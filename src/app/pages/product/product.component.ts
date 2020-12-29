@@ -1,3 +1,4 @@
+import { SetBreadcrumpsComponent } from './set-breadcrumps/set-breadcrumps.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../shared/services/product.service';
@@ -32,6 +33,7 @@ type PostAction = 'duplicate' | 'exit' | 'none';
 })
 export class ProductComponent extends NgUnsubscribe implements OnInit {
 
+  breadcrumpsVarisnts: any;
   isNewProduct: boolean;
   isNewProductBasedOn: boolean;
   product: ProductDto;

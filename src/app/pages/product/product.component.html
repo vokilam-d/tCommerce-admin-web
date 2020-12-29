@@ -87,6 +87,15 @@
       </span>
     </div>
 
+    <div class="product__field field">
+      <label class="field__label">
+        Breadcrumps
+      </label>
+      <span class="field__control">
+        <set-breadcrumps [formControl]="breadcrumpsVarisnts" [breadcrumpsVarisnts]="product"></set-breadcrumps>
+      </span>
+    </div>
+
     <div class="product__field field" *ngIf="form.get('additionalServiceIds') as additionalServiceIds">
       <label class="field__label">
          Доп. услуги

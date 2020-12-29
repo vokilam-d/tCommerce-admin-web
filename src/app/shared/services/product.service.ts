@@ -32,6 +32,10 @@ export class ProductService {
     );
   }
 
+  fetchProductBreadcrumps(id: string | number): any {
+    return this.http.get(`${API_HOST}/api/v1/admin/products/${id}/breadcrumpsVariants`);
+  }
+
   fetchProduct(id: string | number): Observable<ResponseDto<ProductDto>> {
     return this.http.get<ResponseDto<ProductDto>>(`${API_HOST}/api/v1/admin/products/${id}`);
   }
