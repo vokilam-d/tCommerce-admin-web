@@ -6,6 +6,7 @@ import { AdditionalServiceComponent } from './additional-service.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { PreloaderModule } from '../../preloader/preloader.module';
+import { MultilingualControlModule } from '../../multilingual-control/multilingual-control.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { PreloaderModule } from '../../preloader/preloader.module';
     AdditionalServiceRoutingModule,
     ReactiveFormsModule,
     SharedModule,
-    PreloaderModule
+    PreloaderModule,
+    MultilingualControlModule
   ]
 })
 export class AdditionalServiceModule { }

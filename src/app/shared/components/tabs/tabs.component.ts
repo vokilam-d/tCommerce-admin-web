@@ -1,4 +1,5 @@
 import { Component, ContentChildren, Input, OnInit, QueryList, TemplateRef } from '@angular/core';
+import { NotyService } from '../../../noty/noty.service';
 
 
 @Component({
@@ -8,16 +9,20 @@ import { Component, ContentChildren, Input, OnInit, QueryList, TemplateRef } fro
 })
 export class TabsComponent implements OnInit {
 
-  @Input() labels: string[];
-  @Input() isLoading: boolean = false;
   activeLabelIdx: number = 0;
 
+  @Input() labels: string[];
+  @Input() isLoading: boolean = false;
   @ContentChildren('tabContent') tabContents: QueryList<TemplateRef<any>>;
+
   get tabContentsArray(): TemplateRef<any>[] { return this.tabContents.toArray(); }
 
-  constructor() { }
+  constructor(private notyService: NotyService) { }
 
   ngOnInit() {
-    if (!this.labels) { throw new Error(`Input property 'labels' is mandatory`); }
+    if (!this.labels) {
+      this.notyService.showErrorNoty(`[${TabsComponent.name}]: Input property "labels" is mandatory`);
+      throw new Error(`Input property 'labels' is mandatory`);
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { QuillModules } from 'ngx-quill';
-import { API_HOST, inputMediaAcceptTypes } from '../constants/constants';
+import { API_HOST, INPUT_MEDIA_ACCEPT_TYPES } from '../constants/constants';
 import { NotyService } from '../../noty/noty.service';
 
 @Injectable({
@@ -37,7 +37,7 @@ export class QuillHelperService {
   private imageUploadHandler(quill: any) {
     const fileInput = document.createElement('input');
     fileInput.setAttribute('type', 'file');
-    fileInput.setAttribute('accept', inputMediaAcceptTypes);
+    fileInput.setAttribute('accept', INPUT_MEDIA_ACCEPT_TYPES);
     fileInput.click();
 
     fileInput.addEventListener('change', () => {

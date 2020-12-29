@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ProductItemWithSortOrder } from './product-item-with-sort-order';
 import { IDraggedEvent } from '../shared/directives/draggable-item/draggable-item.directive';
-import { UPLOADED_HOST } from '../shared/constants/constants';
+import { DEFAULT_LANG, UPLOADED_HOST } from '../shared/constants/constants';
 import { ProductListItemDto } from '../shared/dtos/product.dto';
 
 @Component({
@@ -11,7 +11,7 @@ import { ProductListItemDto } from '../shared/dtos/product.dto';
 })
 export class ProductItemSorterComponent implements OnInit {
 
-  uploadedHost = UPLOADED_HOST;
+  lang = DEFAULT_LANG;
 
   @Input() isLoading: boolean = false;
   @Input() items: ProductItemWithSortOrder[];
@@ -40,7 +40,7 @@ export class ProductItemSorterComponent implements OnInit {
     if (!product.mediaUrl) {
       return 'admin/assets/images/no-img.png';
     } else {
-      return this.uploadedHost + product.mediaUrl;
+      return UPLOADED_HOST + product.mediaUrl;
     }
   }
 

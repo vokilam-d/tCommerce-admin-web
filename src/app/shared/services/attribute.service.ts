@@ -6,7 +6,7 @@ import { ResponseDto } from '../dtos/response.dto';
 import { tap } from 'rxjs/operators';
 import { IGridValue } from '../../grid/grid.interface';
 import { toHttpParams } from '../helpers/to-http-params.function';
-import { API_HOST } from '../constants/constants';
+import { API_HOST, DEFAULT_LANG } from '../constants/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +66,7 @@ export class AttributeService {
       throw new Error(`Attribute with id '${attrId}' not found`);
     }
 
-    return found.label;
+    return found.label[DEFAULT_LANG];
   }
 
   getValueLabel(attrId: string, valueIds: string[]): string {
@@ -76,6 +76,6 @@ export class AttributeService {
     const foundValue = found.values.filter(value => valueIds.includes(value.id));
     if (!foundValue.length) { return '- - -'; }
 
-    return foundValue.map(values => values.label).join(', ');
+    return foundValue.map(values => values.label[DEFAULT_LANG]).join(', ');
   }
 }

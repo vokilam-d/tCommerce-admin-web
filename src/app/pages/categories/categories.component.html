@@ -45,7 +45,7 @@
        (dragged)="onReorder($event)"
        draggable="false"
     >
-      {{ category.name }}
+      {{ category.name[lang] }}
     </a>
 
     <ul class="categories__list categories__sublist" *ngIf="category.children.length">

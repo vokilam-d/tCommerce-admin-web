@@ -2,7 +2,7 @@
   <div class="header">
     <h1 class="header__title" [ngSwitch]="isNewBlogPost">
       <ng-container *ngSwitchCase="true">Новый блог пост</ng-container>
-      <ng-container *ngSwitchCase="false">{{ post?.name }}</ng-container>
+      <ng-container *ngSwitchCase="false">{{ post?.name[lang] }}</ng-container>
     </h1>
 
     <div class="header__toolbar">
@@ -44,17 +44,7 @@
     >
       <label for="name" class="field__label">Заголовок</label>
       <span class="field__control">
-        <input class="field__input" [formControl]="name" type="text" id="name">
-      </span>
-    </div>
-
-    <div class="post__field field"
-         *ngIf="form.get('slug') as slug"
-         [class.field--invalid]="isControlInvalid(slug)"
-    >
-      <label for="slug" class="field__label">URL адрес</label>
-      <span class="field__control">
-        <input class="field__input" [formControl]="slug" type="text" id="slug">
+        <multilingual-control [formControl]="name" id="name"></multilingual-control>
       </span>
     </div>
 
@@ -64,7 +54,7 @@
     >
       <label class="field__label">Содержание</label>
       <span class="field__control">
-        <quill-editor [formControl]="content" [strict]="false" [id]="'content'" [modules]="quillModules"></quill-editor>
+        <multilingual-control [formControl]="content" type="editor" id="content"></multilingual-control>
       </span>
     </div>
 
@@ -74,7 +64,7 @@
     >
       <label for="shortContent" class="field__label">Краткое содержание</label>
       <span class="field__control">
-        <textarea class="field__textarea" [formControl]="shortContent" id="shortContent"></textarea>
+        <multilingual-control [formControl]="shortContent" type="textarea" id="shortContent"></multilingual-control>
       </span>
     </div>
 
@@ -88,19 +78,47 @@
       </span>
     </div>
 
-    <div class="post__field field" *ngIf="form.get('metaTags.title') as metaTitle">
-      <label class="field__label" [for]="'metaTitle'">Meta заголовок</label>
-      <span class="field__control">
-        <textarea class="field__input" [formControl]="metaTitle" [id]="'metaTitle'"></textarea>
-      </span>
-    </div>
-
     <div class="post__field field" *ngIf="form.get('sortOrder') as sortOrder">
       <label class="field__label" [for]="sortOrder">Сортировка</label>
       <span class="field__control">
         <input class="field__input" [formControl]="sortOrder" type="number" [id]="sortOrder">
       </span>
     </div>
+
+    <fields-group class="post__group" id="post-seo">
+      <div fields-group-title>SEO</div>
+
+      <div class="post__field field"
+           *ngIf="form.get('slug') as slug"
+           [class.field--invalid]="isControlInvalid(slug)"
+      >
+        <label for="slug" class="field__label">URL адрес</label>
+        <span class="field__control">
+          <input class="field__input" [formControl]="slug" type="text" id="slug">
+        </span>
+      </div>
+
+      <div class="post__field field" *ngIf="form.get('metaTags.title') as metaTitle">
+        <label class="field__label" for="metaTitle">Meta заголовок</label>
+        <span class="field__control">
+          <multilingual-control [formControl]="metaTitle" type="textarea" id="metaTitle"></multilingual-control>
+        </span>
+      </div>
+
+      <div class="post__field field" *ngIf="form.get('metaTags.description') as metaDescription">
+        <label class="field__label" for="metaDescription">Meta описание</label>
+        <span class="field__control">
+          <multilingual-control [formControl]="metaDescription" type="textarea" id="metaDescription"></multilingual-control>
+        </span>
+      </div>
+
+      <div class="post__field field" *ngIf="form.get('metaTags.keywords') as metaKeywords">
+        <label class="field__label" for="metaKeywords">Meta ключевые слова</label>
+        <span class="field__control">
+          <multilingual-control [formControl]="metaKeywords" type="textarea" id="metaKeywords"></multilingual-control>
+        </span>
+      </div>
+    </fields-group>
 
     <fields-group class="post__group" id="post-media">
       <div fields-group-title>Картинки и видео</div>

@@ -14,6 +14,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class RatingSelectorComponent implements OnInit, ControlValueAccessor {
 
   value: number;
+
   @Input() size: 'default' | 'small' = 'default';
   @Input() disabled: boolean = false;
 

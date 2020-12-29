@@ -9,7 +9,7 @@ import { CategoryProductItemSorterModalComponent } from '../category-product-ite
 import { HeadService } from '../../../shared/services/head.service';
 import { QuillModules } from 'ngx-quill';
 import { QuillHelperService } from '../../../shared/services/quill-helper.service';
-import { API_HOST, TRANSLATIONS_MAP } from '../../../shared/constants/constants';
+import { API_HOST, DEFAULT_LANG, TRANSLATIONS_MAP } from '../../../shared/constants/constants';
 import { MediaDto } from '../../../shared/dtos/media.dto';
 import { IDraggedEvent } from '../../../shared/directives/draggable-item/draggable-item.directive';
 import { EReorderPosition } from '../../../shared/enums/reorder-position.enum';
@@ -26,8 +26,8 @@ export class CategoryComponent implements OnInit {
   category: CategoryDto;
   form: FormGroup;
   sortOptions: ISelectOption[] = [];
-  quillModules: QuillModules = this.quillHelperService.getEditorModules();
   isClone: boolean = false;
+  lang = DEFAULT_LANG;
 
   get isEnabled() { return this.form?.get('isEnabled') as FormControl; }
   get name() { return this.form?.get('name') as FormControl; }
@@ -44,14 +44,14 @@ export class CategoryComponent implements OnInit {
 
   @ViewChild(CategoryProductItemSorterModalComponent) sorterCmp: CategoryProductItemSorterModalComponent;
 
-  constructor(private categoriesService: CategoriesService,
-              private formBuilder: FormBuilder,
-              private router: Router,
-              private headService: HeadService,
-              private quillHelperService: QuillHelperService,
-              private notyService: NotyService,
-              private route: ActivatedRoute) {
-  }
+  constructor(
+    private categoriesService: CategoriesService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private headService: HeadService,
+    private notyService: NotyService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.buildSortOptions();
@@ -80,7 +80,7 @@ export class CategoryComponent implements OnInit {
         response => {
           this.category = response.data;
           this.buildForm(this.category);
-          this.headService.setTitle(this.category.name);
+          this.headService.setTitle(this.category.name[DEFAULT_LANG]);
           this.isClone = Boolean(this.category.canonicalCategoryId);
         },
         error => console.warn(error)
@@ -144,7 +144,7 @@ export class CategoryComponent implements OnInit {
           this.categoriesService.categoryUpdated$.next();
           this.category = response.data;
           this.buildForm(this.category);
-          this.headService.setTitle(this.category.name);
+          this.headService.setTitle(this.category.name[DEFAULT_LANG]);
         },
         error => console.warn(error)
       );
@@ -153,7 +153,7 @@ export class CategoryComponent implements OnInit {
   private buildForm(category: AddOrUpdateCategoryDto) {
     const controls: Omit<Record<keyof AddOrUpdateCategoryDto, any>, 'parentId'> = {
       isEnabled: category.isEnabled,
-      name: [category.name, Validators.required],
+      name: [category.name],
       canonicalCategoryId: category.canonicalCategoryId,
       description: category.description,
       slug: category.slug,
@@ -171,16 +171,14 @@ export class CategoryComponent implements OnInit {
   }
 
   private validateAllControls() {
-    Object.keys(this.form.controls).forEach(controlName => {
-      const control = this.form.get(controlName);
-
+    Object.values(this.form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       }
     });
   }
 
-  isControlInvalid(control: FormControl) {
+  isControlInvalid(control: FormControl): boolean {
     return !control.valid && control.touched;
   }
 
@@ -188,7 +186,7 @@ export class CategoryComponent implements OnInit {
     this.sorterCmp.openModal();
   }
 
-  getMediaUploadUrl() {
+  getMediaUploadUrl(): string {
     return `${API_HOST}/api/v1/admin/categories/media`;
   }
 

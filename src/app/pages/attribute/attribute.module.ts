@@ -6,6 +6,7 @@ import { AttributeComponent } from './attribute.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { PreloaderModule } from '../../preloader/preloader.module';
+import { MultilingualControlModule } from '../../multilingual-control/multilingual-control.module';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { PreloaderModule } from '../../preloader/preloader.module';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    PreloaderModule
+    PreloaderModule,
+    MultilingualControlModule
   ]
 })
 export class AttributeModule { }

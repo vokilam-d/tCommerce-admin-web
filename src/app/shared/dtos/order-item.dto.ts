@@ -1,7 +1,8 @@
 import { OrderItemAdditionalServiceDto } from './order-item-additional-service.dto';
+import { MultilingualTextDto } from './multilingual-text.dto';
 
 export class OrderItemDto {
-  name: string = '';
+  name: MultilingualTextDto = new MultilingualTextDto();
   productId: number = 0;
   variantId: string = '';
   sku: string = '';

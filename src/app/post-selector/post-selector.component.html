@@ -24,14 +24,14 @@
     <ng-template #cellContent let-post="item">{{ post.id }}</ng-template>
 
     <ng-template #cellContent let-post="item">
-      <img class="product__thumbnail-img" [src]="post.featuredMedia?.variantsUrls.original">
+      <img class="product__thumbnail-img" [src]="getItemThumbnail(post)">
     </ng-template>
 
-    <ng-template #cellContent let-post="item">{{ post.name }}</ng-template>
+    <ng-template #cellContent let-post="item">{{ post.name[lang] }}</ng-template>
 
     <ng-template #cellContent let-post="item">{{ post.createdAt | date:'dd.MM.y' }}</ng-template>
 
-    <ng-template #cellContent let-post="item">{{ post.category.name }}</ng-template>
+    <ng-template #cellContent let-post="item">{{ post.category.name[lang] }}</ng-template>
 
     <ng-template #cellContent let-post="item">
       <ng-container [ngSwitch]="post.isEnabled">

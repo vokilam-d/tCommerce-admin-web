@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 @Component({
   selector: 'not-found',
@@ -13,10 +12,6 @@ export class NotFoundComponent implements OnInit {
 
   ngOnInit() {
     this.headService.setTitle(`404`);
-    setTimeout(() => {
-      console.log('After "NotFoundComponent" render');
-      logMemory();
-    }, 1000);
   }
 
 }

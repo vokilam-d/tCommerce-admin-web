@@ -10,6 +10,8 @@ import { HeadService } from '../../shared/services/head.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { AggregatorService } from '../../shared/services/aggregator.service';
+import { DEFAULT_LANG } from '../../shared/constants/constants';
+import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
 
 @Component({
   selector: 'aggregator-list',
@@ -27,15 +29,18 @@ export class AggregatorListComponent extends NgUnsubscribe implements OnInit, Af
   isGridLoading: boolean = false;
   gridLinkFieldName: string = getPropertyOf<AggregatorDto>('id');
   gridCells: IGridCell[] = aggregatorGridCells;
+  lang = DEFAULT_LANG;
 
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor(private aggregatorService: AggregatorService,
-              private cdr: ChangeDetectorRef,
-              private notyService: NotyService,
-              private headService: HeadService,
-              private route: ActivatedRoute,
-              private router: Router) {
+  constructor(
+    private aggregatorService: AggregatorService,
+    private cdr: ChangeDetectorRef,
+    private notyService: NotyService,
+    private headService: HeadService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     super();
   }
 
@@ -87,7 +92,7 @@ const aggregatorGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<AggregatorDto>('name')
+    fieldName: `${getPropertyOf<AggregatorDto>('name')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   },
   {
     isSearchable: true,
@@ -96,6 +101,6 @@ const aggregatorGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<AggregatorDto>('clientName')
+    fieldName: `${getPropertyOf<AggregatorDto>('clientName')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   }
 ];

@@ -178,7 +178,7 @@
                     <img class="order-item__img" *ngIf="orderItem.imageUrl" [src]="uploadedHost + orderItem.imageUrl">
                   </div>
                   <div class="grid__block order-item__name">
-                    {{ orderItem.name }}
+                    {{ orderItem.name[lang] }}
                     <div class="order-item__sku">
                       SKU: {{ orderItem.sku }}
                     </div>

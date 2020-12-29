@@ -16,8 +16,6 @@ import { finalize } from 'rxjs/operators';
 })
 export class CustomerSelectorComponent implements OnInit, AfterViewInit {
 
-  private fetchAllSub: Subscription;
-
   customers: CustomerDto[] = [];
   itemsTotal: number = 0;
   itemsFiltered: number;
@@ -25,13 +23,16 @@ export class CustomerSelectorComponent implements OnInit, AfterViewInit {
   isGridLoading: boolean = false;
   gridCells: IGridCell[] = customerGridCells;
 
+  private fetchAllSub: Subscription;
+
   @ViewChild(GridComponent) gridCmp: GridComponent;
   @Output('selected') selectedEmitter: EventEmitter<CustomerDto> = new EventEmitter();
 
-  constructor(private customerService: CustomerService,
-              private cdr: ChangeDetectorRef,
-              private notyService: NotyService) {
-  }
+  constructor(
+    private customerService: CustomerService,
+    private cdr: ChangeDetectorRef,
+    private notyService: NotyService
+  ) { }
 
   ngOnInit() {
   }

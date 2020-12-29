@@ -10,7 +10,7 @@
 
     <ng-template #selectedTmpl>
       <span class="select__chip" *ngFor="let category of value">
-        {{ category.name }}
+        {{ category.name[lang] }}
 
         <i class="ai ai-multiply select__remove" (click)="unselectOption($event, category)"></i>
       </span>
@@ -34,7 +34,7 @@
         <i class="ai ai-checkmark select__checkmark" *ngIf="option.isSelected"></i>
       </span>
 
-      {{ option.name }}
+      {{ option.name[lang] }}
     </button>
 
     <ul class="select__suboptions" *ngIf="option.children.length">

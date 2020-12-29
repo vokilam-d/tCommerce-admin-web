@@ -23,7 +23,7 @@
     <span grid-no-items>Агрегаторы не найдены</span>
 
     <ng-template #cellContent let-aggregator="item">{{ aggregator.id }}</ng-template>
-    <ng-template #cellContent let-aggregator="item">{{ aggregator.name }}</ng-template>
-    <ng-template #cellContent let-aggregator="item">{{ aggregator.clientName }}</ng-template>
+    <ng-template #cellContent let-aggregator="item">{{ aggregator.name[lang] }}</ng-template>
+    <ng-template #cellContent let-aggregator="item">{{ aggregator.clientName[lang] }}</ng-template>
   </grid>
 </div>

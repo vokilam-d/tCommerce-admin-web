@@ -7,10 +7,8 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { MediaDto } from '../../shared/dtos/media.dto';
 import { AddOrUpdateProductDto, ProductDto } from '../../shared/dtos/product.dto';
 import { NotyService } from '../../noty/noty.service';
-import { QuillHelperService } from '../../shared/services/quill-helper.service';
-import { Blur, QuillModules } from 'ngx-quill';
 import { DEFAULT_CURRENCY_CODE, ECurrencyCode } from '../../shared/enums/currency.enum';
-import { API_HOST } from '../../shared/constants/constants';
+import { API_HOST, DEFAULT_LANG } from '../../shared/constants/constants';
 import { finalize } from 'rxjs/operators';
 import { AddOrUpdateProductVariantDto, ProductVariantDto } from '../../shared/dtos/product-variant.dto';
 import { LinkedProductDto } from '../../shared/dtos/linked-product.dto';
@@ -21,8 +19,9 @@ import { OrderListViewerModalComponent } from './order-list-viewer-modal/order-l
 import { transliterate } from '../../shared/helpers/transliterate.function';
 import { MetaTagsDto } from '../../shared/dtos/meta-tags.dto';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 import { getClientLinkPrefix } from '../../shared/helpers/get-client-link-prefix.function';
+import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
+import { Language } from '../../shared/enums/language.enum';
 
 type PostAction = 'duplicate' | 'exit' | 'none';
 
@@ -39,8 +38,8 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
   product: ProductDto;
   form: FormGroup;
   currencies = ECurrencyCode;
-  quillModules: QuillModules = this.quillHelperService.getEditorModules();
   isLoading: boolean = false;
+  lang = DEFAULT_LANG;
 
   get variantsFormArray() { return this.form.get('variants') as FormArray; }
   get isMultiVariant(): boolean { return this.variantsFormArray.controls.length > 1; }
@@ -52,7 +51,6 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private headService: HeadService,
-    private quillHelperService: QuillHelperService,
     private notyService: NotyService,
     private route: ActivatedRoute
   ) {
@@ -110,7 +108,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
 
     this.product.variants.forEach(variant => {
       const variantControls: Record<keyof AddOrUpdateProductVariantDto, any> = {
-        name: [variant.name, Validators.required],
+        name: [variant.name],
         slug: variant.slug,
         createRedirect: false,
         attributes: [variant.attributes],
@@ -123,8 +121,8 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
         isIncludedInShoppingFeed: [variant.isIncludedInShoppingFeed],
         googleAdsProductTitle: [variant.googleAdsProductTitle],
         medias: [variant.medias],
-        fullDescription: variant.fullDescription,
-        shortDescription: variant.shortDescription,
+        fullDescription: [variant.fullDescription],
+        shortDescription: [variant.shortDescription],
         metaTags: this.formBuilder.group({
           title: variant.metaTags.title,
           description: variant.metaTags.description,
@@ -138,7 +136,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
       variantsFormArray.push(this.formBuilder.group(variantControls));
     });
 
-    const productControls: Partial<Record<keyof AddOrUpdateProductDto, any>> = {
+    const productControls: Record<keyof Pick<AddOrUpdateProductDto, 'isEnabled' | 'name' | 'categories' | 'additionalServiceIds' | 'attributes' | 'variants'>, any> = {
       isEnabled: this.product.isEnabled,
       name: [this.product.name, Validators.required],
       categories: [this.product.categories],
@@ -147,11 +145,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
       variants: variantsFormArray
     }
 
-    setTimeout(() => {
-
-    }, 5000)
     this.form = this.formBuilder.group(productControls);
-    this.form.get('variants.0.fullDescription').valueChanges.subscribe(console.log);
   }
 
   private fetchProductAndBuildForm(id: string) {
@@ -162,16 +156,14 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
         response => {
           this.setProduct(response.data as ProductDto)
           this.buildForm();
-          this.headService.setTitle(this.product.name);
+          this.headService.setTitle(this.product.name[DEFAULT_LANG]);
         },
         error => console.warn(error)
       );
   }
 
   private validateControls(form: FormGroup | FormArray = this.form) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
-
+    Object.values(form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup || control instanceof FormArray) {
@@ -324,7 +316,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
   }
 
   onNameControlBlur(nameControl: AbstractControl) {
-    const name = nameControl.value;
+    const name: MultilingualTextDto = nameControl.value;
     if (!name || this.isMultiVariant) { return; }
 
     const variantsProp: keyof ProductDto = 'variants';
@@ -336,27 +328,45 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
   }
 
   onVariantNameControlBlur(nameControl: AbstractControl, variantIndex: number) {
-    const name = nameControl.value;
-    if (!name) { return; }
+    const nameValue: MultilingualTextDto = nameControl.value;
+    if (!nameValue) { return; }
 
     const variantForm = this.variantsFormArray.controls[variantIndex];
 
     const slugProp: keyof ProductVariantDto = 'slug';
     const slugControl = variantForm.get(slugProp);
     if (!slugControl.value) {
-      slugControl.setValue(transliterate(name));
+      slugControl.setValue(transliterate(nameValue[DEFAULT_LANG]));
     }
 
     const metaProp: keyof ProductVariantDto = 'metaTags';
     const titleProp: keyof MetaTagsDto = 'title';
     const titleControl = variantForm.get(`${metaProp}.${titleProp}`);
-    if (!titleControl.value) {
-      titleControl.setValue(`Купить ${name[0].toLowerCase()}${name.slice(1)}`);
-    }
+    if (titleControl.value) { return; }
+
+    const title: MultilingualTextDto = new MultilingualTextDto();
+
+    Object.entries(nameValue).forEach(([lang, nameText]) => {
+      let prefix: string = '';
+      switch (lang) {
+        case Language.UK:
+          prefix = `Купити `;
+          break;
+        case Language.RU:
+          prefix = `Купить `;
+          break;
+        case Language.EN:
+          prefix = `Buy `;
+          break;
+      }
+      title[lang] = `${prefix}${nameText[0].toLowerCase()}${nameText.slice(1)}`;
+    });
+
+    titleControl.setValue(title);
   }
 
-  onDescriptionControlBlur(quillBlurEvent: Blur, variantIndex: number) {
-    const description: string = quillBlurEvent.editor.getText();
+  onDescriptionControlBlur(descControl: AbstractControl, variantIndex: number) {
+    const description: string = descControl.value[DEFAULT_LANG];
     if (!description) { return; }
 
     const variantForm = this.variantsFormArray.controls[variantIndex];

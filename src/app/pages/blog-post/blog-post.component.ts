@@ -8,7 +8,7 @@ import { BlogPostService } from '../../shared/services/blog-post.service';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { EPageAction } from '../../shared/enums/category-page-action.enum';
 import { HeadService } from '../../shared/services/head.service';
-import { API_HOST } from '../../shared/constants/constants';
+import { API_HOST, DEFAULT_LANG } from '../../shared/constants/constants';
 import { QuillModules } from 'ngx-quill';
 import { QuillHelperService } from '../../shared/services/quill-helper.service';
 import { formatDate } from '@angular/common';
@@ -33,17 +33,17 @@ export class BlogPostComponent extends NgUnsubscribe implements OnInit {
   isLoading: boolean = false;
   categoriesOptions: ISelectOption[] = [];
   linkedPosts: LinkedBlogPostDto[];
+  lang = DEFAULT_LANG;
   private categories: BlogCategoryDto[] = [];
-  quillModules: QuillModules = this.quillHelperService.getEditorModules();
 
-  constructor( private router: Router,
-               private notyService: NotyService,
-               private formBuilder: FormBuilder,
-               private blogPostService: BlogPostService,
-               private blogCategoryService: BlogCategoryService,
-               private route: ActivatedRoute,
-               private headService: HeadService,
-               private quillHelperService: QuillHelperService
+  constructor(
+    private router: Router,
+    private notyService: NotyService,
+    private formBuilder: FormBuilder,
+    private blogPostService: BlogPostService,
+    private blogCategoryService: BlogCategoryService,
+    private route: ActivatedRoute,
+    private headService: HeadService
   ) {
     super();
   }
@@ -74,7 +74,7 @@ export class BlogPostComponent extends NgUnsubscribe implements OnInit {
           this.post = response.data;
           this.linkedPosts = this.post.linkedPosts;
           this.buildForm();
-          this.headService.setTitle(this.post.name);
+          this.headService.setTitle(this.post.name[DEFAULT_LANG]);
         },
         error => console.warn(error)
       );
@@ -103,8 +103,7 @@ export class BlogPostComponent extends NgUnsubscribe implements OnInit {
   }
 
   private validateControls(form: FormGroup | FormArray) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
+    Object.values(form.controls).forEach(control => {
 
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
@@ -247,7 +246,7 @@ export class BlogPostComponent extends NgUnsubscribe implements OnInit {
       this.categoriesOptions = response.data.map(category => {
         return {
           data: category.id,
-          view: category.name
+          view: category.name[DEFAULT_LANG]
         }
       });
     });

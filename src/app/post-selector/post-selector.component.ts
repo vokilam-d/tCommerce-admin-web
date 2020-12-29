@@ -3,10 +3,12 @@ import { GridComponent } from '../grid/grid.component';
 import { BlogPostService } from '../shared/services/blog-post.service';
 import { IGridCell, IGridValue } from '../grid/grid.interface';
 import { Subscription } from 'rxjs';
-import { BlogPostDto } from '../shared/dtos/blog-post.dto';
+import { BlogPostDto, LinkedBlogCategoryDto } from '../shared/dtos/blog-post.dto';
 import { finalize } from 'rxjs/operators';
 import { NotyService } from '../noty/noty.service';
 import { getPropertyOf } from '../shared/helpers/get-property-of.function';
+import { DEFAULT_LANG, UPLOADED_HOST } from '../shared/constants/constants';
+import { MultilingualTextDto } from '../shared/dtos/multilingual-text.dto';
 
 @Component({
   selector: 'post-selector',
@@ -22,13 +24,17 @@ export class PostSelectorComponent implements OnInit {
   isSelectorVisible: boolean = false;
   isGridLoading: boolean = false
   gridCells: IGridCell[] = POST_GRID_CELLS;
+  lang = DEFAULT_LANG;
+
   private fetchAllSub: Subscription;
+
   @Output('selected') selectedEmitter: EventEmitter<BlogPostDto> = new EventEmitter();
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor(private blogPostService: BlogPostService,
-              private cdr: ChangeDetectorRef,
-              private notyService: NotyService
+  constructor(
+    private blogPostService: BlogPostService,
+    private cdr: ChangeDetectorRef,
+    private notyService: NotyService
   ) { }
 
   ngOnInit(): void { }
@@ -72,6 +78,14 @@ export class PostSelectorComponent implements OnInit {
     this.selectedEmitter.emit(post);
     this.notyService.showSuccessNoty(`Пост добавлен`);
   }
+
+  getItemThumbnail(post: BlogPostDto): string {
+    if (!post.featuredMedia) {
+      return 'admin/assets/images/no-img.png';
+    } else {
+      return UPLOADED_HOST + post.featuredMedia.variantsUrls.original;
+    }
+  }
 }
 
 const POST_GRID_CELLS: IGridCell[] = [
@@ -100,7 +114,7 @@ const POST_GRID_CELLS: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<BlogPostDto>('name')
+    fieldName: `${getPropertyOf<BlogPostDto>('name')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   },
   {
     isSearchable: true,
@@ -118,7 +132,7 @@ const POST_GRID_CELLS: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<BlogPostDto>('category')
+    fieldName: `${getPropertyOf<BlogPostDto>('category')}.${getPropertyOf<LinkedBlogCategoryDto>('name')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   },
   {
     isSearchable: false,

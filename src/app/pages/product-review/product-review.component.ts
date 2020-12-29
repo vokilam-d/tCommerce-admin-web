@@ -11,7 +11,6 @@ import { ProductSelectorComponent } from '../../product-selector/product-selecto
 import { API_HOST } from '../../shared/constants/constants';
 import { finalize } from 'rxjs/operators';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 @Component({
   selector: 'product-review',
@@ -28,20 +27,17 @@ export class ProductReviewComponent implements OnInit {
 
   @ViewChild(ProductSelectorComponent) productSelectorCmp: ProductSelectorComponent;
 
-  constructor(private productReviewService: ProductReviewService,
-              private formBuilder: FormBuilder,
-              private headService: HeadService,
-              private router: Router,
-              private notyService: NotyService,
-              private route: ActivatedRoute) {
-  }
+  constructor(
+    private productReviewService: ProductReviewService,
+    private formBuilder: FormBuilder,
+    private headService: HeadService,
+    private router: Router,
+    private notyService: NotyService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.init();
-    setTimeout(() => {
-      console.log('After "ProductReviewComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   private init() {
@@ -129,9 +125,7 @@ export class ProductReviewComponent implements OnInit {
   }
 
   private validateControls(form: FormGroup | FormArray) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
-
+    Object.values(form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup || control instanceof FormArray) {

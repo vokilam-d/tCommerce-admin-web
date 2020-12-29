@@ -233,6 +233,10 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'announcement',
+        loadChildren: () => import('./pages/announcement/announcement.module').then(m => m.AnnouncementModule)
+      },
+      {
         path: '**',
         loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundModule)
       }

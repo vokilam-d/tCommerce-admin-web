@@ -9,8 +9,9 @@ export class NumberInputDirective {
   @Input() max: number;
   @Input() min: number = 0;
 
-  constructor(private element: ElementRef,
-              @Optional() private ngControl: NgControl
+  constructor(
+    private element: ElementRef,
+    @Optional() private ngControl: NgControl
   ) { }
 
   @HostListener('blur')

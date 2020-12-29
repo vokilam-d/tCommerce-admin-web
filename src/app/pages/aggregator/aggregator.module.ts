@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { PreloaderModule } from '../../preloader/preloader.module';
 import { ProductSelectorModule } from '../../product-selector/product-selector.module';
+import { MultilingualControlModule } from '../../multilingual-control/multilingual-control.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ProductSelectorModule } from '../../product-selector/product-selector.m
     ReactiveFormsModule,
     SharedModule,
     PreloaderModule,
-    ProductSelectorModule
+    ProductSelectorModule,
+    MultilingualControlModule
   ]
 })
 export class AggregatorModule { }

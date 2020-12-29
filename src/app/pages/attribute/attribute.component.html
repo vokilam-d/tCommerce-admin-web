@@ -57,7 +57,7 @@
     >
       <label for="label" class="field__label">Название</label>
       <div class="field__control">
-        <input class="field__input" [formControl]="label" type="text" id="label">
+        <multilingual-control [formControl]="label" id="label"></multilingual-control>
       </div>
     </div>
 
@@ -68,16 +68,6 @@
       <div class="field__label">Тип атрибута</div>
       <div class="field__control">
         <app-select [formControl]="type" [options]="typeOptions"></app-select>
-      </div>
-    </div>
-
-    <div class="attribute__field field"
-           *ngIf="form.get('groupName') as groupName"
-           [class.field--invalid]="isControlInvalid(groupName)"
-    >
-      <label for="groupName" class="field__label">Имя групы</label>
-      <div class="field__control">
-        <input class="field__input" [formControl]="groupName" type="text" id="groupName">
       </div>
     </div>
 
@@ -129,6 +119,7 @@
                    [ngModelOptions]="{ standalone: true }"
                    type="text"
             >
+            <multilingual-control [(ngModel)]="value.label" [ngModelOptions]="{ standalone: true }"></multilingual-control>
           </div>
 
           <div class="option__color-container" *ngIf="hasColorControl.value">

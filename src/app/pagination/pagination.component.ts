@@ -13,21 +13,23 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class PaginationComponent implements OnInit, OnDestroy {
 
+  limitOptions: ISelectOption[] = [{ data: 25 }, { data: 50 }, { data: 100 }, { data: 200 }, { data: 1000 }];
+
   private form: FormGroup;
   private ngUnsubscribe = new Subject();
   private get storageKey(): string { return `limit_${this.dataType}`; }
-
-  get limitControl() { return this.form.get('limit'); }
-  get pageControl() { return this.form.get('page'); }
-  limitOptions: ISelectOption[] = [{ data: 25 }, { data: 50 }, { data: 100 }, { data: 200 }, { data: 1000 }];
 
   @Input() dataType: string = 'default';
   @Input() pageCount: IPagination['pageCount'] = 1;
   @Output('change') changeEmitter = new EventEmitter<IPagination>();
 
-  constructor(private formBuilder: FormBuilder,
-              @Inject(PLATFORM_ID) private platformId: any) {
-  }
+  get limitControl() { return this.form.get('limit'); }
+  get pageControl() { return this.form.get('page'); }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    @Inject(PLATFORM_ID) private platformId: any
+  ) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({

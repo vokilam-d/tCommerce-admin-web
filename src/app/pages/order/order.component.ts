@@ -13,11 +13,10 @@ import { ISelectOption } from '../../shared/components/select/select-option.inte
 import { ShipmentAddressDto } from '../../shared/dtos/shipment-address.dto';
 import { CustomerService } from '../../shared/services/customer.service';
 import { ProductSelectorComponent } from '../../product-selector/product-selector.component';
-import { UPLOADED_HOST } from '../../shared/constants/constants';
+import { DEFAULT_LANG, UPLOADED_HOST } from '../../shared/constants/constants';
 import { HeadService } from '../../shared/services/head.service';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { catchError, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 import { EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { ResponseDto } from '../../shared/dtos/response.dto';
 
@@ -28,6 +27,7 @@ import { ResponseDto } from '../../shared/dtos/response.dto';
 })
 export class OrderComponent extends NgUnsubscribe implements OnInit {
 
+  lang = DEFAULT_LANG;
   uploadedHost = UPLOADED_HOST;
   isNewOrder: boolean;
   isReorder: boolean;
@@ -46,22 +46,20 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
   @ViewChild(ProductSelectorComponent) productSelectorCmp: ProductSelectorComponent;
   @ViewChild(AddressFormComponent) addressFormCmp: AddressFormComponent;
 
-  constructor(private formBuilder: FormBuilder,
-              private orderService: OrderService,
-              private customerService: CustomerService,
-              private router: Router,
-              private headService: HeadService,
-              private notyService: NotyService,
-              private route: ActivatedRoute) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private orderService: OrderService,
+    private customerService: CustomerService,
+    private router: Router,
+    private headService: HeadService,
+    private notyService: NotyService,
+    private route: ActivatedRoute
+  ) {
     super();
   }
 
   ngOnInit() {
     this.init();
-    setTimeout(() => {
-      console.log('After "OrderComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   private init() {
@@ -116,7 +114,6 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
       this.order = new OrderDto();
 
     } else {
-
       if (!confirm(`Вы уверены, что хотите отменить редактирование этого заказа?`)) {
         return;
       }
@@ -222,7 +219,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
     this.createOrderItem(variant.sku, qty);
   }
 
-  onOrderItemQtyBlur(target: HTMLInputElement, orderItem: OrderItemDto) {
+  onOrderItemQtyBlur(target: any, orderItem: OrderItemDto) {
     const newValue = parseInt(target.value);
     if (!newValue) {
       target.value = orderItem.qty.toString();
@@ -344,7 +341,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
     }
   }
 
-  onDiscountValueChange(target: HTMLInputElement) {
+  onDiscountValueChange(target: any) {
     const discountValue = parseInt(target.value);
     this.order.prices.totalCost = this.order.prices.itemsCost - discountValue;
   }

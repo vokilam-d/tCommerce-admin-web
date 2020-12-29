@@ -10,7 +10,6 @@ import { formatDate } from '@angular/common';
 import { API_HOST } from '../../shared/constants/constants';
 import { finalize } from 'rxjs/operators';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 @Component({
   selector: 'store-review',
@@ -24,13 +23,14 @@ export class StoreReviewComponent implements OnInit {
   reviewForm: FormGroup;
   isLoading: boolean = false;
 
-  constructor(private storeReviewService: StoreReviewService,
-              private formBuilder: FormBuilder,
-              private router: Router,
-              private headService: HeadService,
-              private notyService: NotyService,
-              private route: ActivatedRoute) {
-  }
+  constructor(
+    private storeReviewService: StoreReviewService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private headService: HeadService,
+    private notyService: NotyService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.init();
@@ -45,10 +45,6 @@ export class StoreReviewComponent implements OnInit {
     } else {
       this.fetchStoreReview();
     }
-    setTimeout(() => {
-      console.log('After "StoreReviewComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   save() {
@@ -110,9 +106,7 @@ export class StoreReviewComponent implements OnInit {
   }
 
   private validateControls(form: FormGroup | FormArray) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
-
+    Object.values(form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup || control instanceof FormArray) {

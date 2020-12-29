@@ -1,7 +1,9 @@
+import { MultilingualTextDto } from './multilingual-text.dto';
+
 export class AggregatorDto {
   id: number;
-  name: string = '';
-  clientName: string = '';
+  name: MultilingualTextDto = new MultilingualTextDto();
+  clientName: MultilingualTextDto = new MultilingualTextDto();
   isVisibleOnProductPage: boolean = true;
   productIds: number[] = [];
 }

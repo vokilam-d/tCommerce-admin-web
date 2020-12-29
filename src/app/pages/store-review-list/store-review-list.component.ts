@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 import { GridComponent } from '../../grid/grid.component';
 import { finalize } from 'rxjs/operators';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 @Component({
   selector: 'store-review-list',
@@ -17,8 +16,6 @@ import { logMemory } from '../../shared/helpers/log-memory.function';
   styleUrls: ['./store-review-list.component.scss']
 })
 export class StoreReviewListComponent implements OnInit, AfterViewInit {
-
-  private fetchAllSub: Subscription;
 
   storeReviews: StoreReviewDto[] = [];
   itemsTotal: number = 0;
@@ -28,22 +25,21 @@ export class StoreReviewListComponent implements OnInit, AfterViewInit {
   idFieldName = getPropertyOf<StoreReviewDto>('id');
   gridCells: IGridCell[] = storeReviewsGridCells;
 
+  private fetchAllSub: Subscription;
+
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor(private storeReviewsService: StoreReviewService,
-              private cdr: ChangeDetectorRef,
-              private route: ActivatedRoute,
-              private headService: HeadService,
-              private notyService: NotyService,
-              private router: Router
+  constructor(
+    private storeReviewsService: StoreReviewService,
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private headService: HeadService,
+    private notyService: NotyService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.headService.setTitle(`Отзывы о магазине`);
-    setTimeout(() => {
-      console.log('After "StoreReviewListComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   ngAfterViewInit(): void {

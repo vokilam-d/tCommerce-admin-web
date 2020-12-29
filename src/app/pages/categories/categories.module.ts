@@ -15,6 +15,7 @@ import { MediaAssetModule } from '../../media-asset/media-asset.module';
 import { MediaUploaderModule } from '../../media-uploader/media-uploader.module';
 import { RedirectControlModule } from '../../redirect-control/redirect-control.module';
 import { CanonicalCategorySelectComponent } from './canonical-category-select/canonical-category-select.component';
+import { MultilingualControlModule } from '../../multilingual-control/multilingual-control.module';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { CanonicalCategorySelectComponent } from './canonical-category-select/ca
     QuillModule,
     MediaAssetModule,
     MediaUploaderModule,
-    RedirectControlModule
+    RedirectControlModule,
+    MultilingualControlModule
   ],
   providers: [
     CategoriesService

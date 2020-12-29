@@ -5,7 +5,7 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="false">
-      {{ category?.name }} (ID: {{category?.id }})
+      {{ category?.name[lang] }} (ID: {{category?.id }})
     </ng-container>
   </h1>
 
@@ -25,55 +25,55 @@
 </header>
 
 <form class="category" *ngIf="form; else preloaderTmpl">
-  <label class="category__field field" [class.field--invalid]="isControlInvalid(isEnabled)">
-    <span class="field__label">Включить категорию</span>
-    <span class="field__control">
+  <div class="category__field field">
+    <label class="field__label">Включить категорию</label>
+    <div class="field__control">
       <toggle [formControl]="isEnabled"></toggle>
-    </span>
-  </label>
-
-  <label class="category__field field" *ngIf="isNewCategory">
-    <span class="field__label">Эта категория клон?</span>
-    <span class="field__control">
-      <toggle [(ngModel)]="isClone" [ngModelOptions]="{ standalone: true }"></toggle>
-    </span>
-  </label>
-
-  <div class="category__field field" *ngIf="isClone">
-    <span class="field__label">Категория-источник</span>
-    <span class="field__control">
-      <canonical-category-select [formControl]="canonicalCategoryId"></canonical-category-select>
-    </span>
+    </div>
   </div>
 
-  <label class="category__field field field--required" [class.field--invalid]="isControlInvalid(name)">
-    <span class="field__label">Имя</span>
-    <span class="field__control">
-        <input class="field__input" [formControl]="name" type="text">
-      </span>
-  </label>
+  <div class="category__field field" *ngIf="isNewCategory">
+    <div class="field__label">Эта категория клон?</div>
+    <div class="field__control">
+      <toggle [(ngModel)]="isClone" [ngModelOptions]="{ standalone: true }"></toggle>
+    </div>
+  </div>
+
+  <div class="category__field field" *ngIf="isClone">
+    <div class="field__label">Категория-источник</div>
+    <div class="field__control">
+      <canonical-category-select [formControl]="canonicalCategoryId"></canonical-category-select>
+    </div>
+  </div>
+
+  <div class="category__field field field--required">
+    <label class="field__label" for="name">Имя</label>
+    <div class="field__control">
+      <multilingual-control [formControl]="name" id="name"></multilingual-control>
+    </div>
+  </div>
 
   <ng-container *ngIf="(isNewCategory && !isClone) || !isClone">
-    <label class="category__field field" [class.field--invalid]="isControlInvalid(description)">
-      <span class="field__label">Описание</span>
-      <span class="field__control">
-        <quill-editor [formControl]="description" [strict]="false" [id]="'description'" [modules]="quillModules"></quill-editor>
-      </span>
-    </label>
-
-    <div class="category__field field" [class.field--invalid]="isControlInvalid(defaultItemsSort)">
-      <span class="field__label">Сортировка товаров по умолчанию</span>
-      <span class="field__control">
-        <app-select [formControl]="defaultItemsSort" [options]="sortOptions"></app-select>
-      </span>
+    <div class="category__field field">
+      <label class="field__label" for="description">Описание</label>
+      <div class="field__control">
+        <multilingual-control [formControl]="description" type="editor" id="description"></multilingual-control>
+      </div>
     </div>
 
-    <label class="category__field field" *ngIf="!isNewCategory">
-      <span class="field__label">Товары в этой категории</span>
-      <span class="field__control">
+    <div class="category__field field">
+      <div class="field__label">Сортировка товаров по умолчанию</div>
+      <div class="field__control">
+        <app-select [formControl]="defaultItemsSort" [options]="sortOptions"></app-select>
+      </div>
+    </div>
+
+    <div class="category__field field" *ngIf="!isNewCategory">
+      <div class="field__label">Товары в этой категории</div>
+      <div class="field__control">
         <app-button (click)="openItemSorter()">Отсортировать</app-button>
-      </span>
-    </label>
+      </div>
+    </div>
 
     <fields-group id="category-seo">
       <div fields-group-title>SEO</div>
@@ -90,26 +90,26 @@
         </span>
       </div>
 
-      <label class="category__field field" [class.field--invalid]="isControlInvalid(metaTitle)">
-        <span class="field__label">Meta заголовок</span>
-        <span class="field__control">
-          <textarea class="field__input" [formControl]="metaTitle"></textarea>
-        </span>
-      </label>
+      <div class="category__field field">
+        <label class="field__label" for="metaTitle">Meta заголовок</label>
+        <div class="field__control">
+          <multilingual-control [formControl]="metaTitle" type="textarea" id="metaTitle"></multilingual-control>
+        </div>
+      </div>
 
-      <label class="category__field field" [class.field--invalid]="isControlInvalid(metaDescription)">
-        <span class="field__label">Meta описание</span>
-        <span class="field__control">
-          <textarea class="field__textarea" [formControl]="metaDescription"></textarea>
-        </span>
-      </label>
+      <div class="category__field field">
+        <label class="field__label" for="metaDescription">Meta описание</label>
+        <div class="field__control">
+          <multilingual-control [formControl]="metaDescription" type="textarea" id="metaDescription"></multilingual-control>
+        </div>
+      </div>
 
-      <label class="category__field field" [class.field--invalid]="isControlInvalid(metaKeywords)">
-        <span class="field__label">Meta ключевые слова</span>
-        <span class="field__control">
-          <textarea class="field__textarea" [formControl]="metaKeywords"></textarea>
-        </span>
-      </label>
+      <div class="category__field field">
+        <label class="field__label" for="metaKeywords">Meta ключевые слова</label>
+        <div class="field__control">
+          <multilingual-control [formControl]="metaKeywords" type="textarea" id="metaKeywords"></multilingual-control>
+        </div>
+      </div>
     </fields-group>
 
     <fields-group id="category-media">

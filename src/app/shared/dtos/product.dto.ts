@@ -1,11 +1,12 @@
 import { AddOrUpdateProductVariantDto, ProductVariantDto } from './product-variant.dto';
 import { ProductSelectedAttributeDto } from './selected-attribute.dto';
-import { ProductBreadcrumbDto } from './product-breadcrumb.dto';
+import { BreadcrumbDto } from './breadcrumb.dto';
 import { ECurrencyCode } from '../enums/currency.enum';
+import { MultilingualTextDto } from './multilingual-text.dto';
 
 export class ProductCategoryDto {
   id: number;
-  name?: string;
+  name?: MultilingualTextDto = new MultilingualTextDto();
   slug?: string;
   sortOrder?: number;
   reversedSortOrder?: number;
@@ -14,10 +15,10 @@ export class ProductCategoryDto {
 
 export class AddOrUpdateProductDto {
   isEnabled: boolean = true;
-  name: string = '';
+  name: MultilingualTextDto = new MultilingualTextDto();
   categories: ProductCategoryDto[] = [];
   additionalServiceIds: number[] = [];
-  breadcrumbs: ProductBreadcrumbDto[] = [];
+  breadcrumbs: BreadcrumbDto[] = [];
   attributes: ProductSelectedAttributeDto[] = [];
   variants: AddOrUpdateProductVariantDto[] = [new AddOrUpdateProductVariantDto()];
   reviewsCount: number;
@@ -36,7 +37,7 @@ export class ProductVariantListItemDto {
   isEnabled: boolean;
   attributes: ProductSelectedAttributeDto[];
   mediaUrl: string;
-  name: string;
+  name: MultilingualTextDto;
   sku: string;
   vendorCode: string;
   price: number;
@@ -54,8 +55,9 @@ export class ProductListItemDto {
   categories: ProductCategoryDto[];
   attributes: ProductSelectedAttributeDto[];
   mediaUrl: string;
-  name: string;
+  name: MultilingualTextDto = new MultilingualTextDto();
   skus: string;
+  currency: ECurrencyCode;
   vendorCodes: string;
   prices: string;
   quantitiesInStock: string;

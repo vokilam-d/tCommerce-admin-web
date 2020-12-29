@@ -4,6 +4,7 @@ import { SelectComponent } from '../../../shared/components/select/select.compon
 import { CategoriesService } from '../categories.service';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { CategoryDto } from '../../../shared/dtos/category.dto';
+import { DEFAULT_LANG } from '../../../shared/constants/constants';
 
 @Component({
   selector: 'canonical-category-select',
@@ -23,7 +24,7 @@ export class CanonicalCategorySelectComponent extends SelectComponent implements
 
   get activeOptionLabel(): string {
     const category = this.categories.find(category => category.id === this.value);
-    return category ? `${category.name} (id ${category.id})` : '';
+    return category ? `${category.name[DEFAULT_LANG]} (id ${category.id})` : '';
   }
 
   constructor(
@@ -37,14 +38,14 @@ export class CanonicalCategorySelectComponent extends SelectComponent implements
     this.fetchCategories();
   }
 
-  onSearch(event) {
+  onSearch(event: any) {
     const value = event.target.value.trim().toLowerCase();
     if (!value) {
       this.setOptions(this.categories);
       return;
     }
 
-    const filtered = this.categories.filter(category => category.name.toLowerCase().startsWith(value));
+    const filtered = this.categories.filter(category => category.name[DEFAULT_LANG].toLowerCase().startsWith(value));
     this.setOptions(filtered);
   }
 
@@ -60,6 +61,6 @@ export class CanonicalCategorySelectComponent extends SelectComponent implements
   }
 
   private setOptions(categories: CategoryDto[]) {
-    this.options = categories.map(category => ({ data: category.id, view: `${category.name} (id ${category.id})` }));
+    this.options = categories.map(category => ({ data: category.id, view: `${category.name[DEFAULT_LANG]} (id ${category.id})` }));
   }
 }

@@ -1,0 +1,10 @@
+.announcement {
+  &__field {
+    margin: 20px 0 0;
+  }
+
+  &__text {
+    min-height: 150px;
+    line-height: 1.3;
+  }
+}

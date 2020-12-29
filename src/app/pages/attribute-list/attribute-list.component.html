@@ -23,6 +23,6 @@
     <span grid-no-items>Атрибуты не найдены</span>
 
     <ng-template #cellContent let-attribute="item">{{ attribute.id }}</ng-template>
-    <ng-template #cellContent let-attribute="item">{{ attribute.label }}</ng-template>
+    <ng-template #cellContent let-attribute="item">{{ attribute.label[lang] }}</ng-template>
   </grid>
 </div>

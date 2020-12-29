@@ -11,7 +11,6 @@ import { Subscription } from 'rxjs';
 import { GridComponent } from '../../grid/grid.component';
 import { AttributeDto } from '../../shared/dtos/attribute.dto';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 
 @Component({
@@ -21,8 +20,6 @@ import { logMemory } from '../../shared/helpers/log-memory.function';
 })
 export class CustomerListComponent implements OnInit, AfterViewInit {
 
-  private fetchAllSub: Subscription;
-
   customers: CustomerDto[] = [];
   itemsTotal: number = 0;
   itemsFiltered: number;
@@ -31,22 +28,21 @@ export class CustomerListComponent implements OnInit, AfterViewInit {
   idFieldName = getPropertyOf<AttributeDto>('id');
   gridCells: IGridCell[] = customerGridCells;
 
+  private fetchAllSub: Subscription;
+
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor(private customerService: CustomerService,
-              private route: ActivatedRoute,
-              private headService: HeadService,
-              private cdr: ChangeDetectorRef,
-              private notyService: NotyService,
-              private router: Router) {
-  }
+  constructor(
+    private customerService: CustomerService,
+    private route: ActivatedRoute,
+    private headService: HeadService,
+    private cdr: ChangeDetectorRef,
+    private notyService: NotyService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.headService.setTitle(`Клиенты`);
-    setTimeout(() => {
-      console.log('After "CustomerListComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   ngAfterViewInit() {

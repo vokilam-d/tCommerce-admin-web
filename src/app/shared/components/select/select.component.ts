@@ -26,16 +26,8 @@ import { NgUnsubscribe } from '../../directives/ng-unsubscribe/ng-unsubscribe.di
 })
 export class SelectComponent extends NgUnsubscribe implements OnInit, OnChanges, ControlValueAccessor {
 
-  get activeOptionLabel(): string {
-    const selectedOptions = this.options.filter(option => option.isSelected);
-
-    if (selectedOptions.length) {
-      return selectedOptions.map(option => option.view || option.data).join(', ');
-    } else {
-      return '- Не выбрано -';
-    }
-  };
   isVisible: boolean = false;
+
   protected value: any | any[];
 
   @Input() isDisabled: boolean = false;
@@ -45,6 +37,16 @@ export class SelectComponent extends NgUnsubscribe implements OnInit, OnChanges,
   @Input() isSizeSmall: boolean = false;
   @Input() initialValue: any | any[];
   @Output() select: EventEmitter<any> = new EventEmitter();
+
+  get activeOptionLabel(): string {
+    const selectedOptions = this.options.filter(option => option.isSelected);
+
+    if (selectedOptions.length) {
+      return selectedOptions.map(option => option.view || option.data).join(', ');
+    } else {
+      return '- Не выбрано -';
+    }
+  };
 
   constructor() {
     super();

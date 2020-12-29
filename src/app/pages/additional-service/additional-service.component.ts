@@ -7,7 +7,7 @@ import { EPageAction } from '../../shared/enums/category-page-action.enum';
 import { finalize } from 'rxjs/operators';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { ProductService } from '../../shared/services/product.service';
-import { UPLOADED_HOST } from '../../shared/constants/constants';
+import { DEFAULT_LANG, UPLOADED_HOST } from '../../shared/constants/constants';
 import { AdditionalServiceDto } from '../../shared/dtos/additional-service.dto';
 import { AdditionalServiceService } from '../../shared/services/additional-service.service';
 
@@ -22,8 +22,7 @@ export class AdditionalServiceComponent extends NgUnsubscribe implements OnInit 
   additionalService: AdditionalServiceDto;
   form: FormGroup;
   isLoading: boolean = false;
-
-  uploadedHost = UPLOADED_HOST;
+  lang = DEFAULT_LANG;
 
   constructor(private additionalServicesService: AdditionalServiceService,
               private formBuilder: FormBuilder,
@@ -80,7 +79,7 @@ export class AdditionalServiceComponent extends NgUnsubscribe implements OnInit 
   }
 
   private buildForm() {
-    const controls: Omit<Record<keyof AdditionalServiceDto, any>, 'id'> = {
+    const controls: Record<keyof Omit<AdditionalServiceDto, 'id'>, any> = {
       name: [this.additionalService.name, Validators.required],
       clientName: [this.additionalService.clientName],
       isEnabled: [this.additionalService.isEnabled],
@@ -99,16 +98,14 @@ export class AdditionalServiceComponent extends NgUnsubscribe implements OnInit 
         response => {
           this.additionalService = response.data;
           this.buildForm();
-          this.headService.setTitle(this.additionalService.name);
+          this.headService.setTitle(this.additionalService.name[DEFAULT_LANG]);
         },
         error => console.warn(error)
       );
   }
 
   private validateControls(form: FormGroup | FormArray) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
-
+    Object.values(form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup || control instanceof FormArray) {

@@ -6,9 +6,8 @@ import { Router } from '@angular/router';
 import { UserService } from '../../shared/services/user.service';
 import { AddOrUpdateUserDto, UserDto } from '../../shared/dtos/user.dto';
 import { CustomValidators } from '../../shared/classes/validators';
-import { validPasswordRegex } from '../../shared/constants/constants';
+import { VALID_PASSWORD_REGEX } from '../../shared/constants/constants';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 @Component({
   selector: 'users',
@@ -21,21 +20,19 @@ export class UsersComponent implements OnInit {
   activeUser: UserDto;
   form: FormGroup;
   isLoading: boolean = false;
+
   get isNewUser(): boolean { return !this.activeUser?.id; }
 
-  constructor(private userService: UserService,
-              private notyService: NotyService,
-              private router: Router,
-              private headService: HeadService,
-              private formBuilder: FormBuilder) {
-  }
+  constructor(
+    private userService: UserService,
+    private notyService: NotyService,
+    private router: Router,
+    private headService: HeadService,
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.init();
-    setTimeout(() => {
-      console.log('After "UsersComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   private init() {
@@ -57,9 +54,9 @@ export class UsersComponent implements OnInit {
   selectUser(user: UserDto) {
     this.activeUser = user;
 
-    const controls: Partial<Record<keyof AddOrUpdateUserDto, any>> = {
+    const controls: Record<keyof Omit<AddOrUpdateUserDto, 'id'>, any> = {
       login: [user.login, Validators.required],
-      password: ['', Validators.pattern(validPasswordRegex)]
+      password: ['', Validators.pattern(VALID_PASSWORD_REGEX)]
     };
     (controls as any).passwordConfirm = [''];
     if (!this.isNewUser) {
@@ -93,12 +90,12 @@ export class UsersComponent implements OnInit {
     if (this.isNewUser) {
       this.userService.createUser(dto)
         .pipe(this.notyService.attachNoty({ successText: `Юзер успешно создан` }))
-        .subscribe(response => this.init());
+        .subscribe(_ => this.init());
     } else {
 
       this.userService.updateUser(dto.id, dto)
         .pipe(this.notyService.attachNoty({ successText: `Юзер успешно обновлён` }))
-        .subscribe(response => this.init());
+        .subscribe(_ => this.init());
     }
   }
 
@@ -109,18 +106,16 @@ export class UsersComponent implements OnInit {
 
     this.userService.deleteUser(this.activeUser.id)
       .pipe(this.notyService.attachNoty({ successText: `Юзер успешно удалён` }))
-      .subscribe(response => this.init());
+      .subscribe(_ => this.init());
   }
 
   logout() {
     this.userService.logout()
-      .subscribe(response => this.router.navigate(['/', 'admin', 'login']));
+      .subscribe(_ => this.router.navigate(['/', 'admin', 'login']));
   }
 
   private validateControls(form: FormGroup | FormArray = this.form) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
-
+    Object.values(form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup || control instanceof FormArray) {
@@ -129,7 +124,7 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  isControlInvalid(control: AbstractControl) {
+  isControlInvalid(control: AbstractControl): boolean {
     return !control.valid && control.touched;
   }
 }

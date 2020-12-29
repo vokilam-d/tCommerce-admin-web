@@ -5,7 +5,6 @@ import { LoginDto } from '../../shared/dtos/login.dto';
 import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 @Component({
   selector: 'login',
@@ -18,18 +17,16 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   formError: string;
 
-  constructor(private formBuilder: FormBuilder,
-              private router: Router,
-              private headService: HeadService,
-              private userService: UserService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private headService: HeadService,
+    private userService: UserService
+  ) { }
 
   ngOnInit(): void {
     this.buildForm();
     this.headService.setTitle(`Вход`);
-    setTimeout(() => {
-      console.log('After "LoginComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   submit() {
@@ -40,7 +37,7 @@ export class LoginComponent implements OnInit {
     this.userService.login(dto)
       .pipe( finalize(() => this.isLoading = false) )
       .subscribe(
-        response => {
+        _ => {
           this.router.navigate(['/']);
         },
         error => {
@@ -50,9 +47,11 @@ export class LoginComponent implements OnInit {
   }
 
   private buildForm() {
-    this.form = this.formBuilder.group({
+    const controlsConfig: LoginDto = {
       login: '',
       password: ''
-    });
+    };
+
+    this.form = this.formBuilder.group(controlsConfig);
   }
 }

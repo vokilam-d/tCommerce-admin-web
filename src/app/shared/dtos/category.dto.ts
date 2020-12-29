@@ -1,12 +1,13 @@
 import { MetaTagsDto } from './meta-tags.dto';
 import { MediaDto } from './media.dto';
 import { EProductsSort } from '../enums/product-sort.enum';
+import { MultilingualTextDto } from './multilingual-text.dto';
 
 export class AddOrUpdateCategoryDto {
   isEnabled: boolean = true;
-  name: string = '';
+  name: MultilingualTextDto = new MultilingualTextDto();
   canonicalCategoryId: number = null;
-  description: string = '';
+  description: MultilingualTextDto = new MultilingualTextDto();
   slug: string = '';
   createRedirect: boolean = false;
   parentId: number = 0;

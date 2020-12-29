@@ -65,7 +65,7 @@
   <div class="order-view" *ngIf="customer">
     <div class="order-view__subtitle">
       Заказ
-      <div class="order-view__status">{{ order.statusDescription }}</div>
+      <div class="order-view__status">{{ order.statusDescription[lang] }}</div>
     </div>
     <div class="order-view__block two-col">
       <div class="two-col__col info-table">
@@ -170,7 +170,7 @@
     </div>
 
     <div class="order-view__block order-view__address">
-      {{ order.shippingMethodName }}<br><br>
+      {{ order.shippingMethodName[lang] }}<br><br>
 
       {{ order.shipment.recipient.firstName }} {{ order.shipment.recipient.lastName }}, {{ order.shipment.recipient.phone | normalizedPhone }}
       <br>
@@ -184,7 +184,7 @@
     <div class="order-view__block two-col">
       <div class="two-col__col method">
         <div class="method__title">Способ оплаты</div>
-        <div class="method__name">{{ order.paymentMethodAdminName }}</div>
+        <div class="method__name">{{ order.paymentMethodAdminName[lang] }}</div>
         <div class="payment-status" *ngIf="isPaymentToggleVisible()">
           Заказ оплачен? <toggle class="payment-status__control" [formControl]="paymentStatusControl"></toggle>
 
@@ -219,13 +219,11 @@
                [class.items-table__row--even]="even"
           >
             <td class="items-table__block items-table__block--img">
-              <img class="items-table__img"
-                   *ngIf="item.imageUrl"
-                   [src]="uploadedHost + item.imageUrl">
+              <img class="items-table__img" [src]="getItemThumbnail(item)">
             </td>
             <td class="items-table__block items-table__block--name">
               <a class="items-table__link" [routerLink]="['/', 'admin', 'product', 'edit', item.productId]" target="_blank">
-                {{ item.name }}
+                {{ item.name[lang] }}
               </a>
             </td>
             <td class="items-table__block items-table__block--sku">
@@ -236,7 +234,7 @@
             </td>
             <td class="items-table__block items-table__block--additional-services">
               <div *ngFor="let service of item.additionalServices">
-                {{ service.name }} (+{{ service.price }}грн)
+                {{ service.name[lang] }} (+{{ service.price }}грн)
               </div>
             </td>
             <td class="items-table__block items-table__block--price">
@@ -262,7 +260,7 @@
             <div class="summary__block">
               Скидка
               <ng-container *ngIf="order.prices.discountPercent as discountPercent">
-                <br> ({{ order.prices.discountLabel }}, {{ discountPercent }}%)
+                <br> ({{ order.prices.discountLabel[lang] }}, {{ discountPercent }}%)
               </ng-container>
             </div>
             <div class="summary__block">

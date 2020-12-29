@@ -6,7 +6,7 @@ import { NotyService } from '../../noty/noty.service';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
+import { DEFAULT_LANG } from '../../shared/constants/constants';
 
 @Component({
   selector: 'shipping-method',
@@ -19,20 +19,18 @@ export class ShippingMethodComponent implements OnInit {
   activeMethod: ShippingMethodDto;
   form: FormGroup;
   isLoading: boolean = false;
+  lang = DEFAULT_LANG;
 
-  constructor(private shippingMethodService: ShippingMethodService,
-              private notyService: NotyService,
-              private router: Router,
-              private headService: HeadService,
-              private formBuilder: FormBuilder) {
-  }
+  constructor(
+    private shippingMethodService: ShippingMethodService,
+    private notyService: NotyService,
+    private router: Router,
+    private headService: HeadService,
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.init();
-    setTimeout(() => {
-      console.log('After "ShippingMethodComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   private init() {
@@ -62,7 +60,7 @@ export class ShippingMethodComponent implements OnInit {
       sortOrder: shippingMethod.sortOrder
     });
 
-    this.headService.setTitle(this.activeMethod.adminName || `Новый способ доставки`);
+    this.headService.setTitle(this.activeMethod.adminName[DEFAULT_LANG] || `Новый способ доставки`);
   }
 
   addNewMethod() {
@@ -86,12 +84,12 @@ export class ShippingMethodComponent implements OnInit {
     if (dto.id) {
       this.shippingMethodService.updateShippingMethod(dto.id, dto)
         .pipe(this.notyService.attachNoty({ successText: `Способ доставки успешно обновлён` }))
-        .subscribe(response => this.init());
+        .subscribe(_ => this.init());
     } else {
 
       this.shippingMethodService.createShippingMethod(dto)
         .pipe(this.notyService.attachNoty({ successText: `Способ доставки успешно создан` }))
-        .subscribe(response => this.init());
+        .subscribe(_ => this.init());
     }
   }
 
@@ -102,13 +100,11 @@ export class ShippingMethodComponent implements OnInit {
 
     this.shippingMethodService.deleteShippingMethod(this.activeMethod.id)
       .pipe(this.notyService.attachNoty({ successText: `Способ доставки успешно удалён` }))
-      .subscribe(response => this.init());
+      .subscribe(_ => this.init());
   }
 
   private validateControls(form: FormGroup | FormArray = this.form) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
-
+    Object.values(form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup || control instanceof FormArray) {
@@ -117,7 +113,7 @@ export class ShippingMethodComponent implements OnInit {
     });
   }
 
-  isControlInvalid(control: AbstractControl) {
+  isControlInvalid(control: AbstractControl): boolean {
     return !control.valid && control.touched;
   }
 }

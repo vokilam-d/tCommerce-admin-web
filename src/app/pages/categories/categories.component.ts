@@ -1,29 +1,32 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from './categories.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryDto, CategoryTreeItem } from '../../shared/dtos/category.dto';
+import { CategoryTreeItem } from '../../shared/dtos/category.dto';
 import { NotyService } from '../../noty/noty.service';
 import { finalize } from 'rxjs/operators';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { IDraggedEvent } from '../../shared/directives/draggable-item/draggable-item.directive';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
+import { DEFAULT_LANG } from '../../shared/constants/constants';
 
 @Component({
   selector: 'categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
-export class CategoriesComponent extends NgUnsubscribe implements OnInit, OnDestroy {
+export class CategoriesComponent extends NgUnsubscribe implements OnInit {
 
   categories: CategoryTreeItem[];
   isLoading: boolean = false;
+  lang = DEFAULT_LANG;
 
-  constructor(private categoriesService: CategoriesService,
-              private router: Router,
-              private headService: HeadService,
-              private notyService: NotyService,
-              private route: ActivatedRoute) {
+  constructor(
+    private categoriesService: CategoriesService,
+    private router: Router,
+    private headService: HeadService,
+    private notyService: NotyService,
+    private route: ActivatedRoute
+  ) {
     super();
   }
 
@@ -31,14 +34,6 @@ export class CategoriesComponent extends NgUnsubscribe implements OnInit, OnDest
     this.fetchCategoriesTree();
     this.categoriesService.categoryUpdated$.subscribe(_ => this.fetchCategoriesTree());
     this.headService.setTitle('Категории');
-    setTimeout(() => {
-      console.log('After "CategoriesComponent" render');
-      logMemory();
-    }, 1000);
-  }
-
-  ngOnDestroy(): void {
-    super.ngOnDestroy();
   }
 
   fetchCategoriesTree() {

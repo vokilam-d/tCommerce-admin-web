@@ -10,6 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { AdditionalServiceService } from '../../shared/services/additional-service.service';
 import { AdditionalServiceDto } from '../../shared/dtos/additional-service.dto';
+import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
+import { DEFAULT_LANG } from '../../shared/constants/constants';
 
 @Component({
   selector: 'additional-service-list',
@@ -27,15 +29,18 @@ export class AdditionalServiceListComponent extends NgUnsubscribe implements OnI
   isGridLoading: boolean = false;
   gridLinkFieldName: string = getPropertyOf<AdditionalServiceDto>('id');
   gridCells: IGridCell[] = additionalServiceGridCells;
+  lang = DEFAULT_LANG;
 
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor(private additionalServiceService: AdditionalServiceService,
-              private cdr: ChangeDetectorRef,
-              private notyService: NotyService,
-              private headService: HeadService,
-              private route: ActivatedRoute,
-              private router: Router) {
+  constructor(
+    private additionalServiceService: AdditionalServiceService,
+    private cdr: ChangeDetectorRef,
+    private notyService: NotyService,
+    private headService: HeadService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     super();
   }
 
@@ -87,7 +92,7 @@ const additionalServiceGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<AdditionalServiceDto>('name')
+    fieldName: `${getPropertyOf<AdditionalServiceDto>('name')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   },
   {
     isSearchable: true,
@@ -96,7 +101,7 @@ const additionalServiceGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<AdditionalServiceDto>('clientName')
+    fieldName: `${getPropertyOf<AdditionalServiceDto>('clientName')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   },
   {
     isSearchable: true,

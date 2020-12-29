@@ -1,0 +1,39 @@
+<div class="page">
+  <div class="header">
+    <h1 class="header__title">
+      Объявление на сайте
+    </h1>
+
+    <div class="header__toolbar">
+      <button class="header__btn toolbar-main-btn" (click)="save()" type="button">Сохранить</button>
+    </div>
+  </div>
+
+
+  <form class="announcement" *ngIf="form" [formGroup]="form">
+
+    <div class="announcement__field field" *ngIf="form.get('isEnabled') as isEnabled">
+      <label class="field__label">Включено?</label>
+      <div class="field__control">
+        <toggle [formControl]="isEnabled"></toggle>
+      </div>
+    </div>
+
+    <div class="announcement__field field">
+      <div class="field__label">Шаблон</div>
+      <div class="field__control">
+        <app-select [options]="announcementOptions" (select)="setAnnouncementValue($event)"></app-select>
+      </div>
+    </div>
+
+    <div class="announcement__field field" *ngIf="form.get('announcement') as announcement">
+      <label for="announcement" class="field__label">Редактировать текст</label>
+      <span class="field__control">
+        <textarea class="field__input announcement__text" [formControl]="announcement" type="text" id="announcement"></textarea>
+      </span>
+    </div>
+
+  </form>
+
+  <preloader class="preloader" *ngIf="isLoading"></preloader>
+</div>

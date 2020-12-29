@@ -19,6 +19,8 @@ import { GridModule } from '../../grid/grid.module';
 import { RedirectControlModule } from '../../redirect-control/redirect-control.module';
 import { LinkedProductsModule } from '../../linked-products/linked-products.module';
 import { SetBreadcrumpsComponent } from './set-breadcrumps/set-breadcrumps.component';
+import { MultilingualControlModule } from '../../multilingual-control/multilingual-control.module';
+
 
 
 @NgModule({
@@ -38,7 +40,8 @@ import { SetBreadcrumpsComponent } from './set-breadcrumps/set-breadcrumps.compo
     OrderListViewerModule,
     GridModule,
     RedirectControlModule,
-    LinkedProductsModule
+    LinkedProductsModule,
+    MultilingualControlModule
   ],
   exports: [],
   providers: []

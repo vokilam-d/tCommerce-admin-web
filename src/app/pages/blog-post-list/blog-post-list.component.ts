@@ -10,6 +10,8 @@ import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubsc
 import { Subscription } from 'rxjs';
 import { BlogPostService } from '../../shared/services/blog-post.service';
 import { NotyService } from '../../noty/noty.service';
+import { DEFAULT_LANG } from '../../shared/constants/constants';
+import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
 
 @Component({
   selector: 'blog-post-list',
@@ -18,8 +20,6 @@ import { NotyService } from '../../noty/noty.service';
 })
 export class BlogPostListComponent extends NgUnsubscribe implements OnInit, AfterViewInit {
 
-  private fetchAllSub: Subscription;
-
   posts: BlogPostDto[] = [];
   postsTotal: number = 0;
   pagesTotal: number = 1;
@@ -27,15 +27,19 @@ export class BlogPostListComponent extends NgUnsubscribe implements OnInit, Afte
   isGridLoading: boolean = false;
   gridLinkFieldName: string = getPropertyOf<BlogPostDto>('id');
   gridCells: IGridCell[] = postGridCells;
+  lang = DEFAULT_LANG;
+
+  private fetchAllSub: Subscription;
 
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor( private headService: HeadService,
-               private route: ActivatedRoute,
-               private router: Router,
-               private cdr: ChangeDetectorRef,
-               private blogPostService: BlogPostService,
-               private notyService: NotyService
+  constructor(
+    private headService: HeadService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private blogPostService: BlogPostService,
+    private notyService: NotyService
   ) {
     super();
   }
@@ -88,7 +92,7 @@ const postGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<BlogPostDto>('name')
+    fieldName: `${getPropertyOf<BlogPostDto>('name')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   },
   {
     isSearchable: false,

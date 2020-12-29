@@ -9,16 +9,16 @@ import { GridComponent } from '../../grid/grid.component';
 import { Subscription } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { getPropertyOf } from '../../shared/helpers/get-property-of.function';
-import { UPLOADED_HOST } from '../../shared/constants/constants';
+import { DEFAULT_LANG, UPLOADED_HOST } from '../../shared/constants/constants';
 import { HeadService } from '../../shared/services/head.service';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { AttributeService } from '../../shared/services/attribute.service';
 import { DeviceService } from '../../shared/services/device-detector/device.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 import { copyToClipboard } from '../../shared/helpers/copy-to-clipboard.function';
 import { DEFAULT_CURRENCY_CODE } from '../../shared/enums/currency.enum';
 import { ReadableCurrencyPipe } from '../../shared/pipes/readable-currency.pipe';
 import { DatePipe } from '@angular/common';
+import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
 
 @Component({
   selector: 'product-list',
@@ -27,12 +27,12 @@ import { DatePipe } from '@angular/common';
 })
 export class ProductListComponent extends NgUnsubscribe implements OnInit, AfterViewInit {
 
-  private fetchAllSub: Subscription;
   products: ProductListItemDto[];
 
   defaultCurrency = DEFAULT_CURRENCY_CODE;
   isOrderedFiltersVisible: boolean = false;
   orderedDates: [string, string] = [undefined, undefined];
+  lang = DEFAULT_LANG;
 
   itemsTotal: number = 0;
   itemsFiltered: number;
@@ -40,18 +40,22 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
   gridLinkUrl: string = 'edit';
   isGridLoading: boolean = false;
   gridCells: IGridCell[] = [];
+
+  private fetchAllSub: Subscription;
+
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor(private productsService: ProductService,
-              private attributeService: AttributeService,
-              private route: ActivatedRoute,
-              private deviceService: DeviceService,
-              private cdr: ChangeDetectorRef,
-              private headService: HeadService,
-              private notyService: NotyService,
-              private router: Router,
-              private readableCurrencyPipe: ReadableCurrencyPipe,
-              private datePipe: DatePipe
+  constructor(
+    private productsService: ProductService,
+    private attributeService: AttributeService,
+    private route: ActivatedRoute,
+    private deviceService: DeviceService,
+    private cdr: ChangeDetectorRef,
+    private headService: HeadService,
+    private notyService: NotyService,
+    private router: Router,
+    private readableCurrencyPipe: ReadableCurrencyPipe,
+    private datePipe: DatePipe
   ) {
     super();
   }
@@ -59,10 +63,6 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
   ngOnInit() {
     this.setGridCells();
     this.headService.setTitle(`Товары`);
-    setTimeout(() => {
-      console.log('After "ProductListComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   ngAfterViewInit(): void {
@@ -115,7 +115,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
   }
 
   getItemCategories(product: ProductListItemDto): string {
-    return product.categories.map(category => category.name).join(', ');
+    return product.categories.map(category => category.name[DEFAULT_LANG]).join(', ');
   }
 
   getManufacturerAttr(product: ProductListItemDto): string {
@@ -156,7 +156,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
       .map(product => {
         const fields: (string | number)[] = [
           product.skus,
-          product.name,
+          product.name[DEFAULT_LANG],
           this.getItemCategories(product),
           product.vendorCodes,
           this.getManufacturerAttr(product),
@@ -208,7 +208,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             align: 'left',
             isImage: false,
             isSortable: true,
-            fieldName: getPropertyOf<ProductListItemDto>('name')
+            fieldName: `${getPropertyOf<ProductListItemDto>('name')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
           },
           {
             isSearchable: true,
@@ -217,7 +217,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             align: 'left',
             isImage: false,
             isSortable: true,
-            fieldName: `${getPropertyOf<ProductListItemDto>('categories')}.${getPropertyOf<ProductCategoryDto>('name')}`
+            fieldName: `${getPropertyOf<ProductListItemDto>('categories')}.${getPropertyOf<ProductCategoryDto>('name')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
           },
           {
             isSearchable: true,
@@ -230,13 +230,13 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
           },
           {
             isSearchable: false,
-            label: manufacturerAttribute?.label,
+            label: manufacturerAttribute?.label[DEFAULT_LANG],
             initialWidth: 120,
             align: 'left',
             isImage: false,
             isSortable: false,
             fieldName: manufacturerAttribute?.id,
-            filterFields: manufacturerAttribute?.values.map(value => ({ data: value.id, view: value.label }))
+            filterFields: manufacturerAttribute?.values.map(value => ({ data: value.id, view: value.label[DEFAULT_LANG] }))
           },
           {
             isSearchable: true,

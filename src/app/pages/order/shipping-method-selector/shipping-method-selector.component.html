@@ -2,9 +2,11 @@
   <div class="selector__title">
     Способы доставки
   </div>
+
   <div class="selector__empty" *ngIf="!enabledMethods.length; else hasMethods">
     Нет способов доставки
   </div>
+
   <ng-template #hasMethods>
     <div class="selector__method" *ngFor="let method of enabledMethods" (click)="selectMethod(method)">
       <input class="selector__radio"
@@ -14,7 +16,7 @@
       >
 
       <div class="selector__name">
-        {{ method.adminName }}
+        {{ method.adminName[lang] }}
       </div>
     </div>
   </ng-template>

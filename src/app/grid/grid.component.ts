@@ -53,6 +53,7 @@ export class GridComponent<T extends { isOpened?: boolean } = any> extends NgUns
   activeSorting: IGridSorting = null;
   filtersMap = new Map<fieldName, string | string[]>();
   gridScrollLeft: number = 0;
+
   private search$ = new Subject<IGridFilter>();
 
   @Input() gridName: string;
@@ -74,11 +75,14 @@ export class GridComponent<T extends { isOpened?: boolean } = any> extends NgUns
   @ViewChild('gridBodyRef') gridBodyRef: ElementRef<HTMLElement>;
   @ContentChildren('cellContent') cellContents: QueryList<TemplateRef<any>>;
   @ContentChildren('subCellContent') subCellContents: QueryList<TemplateRef<any>>;
+
   get cellContentsArray(): TemplateRef<any>[] { return this.cellContents.toArray(); }
   get subCellContentsArray(): TemplateRef<any>[] { return this.subCellContents.toArray(); }
 
-  constructor(private deviceService: DeviceService,
-              private cdr: ChangeDetectorRef) {
+  constructor(
+    private deviceService: DeviceService,
+    private cdr: ChangeDetectorRef
+  ) {
     super();
   }
 

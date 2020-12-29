@@ -23,8 +23,8 @@
     <span grid-no-items>Дополнительные услуги не найдены</span>
 
     <ng-template #cellContent let-additionalService="item">{{ additionalService.id }}</ng-template>
-    <ng-template #cellContent let-additionalService="item">{{ additionalService.name }}</ng-template>
-    <ng-template #cellContent let-additionalService="item">{{ additionalService.clientName }}</ng-template>
+    <ng-template #cellContent let-additionalService="item">{{ additionalService.name[lang] }}</ng-template>
+    <ng-template #cellContent let-additionalService="item">{{ additionalService.clientName[lang] }}</ng-template>
     <ng-template #cellContent let-additionalService="item">{{ additionalService.price }}</ng-template>
     <ng-template #cellContent let-additionalService="item">{{ additionalService.isEnabled ? 'On' : 'Off' }}</ng-template>
   </grid>

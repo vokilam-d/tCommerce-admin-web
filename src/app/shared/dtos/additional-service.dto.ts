@@ -1,7 +1,9 @@
+import { MultilingualTextDto } from './multilingual-text.dto';
+
 export class AdditionalServiceDto {
   id: number;
-  name: string = '';
-  clientName: string = '';
+  name: MultilingualTextDto = new MultilingualTextDto();
+  clientName: MultilingualTextDto = new MultilingualTextDto();
   isEnabled: boolean = true;
   price: number = 0;
 }

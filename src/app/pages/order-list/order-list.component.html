@@ -56,7 +56,7 @@
       <span class="order__city">{{ order.shipment.recipient.address }}</span>
     </ng-template>
     <ng-template #cellContent let-order="item">{{ order.prices.totalCost }} {{ defaultCurrency | readableCurrency }}</ng-template>
-    <ng-template #cellContent let-order="item">{{ order.statusDescription }}</ng-template>
+    <ng-template #cellContent let-order="item">{{ order.statusDescription[lang] }}</ng-template>
     <ng-template #cellContent let-order="item">
       <span class="order__shipment-status">
         {{ order.shipment.statusDescription }}
@@ -72,7 +72,7 @@
         {{ order.isOrderPaid ? 'Да' : 'Нет' }}
       </div>
     </ng-template>
-    <ng-template #cellContent let-order="item">{{ order.paymentMethodAdminName }}</ng-template>
+    <ng-template #cellContent let-order="item">{{ order.paymentMethodAdminName[lang] }}</ng-template>
     <ng-template #cellContent let-order="item">{{ order.isCallbackNeeded ? 'Да' : 'Нет' }}</ng-template>
     <ng-template #cellContent let-order="item">{{ order.clientNote }}</ng-template>
     <ng-template #cellContent let-order="item">

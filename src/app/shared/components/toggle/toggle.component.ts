@@ -14,6 +14,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class ToggleComponent implements OnInit, ControlValueAccessor {
 
   value: boolean;
+
   @Input() disabled: boolean = false;
 
   constructor() { }

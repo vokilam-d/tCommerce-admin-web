@@ -6,7 +6,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="false">
-        {{ product?.name }}
+        {{ product?.name[lang] }}
       </ng-container>
     </h1>
 
@@ -74,7 +74,7 @@
     >
       <label for="name" class="field__label">Название товара</label>
       <span class="field__control">
-        <input class="field__input" [formControl]="name" (blur)="onNameControlBlur(name)" type="text" id="name">
+        <multilingual-control [formControl]="name" (onBlur)="onNameControlBlur(name)" id="name"></multilingual-control>
       </span>
     </div>
 
@@ -131,7 +131,7 @@
     >
 
       <div fields-group-title *ngIf="isMultiVariant">
-        Вариация {{ i + 1 }} - Код {{ product.variants[i].sku || '_____' }}<ng-container *ngIf="variantForm.get('name')?.value as name"> - {{ name }}</ng-container>
+        Вариация {{ i + 1 }} - Код {{ product.variants[i].sku || '_____' }}<ng-container *ngIf="variantForm.get('name')?.value as name"> - {{ name[lang] }}</ng-container>
       </div>
 
       <div class="product__field product__is-enabled-variant field"
@@ -157,7 +157,10 @@
             Название товара
           </label>
           <span class="field__control">
-            <input class="field__input" [formControl]="name" (blur)="onVariantNameControlBlur(name, i)" type="text" [id]="'name-' + i">
+            <multilingual-control [formControl]="name"
+                                  [id]="'name-' + i"
+                                  (blur)="onVariantNameControlBlur(name, i)"
+            ></multilingual-control>
           </span>
         </div>
 
@@ -268,7 +271,7 @@
             Google product ads название товара
           </label>
           <span class="field__control">
-            <input class="field__input" [formControl]="googleAdsProductTitle" [id]="'googleAdsProductTitle-' + i" type="text">
+            <multilingual-control [formControl]="googleAdsProductTitle" [id]="'googleAdsProductTitle-' + i"></multilingual-control>
           </span>
         </div>
 
@@ -309,7 +312,11 @@
             Описание
           </label>
           <span class="field__control">
-            <quill-editor [formControl]="fullDescription" [strict]="false" [id]="'desc-' + i" [modules]="quillModules" (onBlur)="onDescriptionControlBlur($event, i)"></quill-editor>
+            <multilingual-control [formControl]="fullDescription"
+                                  [id]="'desc-' + i"
+                                  (blur)="onDescriptionControlBlur(fullDescription, i)"
+                                  type="editor"
+            ></multilingual-control>
           </span>
         </div>
 
@@ -320,7 +327,10 @@
             Короткое описание
           </label>
           <span class="field__control">
-            <textarea class="field__textarea" [formControl]="shortDescription" [id]="'s-desc-' + i"></textarea>
+            <multilingual-control [formControl]="shortDescription"
+                                  [id]="'s-desc-' + i"
+                                  type="textarea"
+            ></multilingual-control>
           </span>
         </div>
       </fields-group>
@@ -351,7 +361,7 @@
             Meta заголовок
           </label>
           <span class="field__control">
-            <textarea class="field__input" [formControl]="metaTitle" [id]="'metaTitle-' + i"></textarea>
+            <multilingual-control [formControl]="metaTitle" [id]="'metaTitle-' + i" type="textarea"></multilingual-control>
           </span>
         </div>
 
@@ -362,7 +372,7 @@
             Meta описание
           </label>
           <span class="field__control">
-            <textarea class="field__textarea" [formControl]="metaDescription" [id]="'metaDesc-' + i"></textarea>
+            <multilingual-control [formControl]="metaDescription" [id]="'metaDesc-' + i" type="textarea"></multilingual-control>
           </span>
         </div>
 
@@ -373,7 +383,7 @@
             Meta ключевые слова
           </label>
           <span class="field__control">
-            <textarea class="field__textarea" [formControl]="metaKeywords" [id]="'metaKeys-' + i"></textarea>
+            <multilingual-control [formControl]="metaKeywords" [id]="'metaKeys-' + i" type="textarea"></multilingual-control>
           </span>
         </div>
       </fields-group>

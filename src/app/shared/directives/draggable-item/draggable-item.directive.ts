@@ -28,24 +28,27 @@ export class DraggableItemDirective implements AfterViewInit, OnDestroy {
     [EReorderPosition.Inside]: false,
     [EReorderPosition.Start]: false,
     [EReorderPosition.End]: false
-  }
+  };
+
+  private mouseMoveUnlisten: () => void = null;
+
+  @HostBinding('class.draggable-item--is-dragging')   isDragging: boolean = false;
   @HostBinding('class.draggable-item--body-hovered')  get isBodyHovered() { return this.isHovered[EReorderPosition.Inside]; }
   @HostBinding('class.draggable-item--start-hovered') get isStartHovered() { return this.isHovered[EReorderPosition.Start]; }
   @HostBinding('class.draggable-item--end-hovered')   get isEndHovered() { return this.isHovered[EReorderPosition.End]; }
   @HostBinding('class.draggable-item--vertical')      get isVertical() { return this.direction === 'vertical'; }
   @HostBinding('class.draggable-item--horizontal')    get isHorizontal() { return this.direction === 'horizontal'; }
-  @HostBinding('class.draggable-item--is-dragging')   isDragging: boolean = false;
 
   @Input('draggable-item') item: any;
   @Input('draggable-item-type') type: string;
   @Input('draggable-item-direction') direction: 'vertical' | 'horizontal' = 'vertical';
   @Output() dragged = new EventEmitter<IDraggedEvent>();
 
-  private mouseMoveUnlisten: () => void = null;
-
-  constructor(private dragService: DraggableService,
-              private renderer: Renderer2,
-              private elementRef: ElementRef) { }
+  constructor(
+    private dragService: DraggableService,
+    private renderer: Renderer2,
+    private elementRef: ElementRef
+  ) { }
 
   ngAfterViewInit() {
   }
@@ -113,6 +116,7 @@ export class DraggableItemDirective implements AfterViewInit, OnDestroy {
     this.resetHovered();
     this.isHovered[position] = true;
   }
+
   private resetHovered() {
     Object.keys(this.isHovered).forEach(position => this.isHovered[position] = false);
   }

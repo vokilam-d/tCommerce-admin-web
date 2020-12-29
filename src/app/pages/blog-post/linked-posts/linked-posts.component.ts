@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { LinkedBlogPostDto } from '../../../shared/dtos/blog-post.dto';
 import { PostSelectorComponent } from '../../../post-selector/post-selector.component';
+import { DEFAULT_LANG } from '../../../shared/constants/constants';
 
 @Component({
   selector: 'linked-posts',
@@ -10,6 +11,7 @@ import { PostSelectorComponent } from '../../../post-selector/post-selector.comp
 export class LinkedPostsComponent implements OnInit {
 
   isLoading: boolean = false;
+  lang = DEFAULT_LANG;
 
   @Input() linkedPosts: LinkedBlogPostDto[];
   @Output() onChange = new EventEmitter<LinkedBlogPostDto[]>();

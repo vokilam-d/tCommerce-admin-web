@@ -1,26 +1,27 @@
 import { MetaTagsDto } from './meta-tags.dto';
 import { MediaDto } from './media.dto';
 import { LinkedProductDto } from './linked-product.dto';
+import { MultilingualTextDto } from './multilingual-text.dto';
 
 export class LinkedBlogCategoryDto {
   id: number;
-  name: string;
+  name: MultilingualTextDto = new MultilingualTextDto();
   slug: string;
 }
 
 export class LinkedBlogPostDto {
   id: number;
-  name: string;
+  name: MultilingualTextDto = new MultilingualTextDto();
   slug: string;
   sortOrder: number;
 }
 
 export class BlogPostCreateDto {
-  name: string = '';
+  name: MultilingualTextDto = new MultilingualTextDto();
   slug: string = '';
   category: LinkedBlogCategoryDto;
-  content: string = '';
-  shortContent: string = '';
+  content: MultilingualTextDto = new MultilingualTextDto();
+  shortContent: MultilingualTextDto = new MultilingualTextDto();
   createdAt: Date = new Date();
   publishedAt: Date = new Date();
   updatedAt: Date = new Date();

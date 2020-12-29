@@ -7,7 +7,7 @@ import { CustomerService } from '../../shared/services/customer.service';
 import { NotyService } from '../../noty/noty.service';
 import { AddressFormComponent } from '../../address-form/address-form.component';
 import { saveFileFromUrl } from '../../shared/helpers/save-file.function';
-import { DEFAULT_ERROR_TEXT, UPLOADED_HOST } from '../../shared/constants/constants';
+import { DEFAULT_ERROR_TEXT, DEFAULT_LANG, UPLOADED_HOST } from '../../shared/constants/constants';
 import { FormControl } from '@angular/forms';
 import { HeadService } from '../../shared/services/head.service';
 import { FinalOrderStatuses, OrderStatusEnum } from '../../shared/enums/order-status.enum';
@@ -17,7 +17,7 @@ import { catchError, finalize, switchMap, takeUntil, tap } from 'rxjs/operators'
 import { PaymentMethodEnum } from '../../shared/enums/payment-method.enum';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { ShipmentStatusEnum } from '../../shared/enums/shipment-status.enum';
-import { logMemory } from '../../shared/helpers/log-memory.function';
+import { OrderItemDto } from '../../shared/dtos/order-item.dto';
 
 @Component({
   selector: 'order-view',
@@ -26,7 +26,7 @@ import { logMemory } from '../../shared/helpers/log-memory.function';
 })
 export class OrderViewComponent extends NgUnsubscribe implements OnInit {
 
-  uploadedHost = UPLOADED_HOST;
+  lang = DEFAULT_LANG;
   order: OrderDto;
   customer: CustomerDto;
   isAddressFormVisible: boolean = false;
@@ -59,21 +59,19 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
       || this.order?.shipment.status === ShipmentStatusEnum.HEADING_TO_RECIPIENT;
   }
 
-  constructor(private orderService: OrderService,
-              private customerService: CustomerService,
-              private notyService: NotyService,
-              private headService: HeadService,
-              private router: Router,
-              private route: ActivatedRoute) {
+  constructor(
+    private orderService: OrderService,
+    private customerService: CustomerService,
+    private notyService: NotyService,
+    private headService: HeadService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     super();
   }
 
   ngOnInit() {
     this.init();
-    setTimeout(() => {
-      console.log('After "OrderViewComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   private init() {
@@ -321,6 +319,14 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
 
   isCashOnDelivery() {
     return this.order.paymentType === PaymentMethodEnum.CASH_ON_DELIVERY;
+  }
+
+  getItemThumbnail(item: OrderItemDto): string {
+    if (!item.imageUrl) {
+      return 'admin/assets/images/no-img.png';
+    } else {
+      return UPLOADED_HOST + item.imageUrl;
+    }
   }
 
   private handlePaymentStatusControl() {

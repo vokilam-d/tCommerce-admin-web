@@ -9,8 +9,8 @@ import { UPLOADED_HOST } from '../shared/constants/constants';
 })
 export class MediaAssetComponent implements OnInit {
 
-  uploadedHost = UPLOADED_HOST;
   isDetailsVisible: boolean = false;
+
   @Input() media: MediaDto;
   @Output('remove') removeEmitter = new EventEmitter<MediaDto>();
 
@@ -29,5 +29,9 @@ export class MediaAssetComponent implements OnInit {
 
   hideDetails() {
     this.isDetailsVisible = false;
+  }
+
+  getMediaUrl(): string {
+    return UPLOADED_HOST + this.media.variantsUrls.original;
   }
 }

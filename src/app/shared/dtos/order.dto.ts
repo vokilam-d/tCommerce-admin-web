@@ -3,6 +3,8 @@ import { ShipmentDto } from './shipment.dto';
 import { OrderStatusEnum } from '../enums/order-status.enum';
 import { PaymentMethodEnum } from '../enums/payment-method.enum';
 import { OrderPricesDto } from './order-prices.dto';
+import { MultilingualTextDto } from './multilingual-text.dto';
+import { LogDto } from './log.dto';
 
 export class AddOrUpdateOrderDto {
   customerId: number;
@@ -17,22 +19,22 @@ export class AddOrUpdateOrderDto {
   isConfirmationEmailSent: boolean = false;
   paymentType: PaymentMethodEnum;
   paymentMethodId: string;
-  paymentMethodAdminName: string;
-  paymentMethodClientName: string;
-  shippingMethodName: string;
+  paymentMethodAdminName: MultilingualTextDto = new MultilingualTextDto();
+  paymentMethodClientName: MultilingualTextDto = new MultilingualTextDto();
+  shippingMethodName: MultilingualTextDto = new MultilingualTextDto();
   isCallbackNeeded: boolean = false;
   items: OrderItemDto[] = [];
   status: OrderStatusEnum = OrderStatusEnum.NEW;
   clientNote: string = '';
   adminNote: string = '';
-  notes: string[] = [];
   prices: OrderPricesDto = new OrderPricesDto();
   isOrderPaid: boolean = false;
+  logs: LogDto[];
 }
 
 export class OrderDto extends AddOrUpdateOrderDto {
   id: number;
-  statusDescription: string;
+  statusDescription: MultilingualTextDto = new MultilingualTextDto();
   source: 'client' | 'manager';
 }
 

@@ -10,7 +10,8 @@ import { Subscription } from 'rxjs';
 import { GridComponent } from '../../grid/grid.component';
 import { NotyService } from '../../noty/noty.service';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
+import { DEFAULT_LANG } from '../../shared/constants/constants';
+import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
 
 
 @Component({
@@ -29,24 +30,23 @@ export class AttributeListComponent extends NgUnsubscribe implements OnInit, Aft
   isGridLoading: boolean = false;
   gridLinkFieldName: string = getPropertyOf<AttributeDto>('id');
   gridCells: IGridCell[] = attributeGridCells;
+  lang = DEFAULT_LANG;
 
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor(private attributeService: AttributeService,
-              private cdr: ChangeDetectorRef,
-              private notyService: NotyService,
-              private headService: HeadService,
-              private route: ActivatedRoute,
-              private router: Router) {
+  constructor(
+    private attributeService: AttributeService,
+    private cdr: ChangeDetectorRef,
+    private notyService: NotyService,
+    private headService: HeadService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     super();
   }
 
   ngOnInit() {
     this.headService.setTitle(`Атрибуты`);
-    setTimeout(() => {
-      console.log('After "AttributeListComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   ngAfterViewInit() {
@@ -93,6 +93,6 @@ const attributeGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<AttributeDto>('label')
+    fieldName: `${getPropertyOf<AttributeDto>('label')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   }
 ];

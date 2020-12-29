@@ -18,7 +18,8 @@ import { GridComponent } from '../grid/grid.component';
 import { NotyService } from '../noty/noty.service';
 import { finalize } from 'rxjs/operators';
 import { getPropertyOf } from '../shared/helpers/get-property-of.function';
-import { UPLOADED_HOST } from '../shared/constants/constants';
+import { DEFAULT_LANG, UPLOADED_HOST } from '../shared/constants/constants';
+import { MultilingualTextDto } from '../shared/dtos/multilingual-text.dto';
 
 class VariantForSelector extends ProductVariantListItemDto {
   selectedQty: number;
@@ -44,8 +45,6 @@ export interface ISelectedProduct {
 })
 export class ProductSelectorComponent implements OnInit, AfterViewInit {
 
-  uploadedHost = UPLOADED_HOST;
-  private fetchAllSub: Subscription;
   isSelectorVisible: boolean = false;
   products: ProductForSelector[] = [];
   itemsTotal: number = 0;
@@ -55,14 +54,18 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
   gridCells: IGridCell[] = PRODUCT_GRID_CELLS;
   variantsFieldName = getPropertyOf<ProductForSelector>('variants');
   defaultCurrency = DEFAULT_CURRENCY_CODE;
+  lang = DEFAULT_LANG;
+
+  private fetchAllSub: Subscription;
 
   @Input() canInputQty: boolean = false;
   @Output('selected') selectedEmitter: EventEmitter<ISelectedProduct> = new EventEmitter();
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor(private productService: ProductService,
-              private cdr: ChangeDetectorRef,
-              private notyService: NotyService
+  constructor(
+    private productService: ProductService,
+    private cdr: ChangeDetectorRef,
+    private notyService: NotyService
   ) { }
 
   ngOnInit() {
@@ -131,11 +134,11 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
     this.notyService.showSuccessNoty(`Товар добавлен`);
   }
 
-  setItemThumbnail(product) {
+  getItemThumbnail(product: ProductForSelector | VariantForSelector) {
     if (!product.mediaUrl) {
       return 'admin/assets/images/no-img.png';
     } else {
-      return this.uploadedHost + product.mediaUrl;
+      return UPLOADED_HOST + product.mediaUrl;
     }
   }
 
@@ -170,7 +173,7 @@ const PRODUCT_GRID_CELLS: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<ProductForSelector>('name')
+    fieldName: `${getPropertyOf<ProductForSelector>('name')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   },
   {
     isSearchable: true,
@@ -184,7 +187,7 @@ const PRODUCT_GRID_CELLS: IGridCell[] = [
   {
     isSearchable: true,
     label: 'Артикул',
-    initialWidth: 55,
+    initialWidth: 65,
     align: 'left',
     isImage: false,
     isSortable: true,

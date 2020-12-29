@@ -1,0 +1,45 @@
+<div class="control">
+  <div class="control__tabs">
+    <button class="control__tab"
+            *ngFor="let lang of languages"
+            [class.control__tab--active]="lang === activeLanguage"
+            [ngSwitch]="lang"
+            (click)="activeLanguage = lang"
+    >
+      <ng-container *ngSwitchCase="languagesEnum.UK">Укр</ng-container>
+      <ng-container *ngSwitchCase="languagesEnum.RU">Рус</ng-container>
+      <ng-container *ngSwitchCase="languagesEnum.EN">Eng</ng-container>
+    </button>
+  </div>
+
+  <ng-container *ngFor="let lang of languages" [ngSwitch]="type">
+    <ng-container *ngIf="lang === activeLanguage && form.get(lang) as control">
+
+      <input *ngSwitchCase="'text'"
+             class="field__input control__input"
+             [formControl]="control"
+             [id]="id"
+             (blur)="onControlBlur()"
+             type="text"
+      >
+
+      <textarea *ngSwitchCase="'textarea'"
+                class="field__input control__input"
+                [formControl]="control"
+                [id]="id"
+                [rows]="rows"
+                (blur)="onControlBlur()"
+                type="text"
+      ></textarea>
+
+      <quill-editor *ngSwitchCase="'editor'"
+                    class="control__input"
+                    [formControl]="control"
+                    [strict]="false"
+                    [id]="id"
+                    [modules]="quillModules"
+                    (onBlur)="onControlBlur()"
+      ></quill-editor>
+    </ng-container>
+  </ng-container>
+</div>

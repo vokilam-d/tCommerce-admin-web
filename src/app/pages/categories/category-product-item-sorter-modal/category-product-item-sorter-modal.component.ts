@@ -19,9 +19,10 @@ export class CategoryProductItemSorterModalComponent implements OnInit {
 
   @Input() categoryId: number;
 
-  constructor(private productService: ProductService,
-              private notyService: NotyService) {
-  }
+  constructor(
+    private productService: ProductService,
+    private notyService: NotyService
+  ) { }
 
   ngOnInit(): void {
   }

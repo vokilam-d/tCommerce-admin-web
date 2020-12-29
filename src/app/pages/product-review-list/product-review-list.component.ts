@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 import { GridComponent } from '../../grid/grid.component';
 import { finalize } from 'rxjs/operators';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 @Component({
   selector: 'product-review-list',
@@ -30,20 +29,17 @@ export class ProductReviewListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor(private productReviewsService: ProductReviewService,
-              private route: ActivatedRoute,
-              private headService: HeadService,
-              private cdr: ChangeDetectorRef,
-              private notyService: NotyService,
-              private router: Router) {
-  }
+  constructor(
+    private productReviewsService: ProductReviewService,
+    private route: ActivatedRoute,
+    private headService: HeadService,
+    private cdr: ChangeDetectorRef,
+    private notyService: NotyService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.headService.setTitle(`Отзывы о товарах`);
-    setTimeout(() => {
-      console.log('After "ProductReviewListComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   ngAfterViewInit(): void {

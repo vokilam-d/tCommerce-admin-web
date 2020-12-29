@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MediaAssetComponent } from './media-asset.component';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { MultilingualControlModule } from '../multilingual-control/multilingual-control.module';
 
 
 @NgModule({
@@ -10,7 +11,8 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    MultilingualControlModule
   ],
   exports: [MediaAssetComponent]
 })

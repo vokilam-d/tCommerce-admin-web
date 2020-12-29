@@ -7,8 +7,9 @@ export class ClickOutsideDirective {
 
   @Output() private clickOutside = new EventEmitter<any>();
 
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor(
+    private elementRef: ElementRef
+  ) { }
 
   @HostListener(`document:touchend`, ['$event', '$event.target']) // workaround for ios devices not handling properly 'click'
   @HostListener(`document:click`, ['$event', '$event.target'])

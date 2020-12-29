@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 @Component({
   selector: 'dashboard',
@@ -13,10 +12,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.headService.setTitle(`Dashboard`);
-    setTimeout(() => {
-      console.log('After "DashboardComponent" render');
-      logMemory();
-    }, 1000);
   }
 
 }

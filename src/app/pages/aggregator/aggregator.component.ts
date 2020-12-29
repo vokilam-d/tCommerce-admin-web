@@ -13,7 +13,7 @@ import { Observable, of } from 'rxjs';
 import { ResponseDto } from '../../shared/dtos/response.dto';
 import { ProductService } from '../../shared/services/product.service';
 import { IGridFilter } from '../../grid/grid.interface';
-import { UPLOADED_HOST } from '../../shared/constants/constants';
+import { DEFAULT_LANG, UPLOADED_HOST } from '../../shared/constants/constants';
 import { ISelectedProduct, ProductSelectorComponent } from '../../product-selector/product-selector.component';
 
 @Component({
@@ -29,8 +29,7 @@ export class AggregatorComponent extends NgUnsubscribe implements OnInit {
   isLoading: boolean = false;
   isProductsLoading: boolean = false;
   products$: Observable<ProductListItemDto[]>;
-
-  uploadedHost = UPLOADED_HOST;
+  lang = DEFAULT_LANG;
 
   @ViewChild(ProductSelectorComponent) selectorCmp: ProductSelectorComponent;
 
@@ -39,13 +38,15 @@ export class AggregatorComponent extends NgUnsubscribe implements OnInit {
     return this.form.get(idsProp);
   }
 
-  constructor(private aggregatorsService: AggregatorService,
-              private formBuilder: FormBuilder,
-              private productService: ProductService,
-              private headService: HeadService,
-              private router: Router,
-              private notyService: NotyService,
-              private route: ActivatedRoute) {
+  constructor(
+    private aggregatorsService: AggregatorService,
+    private formBuilder: FormBuilder,
+    private productService: ProductService,
+    private headService: HeadService,
+    private router: Router,
+    private notyService: NotyService,
+    private route: ActivatedRoute
+  ) {
     super();
   }
 
@@ -94,12 +95,14 @@ export class AggregatorComponent extends NgUnsubscribe implements OnInit {
   }
 
   private buildForm() {
-    this.form = this.formBuilder.group({
+    const controlsConfig: Record<keyof Omit<AggregatorDto, 'id'>, any> = {
       name: [this.aggregator.name],
       clientName: [this.aggregator.clientName, Validators.required],
       isVisibleOnProductPage: [this.aggregator.isVisibleOnProductPage],
-      productIds: [this.aggregator.productIds],
-    });
+      productIds: [this.aggregator.productIds]
+    };
+
+    this.form = this.formBuilder.group(controlsConfig);
 
     this.products$ = this.productIdsControl.valueChanges
       .pipe(
@@ -122,16 +125,14 @@ export class AggregatorComponent extends NgUnsubscribe implements OnInit {
         response => {
           this.aggregator = response.data;
           this.buildForm();
-          this.headService.setTitle(this.aggregator.name);
+          this.headService.setTitle(this.aggregator.name[DEFAULT_LANG]);
         },
         error => console.warn(error)
       );
   }
 
   private validateControls(form: FormGroup | FormArray) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
-
+    Object.values(form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup || control instanceof FormArray) {
@@ -183,7 +184,7 @@ export class AggregatorComponent extends NgUnsubscribe implements OnInit {
     if (!product.mediaUrl) {
       return 'admin/assets/images/no-img.png';
     } else {
-      return this.uploadedHost + product.mediaUrl;
+      return UPLOADED_HOST + product.mediaUrl;
     }
   }
 
@@ -194,7 +195,7 @@ export class AggregatorComponent extends NgUnsubscribe implements OnInit {
   }
 
   onProductRemove(product: ProductListItemDto) {
-    if (!confirm(`Вы точно хотите убрать товар "${product.name}" из этого списка?`)) { return; }
+    if (!confirm(`Вы точно хотите убрать товар "${product.name[DEFAULT_LANG]}" из этого списка?`)) { return; }
 
     const productIds: number[] = this.productIdsControl.value;
     const index = productIds.findIndex(id => id === product.id);

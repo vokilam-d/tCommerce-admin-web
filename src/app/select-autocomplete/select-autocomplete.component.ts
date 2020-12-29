@@ -19,6 +19,7 @@ import { WarehouseDto } from '../shared/dtos/warehouse.dto';
 import { SettlementDto } from '../shared/dtos/settlement.dto';
 import { ISelectOption } from '../shared/components/select/select-option.interface';
 import { ResponseDto } from '../shared/dtos/response.dto';
+import { NotyService } from '../noty/noty.service';
 
 @Component({
   selector: 'select-autocomplete',
@@ -37,19 +38,25 @@ export class SelectAutocompleteComponent extends SelectComponent implements Afte
   searchError: string = null;
 
   private _activeOptionLabel: string;
-  get activeOptionLabel(): string { return this._activeOptionLabel; };
+
   @Input() set activeOptionLabel(label: string) { this._activeOptionLabel = label; };
   @Input() type: 'settlement' | 'warehouse' | 'street';
   @Input() settlementId?: string;
   @ViewChild('input') inputRef: ElementRef<HTMLInputElement>;
 
-  constructor(private addressService: AddressService,
-              private cdr: ChangeDetectorRef) {
+  get activeOptionLabel(): string { return this._activeOptionLabel; };
+
+  constructor(
+    private addressService: AddressService,
+    private notyService: NotyService,
+    private cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
   ngAfterViewInit() {
     if (!this.type) {
+      this.notyService.showErrorNoty(`[${SelectAutocompleteComponent.name}]: "type" is not provided!`);
       throw new Error('"type" is not provided!');
     }
 

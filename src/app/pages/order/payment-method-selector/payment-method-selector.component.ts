@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PaymentMethodDto } from '../../../shared/dtos/payment-method.dto';
 import { PaymentMethodService } from '../../../shared/services/payment-method.service';
+import { DEFAULT_LANG } from '../../../shared/constants/constants';
 
 @Component({
   selector: 'payment-method-selector',
@@ -9,7 +10,9 @@ import { PaymentMethodService } from '../../../shared/services/payment-method.se
 })
 export class PaymentMethodSelectorComponent implements OnInit {
 
+  lang = DEFAULT_LANG;
   private methods: PaymentMethodDto[] = [];
+
   get enabledMethods(): PaymentMethodDto[] { return this.methods.filter(method => method.isEnabled); }
 
   @Input('activeId') activeMethodId: string;

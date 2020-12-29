@@ -3,9 +3,10 @@ import { MediaDto } from './media.dto';
 import { MetaTagsDto } from './meta-tags.dto';
 import { DEFAULT_CURRENCY_CODE, ECurrencyCode } from '../enums/currency.enum';
 import { LinkedProductDto } from './linked-product.dto';
+import { MultilingualTextDto } from './multilingual-text.dto';
 
 export class AddOrUpdateProductVariantDto {
-  name: string = '';
+  name: MultilingualTextDto = new MultilingualTextDto();
   createRedirect: boolean;
   vendorCode: string = '';
   gtin: string = '';
@@ -16,8 +17,8 @@ export class AddOrUpdateProductVariantDto {
   oldPrice: number;
   currency: ECurrencyCode = DEFAULT_CURRENCY_CODE;
   medias: MediaDto[] = [];
-  fullDescription: string = '';
-  shortDescription: string = '';
+  fullDescription: MultilingualTextDto = new MultilingualTextDto();
+  shortDescription: MultilingualTextDto = new MultilingualTextDto();
   metaTags: MetaTagsDto = new MetaTagsDto();
   qtyInStock: number = 0;
   isDiscountApplicable: boolean = true;

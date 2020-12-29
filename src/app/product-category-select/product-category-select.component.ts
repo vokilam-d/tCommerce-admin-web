@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CategoryTreeItem } from '../shared/dtos/category.dto';
 import { ResponseDto } from '../shared/dtos/response.dto';
-import { API_HOST } from '../shared/constants/constants';
+import { API_HOST, DEFAULT_LANG } from '../shared/constants/constants';
 import { ProductCategoryDto } from '../shared/dtos/product.dto';
 import { NotyService } from '../noty/noty.service';
 import { toHttpParams } from '../shared/helpers/to-http-params.function';
@@ -26,8 +26,10 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
   isVisible: boolean = false;
   isDisabled: boolean = false;
   options: CategorySelectOption[] = [];
+  lang = DEFAULT_LANG;
 
   private _value: ProductCategoryDto[];
+
   get value(): ProductCategoryDto[] {
     const selected = [];
     const populate = (options: CategorySelectOption[]) => {
@@ -43,6 +45,7 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
     populate(this.options);
     return selected;
   }
+
   set value(categories: ProductCategoryDto[]) {
     this._value = categories;
     this.setOptionsSelectedState(this.options);
@@ -50,10 +53,11 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
     this.onTouched();
   }
 
-  constructor(private http: HttpClient,
-              private notyService: NotyService,
-              private cdr: ChangeDetectorRef) {
-  }
+  constructor(
+    private http: HttpClient,
+    private notyService: NotyService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
     setTimeout(() => this.init());

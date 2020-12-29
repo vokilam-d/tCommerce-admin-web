@@ -81,14 +81,14 @@
         </div>
       </ng-template>
       <ng-template #cellContent let-attribute="item">{{ attribute.id }}</ng-template>
-      <ng-template #cellContent let-attribute="item">{{ attribute.label }}</ng-template>
+      <ng-template #cellContent let-attribute="item">{{ attribute.label[lang] }}</ng-template>
     </grid>
 
     <ng-container *ngSwitchCase="stepsEnum.AttributeValues">
       <div class="attribute" *ngFor="let attribute of selectedAttributes">
         <div class="attribute__header">
           <div class="attribute__label">
-            {{ attribute.label }}
+            {{ attribute.label[lang] }}
             <ng-container *ngIf="attribute.type === attrTypeEnum.MultiSelect"> (мультивыбор)</ng-container>
           </div>
           <div class="attribute__remove" (click)="toggleAttribute(attribute, false)">
@@ -102,7 +102,7 @@
                    [(ngModel)]="value.isSelected"
                    type="checkbox"
             >
-            <span class="attribute__value-label">{{ value.label }}</span>
+            <span class="attribute__value-label">{{ value.label[lang] }}</span>
           </label>
         </div>
       </div>

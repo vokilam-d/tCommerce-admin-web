@@ -6,8 +6,10 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AutofocusDirective implements AfterViewInit {
 
-  constructor(private elementRef: ElementRef,
-              @Inject(PLATFORM_ID) private platformId: any) { }
+  constructor(
+    private elementRef: ElementRef,
+    @Inject(PLATFORM_ID) private platformId: any
+  ) { }
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {

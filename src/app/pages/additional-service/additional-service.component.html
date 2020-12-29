@@ -2,7 +2,7 @@
   <div class="header">
     <h1 class="header__title" [ngSwitch]="isNewAdditionalService">
       <ng-container *ngSwitchCase="true">Новая дополнительная услуга</ng-container>
-      <ng-container *ngSwitchCase="false">Доп. услуга {{ additionalService?.name }}</ng-container>
+      <ng-container *ngSwitchCase="false">Доп. услуга {{ additionalService?.name[lang] }}</ng-container>
     </h1>
 
     <div class="header__toolbar">
@@ -34,7 +34,7 @@
     >
       <label for="name" class="field__label">Название</label>
       <span class="field__control">
-        <input class="field__input" [formControl]="name" type="text" id="name">
+        <multilingual-control [formControl]="name" id="name"></multilingual-control>
       </span>
     </div>
 
@@ -44,7 +44,7 @@
     >
       <label for="clientName" class="field__label">Название для клиента</label>
       <span class="field__control">
-        <input class="field__input" [formControl]="clientName" type="text" id="clientName">
+        <multilingual-control [formControl]="clientName" id="clientName"></multilingual-control>
       </span>
     </div>
 

@@ -10,9 +10,11 @@ import { Request } from 'express';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router,
-              @Optional() @Inject(REQUEST) private serverReq: Request,
-              private userService: UserService) {}
+  constructor(
+    private router: Router,
+    @Optional() @Inject(REQUEST) private serverReq: Request,
+    private userService: UserService
+  ) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 

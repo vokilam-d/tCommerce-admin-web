@@ -1,4 +1,5 @@
 import { EMediaVariant } from '../enums/media-variant.enum';
+import { MultilingualTextDto } from './multilingual-text.dto';
 
 type VariantsUrls = {
   [k in EMediaVariant]: string;
@@ -12,7 +13,7 @@ export class MediaDto {
     [EMediaVariant.Small]: '',
   };
 
-  altText: string;
+  altText: MultilingualTextDto = new MultilingualTextDto();
 
   isHidden: boolean;
 

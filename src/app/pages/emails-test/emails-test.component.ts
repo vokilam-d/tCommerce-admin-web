@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { NotyService } from '../../noty/noty.service';
 import { API_HOST } from '../../shared/constants/constants';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 @Component({
   selector: 'emails-test',
@@ -13,18 +12,17 @@ import { logMemory } from '../../shared/helpers/log-memory.function';
 export class EmailsTestComponent implements OnInit {
 
   email: string = '';
+  id: number = 1;
   private apiPrefix = 'admin/email-test';
 
-  constructor(private http: HttpClient,
-              private headService: HeadService,
-              private notyService: NotyService) { }
+  constructor(
+    private http: HttpClient,
+    private headService: HeadService,
+    private notyService: NotyService
+  ) { }
 
   ngOnInit() {
     this.headService.setTitle(`Письма`);
-    setTimeout(() => {
-      console.log('After "EmailsTestComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   sendEmailConfirmationEmail() {
@@ -46,24 +44,18 @@ export class EmailsTestComponent implements OnInit {
   }
 
   sendOrderConfirmationEmail() {
-    if (!this.checkEmail()) { return; }
+    if (!this.checkEmail() || !this.id) { return; }
 
-    const orderId = prompt(`Введите ID заказа`);
-    if (!orderId) { return; }
-
-    const apiUrl = `${API_HOST}/api/v1/${this.apiPrefix}/order-confirmation/${orderId}`;
+    const apiUrl = `${API_HOST}/api/v1/${this.apiPrefix}/order-confirmation/${this.id}`;
     this.http.post(apiUrl, { email: this.email })
       .pipe(this.notyService.attachNoty({ successText: 'Письмо успешно отправлено' }))
       .subscribe();
   }
 
   sendLeaveReviewEmail() {
-    if (!this.checkEmail()) { return; }
+    if (!this.checkEmail() || !this.id) { return; }
 
-    const orderId = prompt(`Введите ID заказа`);
-    if (!orderId) { return; }
-
-    const apiUrl = `${API_HOST}/api/v1/${this.apiPrefix}/leave-review/${orderId}`;
+    const apiUrl = `${API_HOST}/api/v1/${this.apiPrefix}/leave-review/${this.id}`;
     this.http.post(apiUrl, { email: this.email })
       .pipe(this.notyService.attachNoty({ successText: 'Письмо успешно отправлено' }))
       .subscribe();
@@ -79,24 +71,18 @@ export class EmailsTestComponent implements OnInit {
   }
 
   sendNewProductReviewEmail() {
-    if (!this.checkEmail()) { return; }
+    if (!this.checkEmail() || !this.id) { return; }
 
-    const reviewId = prompt(`Введите ID отзыва`);
-    if (!reviewId) { return; }
-
-    const apiUrl = `${API_HOST}/api/v1/${this.apiPrefix}/new-product-review/${reviewId}`;
+    const apiUrl = `${API_HOST}/api/v1/${this.apiPrefix}/new-product-review/${this.id}`;
     this.http.post(apiUrl, { email: this.email })
       .pipe(this.notyService.attachNoty({ successText: 'Письмо успешно отправлено' }))
       .subscribe();
   }
 
   sendNewStoreReviewEmail() {
-    if (!this.checkEmail()) { return; }
+    if (!this.checkEmail() || !this.id) { return; }
 
-    const reviewId = prompt(`Введите ID отзыва`);
-    if (!reviewId) { return; }
-
-    const apiUrl = `${API_HOST}/api/v1/${this.apiPrefix}/new-store-review/${reviewId}`;
+    const apiUrl = `${API_HOST}/api/v1/${this.apiPrefix}/new-store-review/${this.id}`;
     this.http.post(apiUrl, { email: this.email })
       .pipe(this.notyService.attachNoty({ successText: 'Письмо успешно отправлено' }))
       .subscribe();

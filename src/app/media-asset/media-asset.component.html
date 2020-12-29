@@ -1,10 +1,6 @@
 <div class="media">
   <div class="media__img-container" (click)="showDetails()">
-    <img class="media__img"
-         [src]="uploadedHost + media.variantsUrls.original"
-         [alt]="media.altText"
-         draggable="false"
-    >
+    <img class="media__img" [src]="getMediaUrl()" draggable="false">
 
     <div class="media__is-hidden" *ngIf="media.isHidden">Скрыто</div>
   </div>
@@ -31,14 +27,14 @@
 
   <div class="details__container">
     <div class="details__img-container">
-      <img class="details__img" [src]="uploadedHost + media.variantsUrls.original" [alt]="media.altText">
+      <img class="details__img" [src]="getMediaUrl()">
     </div>
 
     <div class="details__info">
       <label class="details__row">
         <span class="details__label">Alt text</span>
         <span class="details__value">
-          <textarea class="field__textarea" [(ngModel)]="media.altText"></textarea>
+          <multilingual-control [(ngModel)]="media.altText" type="textarea"></multilingual-control>
         </span>
       </label>
       <div class="details__row">

@@ -24,9 +24,10 @@ export class LinkedProductsComponent implements OnInit {
   @Output() onChange = new EventEmitter<LinkedProductDto[]>();
   @ViewChild(ProductSelectorComponent) selectorCmp: ProductSelectorComponent;
 
-  constructor(private productService: ProductService,
-              private notyService: NotyService) {
-  }
+  constructor(
+    private productService: ProductService,
+    private notyService: NotyService
+  ) { }
 
   ngOnInit(): void {
     this.fetchListItems();

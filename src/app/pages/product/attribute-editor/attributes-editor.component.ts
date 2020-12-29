@@ -18,6 +18,8 @@ import { IGridCell, IGridValue } from '../../../grid/grid.interface';
 import { NotyService } from '../../../noty/noty.service';
 import { getPropertyOf } from '../../../shared/helpers/get-property-of.function';
 import { ProductSelectedAttributeDto } from '../../../shared/dtos/selected-attribute.dto';
+import { DEFAULT_LANG } from '../../../shared/constants/constants';
+import { MultilingualTextDto } from '../../../shared/dtos/multilingual-text.dto';
 
 enum ESelectionStep {
   SelectAttributes,
@@ -51,6 +53,7 @@ interface ITruncatedVariant {
 })
 export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
 
+  lang = DEFAULT_LANG;
   isVisible: boolean = false;
   activeStep: ESelectionStep = ESelectionStep.SelectAttributes;
   attributes: AttributeDto[] = [];
@@ -90,9 +93,11 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
     );
   }
 
-  constructor(public attributeService: AttributeService,
-              private notyService: NotyService,
-              private cdr: ChangeDetectorRef) {
+  constructor(
+    public attributeService: AttributeService,
+    private notyService: NotyService,
+    private cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -269,6 +274,12 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
   }
 
   private finish() {
+    const getStringCopy = (str: string): string => `КОПИЯ - ${str}`;
+    const getMultilangTextCopy = (text: MultilingualTextDto): MultilingualTextDto => {
+      const copy = new MultilingualTextDto();
+      Object.entries(text).forEach(([lang, value]) => copy[lang] = getStringCopy(value));
+      return copy;
+    }
     const getVariantCopy = (idx: number) => {
       if (idx === -1) {
         idx = 0;
@@ -276,22 +287,22 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
 
       const variantClone: AddOrUpdateProductVariantDto = JSON.parse(JSON.stringify(this.initialFormValue.variants[idx]));
       return {
-        name: `КОПИЯ - ${variantClone.name}`,
+        name: getMultilangTextCopy(variantClone.name),
         price: variantClone.price,
         oldPrice: variantClone.oldPrice,
         qtyInStock: variantClone.qtyInStock,
         isIncludedInShoppingFeed: variantClone.isIncludedInShoppingFeed,
         isEnabled: variantClone.isEnabled,
-        googleAdsProductTitle: `КОПИЯ - ${variantClone.googleAdsProductTitle}`,
+        googleAdsProductTitle: getStringCopy(variantClone.googleAdsProductTitle),
         isDiscountApplicable: variantClone.isDiscountApplicable,
-        vendorCode: `КОПИЯ - ${variantClone.vendorCode}`,
-        gtin: `КОПИЯ - ${variantClone.gtin}`,
-        fullDescription: `КОПИЯ - ${variantClone.fullDescription}`,
+        vendorCode: getStringCopy(variantClone.vendorCode),
+        gtin: getStringCopy(variantClone.gtin),
+        fullDescription: getMultilangTextCopy(variantClone.fullDescription),
         slug: '',
         metaTags: {
-          title: `КОПИЯ - ${variantClone.metaTags.title}`,
-          description: `КОПИЯ - ${variantClone.metaTags.description}`,
-          keywords: `КОПИЯ - ${variantClone.metaTags.keywords}`,
+          title: getMultilangTextCopy(variantClone.metaTags.title),
+          description: getMultilangTextCopy(variantClone.metaTags.description),
+          keywords: getMultilangTextCopy(variantClone.metaTags.keywords),
         },
         crossSellProducts: variantClone.crossSellProducts,
         relatedProducts: variantClone.relatedProducts,
@@ -449,6 +460,6 @@ const attributeGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<AttributeDto>('label')
+    fieldName: `${getPropertyOf<AttributeDto>('label')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   }
 ];

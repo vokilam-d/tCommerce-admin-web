@@ -16,13 +16,13 @@ import { FormControl } from '@angular/forms';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { OrderStatusEnum } from '../../shared/enums/order-status.enum';
 import { ShipmentStatusEnum } from '../../shared/enums/shipment-status.enum';
-import { TRANSLATIONS_MAP } from '../../shared/constants/constants';
+import { DEFAULT_LANG, TRANSLATIONS_MAP } from '../../shared/constants/constants';
 import { PaymentMethodEnum } from '../../shared/enums/payment-method.enum';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 import { OrderPricesDto } from '../../shared/dtos/order-prices.dto';
 import { copyToClipboard } from '../../shared/helpers/copy-to-clipboard.function';
 import { DatePipe } from '@angular/common';
 import { ReadableCurrencyPipe } from '../../shared/pipes/readable-currency.pipe';
+import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
 
 @Component({
   selector: 'order-list',
@@ -30,8 +30,6 @@ import { ReadableCurrencyPipe } from '../../shared/pipes/readable-currency.pipe'
   styleUrls: ['./order-list.component.scss']
 })
 export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterViewInit {
-
-  private fetchAllSub: Subscription;
 
   paymentTypes = PaymentMethodEnum;
   orders: OrderDto[] = [];
@@ -42,18 +40,22 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
   gridLinkUrl: string = 'view';
   gridCells: IGridCell[] = orderGridCells;
   defaultCurrency = DEFAULT_CURRENCY_CODE;
+  lang = DEFAULT_LANG;
   statusControl = new FormControl();
+
+  private fetchAllSub: Subscription;
 
   @ViewChild(GridComponent) gridCmp: GridComponent;
 
-  constructor(private ordersService: OrderService,
-              private route: ActivatedRoute,
-              private headService: HeadService,
-              private cdr: ChangeDetectorRef,
-              private notyService: NotyService,
-              private router: Router,
-              private datePipe: DatePipe,
-              private readableCurrencyPipe: ReadableCurrencyPipe
+  constructor(
+    private ordersService: OrderService,
+    private route: ActivatedRoute,
+    private headService: HeadService,
+    private cdr: ChangeDetectorRef,
+    private notyService: NotyService,
+    private router: Router,
+    private datePipe: DatePipe,
+    private readableCurrencyPipe: ReadableCurrencyPipe
   ) {
     super();
   }
@@ -61,10 +63,6 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
   ngOnInit() {
     this.headService.setTitle(`Заказы`);
     this.handleStatusControl();
-    setTimeout(() => {
-      console.log('After "OrderListComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   ngAfterViewInit(): void {
@@ -122,12 +120,12 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
           order.shipment.recipient.settlement,
           order.shipment.recipient.address,
           `${order.prices.totalCost} ${this.readableCurrencyPipe.transform(this.defaultCurrency)}`,
-          order.statusDescription,
+          order.statusDescription[DEFAULT_LANG],
           order.shipment.statusDescription,
           order.shipment.trackingNumber,
           order.adminNote,
           `${order.isOrderPaid ? 'Да' : 'Нет'}`,
-          order.paymentMethodAdminName,
+          order.paymentMethodAdminName[DEFAULT_LANG],
           `${order.isCallbackNeeded ? 'Да' : 'Нет'}`,
           order.clientNote
         ];
@@ -283,7 +281,7 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<OrderDto>('paymentMethodAdminName')
+    fieldName: `${getPropertyOf<OrderDto>('paymentMethodAdminName')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   },
   {
     isSearchable: false,

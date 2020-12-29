@@ -10,7 +10,7 @@ import { HeadService } from '../../shared/services/head.service';
 import { EAttributeType } from '../../shared/enums/attribute-type.enum';
 import { ISelectOption } from '../../shared/components/select/select-option.interface';
 
-class TransformedValue extends AttributeValueDto {
+class TransformedAttributeValue extends AttributeValueDto {
   isNew: boolean = true;
 }
 
@@ -28,7 +28,7 @@ export class AttributeComponent implements OnInit {
   typeOptions: ISelectOption[] = [{ data: EAttributeType.Select }, { data: EAttributeType.MultiSelect }];
 
   get hasColorControl() { return this.form.get('hasColor'); }
-  get values(): TransformedValue[] { return this.form.get('values').value; }
+  get values(): TransformedAttributeValue[] { return this.form.get('values').value; }
 
   constructor(
     private formBuilder: FormBuilder,
@@ -93,7 +93,7 @@ export class AttributeComponent implements OnInit {
 
   addOption() {
     const controlOptions = this.form.get('values').value as AttributeValueDto[];
-    controlOptions.push(new TransformedValue());
+    controlOptions.push(new TransformedAttributeValue());
   }
 
   onRadioChange(optionIndex: number) {
@@ -114,7 +114,6 @@ export class AttributeComponent implements OnInit {
       label: [attribute.label, Validators.required],
       values: [attribute.values],
       type: [attribute.type],
-      groupName: attribute.groupName,
       isVisibleInFilters: attribute.isVisibleInFilters,
       isVisibleInProduct: attribute.isVisibleInProduct,
       hasColor: attribute.hasColor,
@@ -140,9 +139,7 @@ export class AttributeComponent implements OnInit {
   }
 
   private validateAllControls() {
-    Object.keys(this.form.controls).forEach(controlName => {
-      const control = this.form.get(controlName);
-
+    Object.values(this.form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       }

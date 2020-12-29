@@ -10,7 +10,6 @@ import { finalize } from 'rxjs/operators';
 import { HeadService } from '../../shared/services/head.service';
 import { AddressFormComponent } from '../../address-form/address-form.component';
 import { AddressTypeEnum } from '../../shared/enums/address-type.enum';
-import { logMemory } from '../../shared/helpers/log-memory.function';
 
 @Component({
   selector: 'customer',
@@ -31,20 +30,17 @@ export class CustomerComponent implements OnInit {
 
   @ViewChild(AddressFormComponent) addressFormCmp: AddressFormComponent;
 
-  constructor(private customersService: CustomerService,
-              private formBuilder: FormBuilder,
-              private headService: HeadService,
-              private router: Router,
-              private notyService: NotyService,
-              private route: ActivatedRoute) {
-  }
+  constructor(
+    private customersService: CustomerService,
+    private formBuilder: FormBuilder,
+    private headService: HeadService,
+    private router: Router,
+    private notyService: NotyService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.init();
-    setTimeout(() => {
-      console.log('After "CustomerComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   private init() {
@@ -114,9 +110,7 @@ export class CustomerComponent implements OnInit {
   }
 
   private validateControls(form: FormGroup | FormArray) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
-
+    Object.values(form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup || control instanceof FormArray) {
@@ -125,7 +119,7 @@ export class CustomerComponent implements OnInit {
     });
   }
 
-  isControlInvalid(control: AbstractControl) {
+  isControlInvalid(control: AbstractControl): boolean {
     return !control.valid && control.touched;
   }
 

@@ -71,9 +71,7 @@ export class AddressFormComponent extends NgUnsubscribe implements OnChanges {
   }
 
   private validateControls(form: FormGroup | FormArray) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
-
+    Object.values(form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup || control instanceof FormArray) {
@@ -82,7 +80,7 @@ export class AddressFormComponent extends NgUnsubscribe implements OnChanges {
     });
   }
 
-  isControlInvalid(control: AbstractControl) {
+  isControlInvalid(control: AbstractControl): boolean {
     return !control.valid && control.touched;
   }
 

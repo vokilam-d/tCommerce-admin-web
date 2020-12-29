@@ -6,7 +6,7 @@ import { NotyService } from '../../noty/noty.service';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { HeadService } from '../../shared/services/head.service';
-import { logMemory } from '../../shared/helpers/log-memory.function';
+import { DEFAULT_LANG } from '../../shared/constants/constants';
 
 @Component({
   selector: 'payment-method',
@@ -19,20 +19,18 @@ export class PaymentMethodComponent implements OnInit {
   activeMethod: PaymentMethodDto;
   form: FormGroup;
   isLoading: boolean = false;
+  lang = DEFAULT_LANG;
 
-  constructor(private paymentMethodService: PaymentMethodService,
-              private notyService: NotyService,
-              private router: Router,
-              private headService: HeadService,
-              private formBuilder: FormBuilder) {
-  }
+  constructor(
+    private paymentMethodService: PaymentMethodService,
+    private notyService: NotyService,
+    private router: Router,
+    private headService: HeadService,
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.init();
-    setTimeout(() => {
-      console.log('After "PaymentMethodComponent" render');
-      logMemory();
-    }, 1000);
   }
 
   private init() {
@@ -62,7 +60,7 @@ export class PaymentMethodComponent implements OnInit {
       sortOrder: paymentMethod.sortOrder
     });
 
-    this.headService.setTitle(this.activeMethod.adminName || 'Новый способ оплаты');
+    this.headService.setTitle(this.activeMethod.adminName[DEFAULT_LANG] || 'Новый способ оплаты');
   }
 
   addNewMethod() {
@@ -96,19 +94,17 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   deleteMethod() {
-    if (!this.activeMethod.id || !confirm(`Вы уверены, что хотите удалить '${this.activeMethod.adminName}'?`)) {
+    if (!this.activeMethod.id || !confirm(`Вы уверены, что хотите удалить '${this.activeMethod.adminName[DEFAULT_LANG]}'?`)) {
       return;
     }
 
     this.paymentMethodService.deletePaymentMethod(this.activeMethod.id)
       .pipe(this.notyService.attachNoty({ successText: `Способ оплаты успешно удалён` }))
-      .subscribe(response => this.init());
+      .subscribe(_ => this.init());
   }
 
   private validateControls(form: FormGroup | FormArray = this.form) {
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.get(controlName);
-
+    Object.values(form.controls).forEach(control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup || control instanceof FormArray) {

@@ -53,7 +53,7 @@
     <ng-template #cellContent let-product="item">
       <img class="product-thumbnail" [src]="getItemThumbnail(product)">
     </ng-template>
-    <ng-template #cellContent let-product="item">{{ product.name }}</ng-template>
+    <ng-template #cellContent let-product="item">{{ product.name[lang] }}</ng-template>
     <ng-template #cellContent let-product="item">
       <span class="small">{{ getItemCategories(product) }}</span>
     </ng-template>
@@ -61,7 +61,7 @@
     <ng-template #cellContent let-product="item">
       <span class="small">{{ getManufacturerAttr(product) }}</span>
     </ng-template>
-    <ng-template #cellContent let-product="item">{{ product.prices }} {{ defaultCurrency | readableCurrency }}</ng-template>
+    <ng-template #cellContent let-product="item">{{ product.prices }} {{ product.currency | readableCurrency }}</ng-template>
     <ng-template #cellContent let-product="item">{{ product.quantitiesInStock }}</ng-template>
     <ng-template #cellContent let-product="item">{{ product.sellableQuantities }}</ng-template>
     <ng-template #cellContent let-product="item">

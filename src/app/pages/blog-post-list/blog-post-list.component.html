@@ -23,7 +23,7 @@
     <span grid-no-items>Посты не найдены</span>
 
     <ng-template #cellContent let-post="item">{{ post.id }}</ng-template>
-    <ng-template #cellContent let-post="item">{{ post.name }}</ng-template>
+    <ng-template #cellContent let-post="item">{{ post.name[lang] }}</ng-template>
     <ng-template #cellContent let-post="item">{{ post.createdAt | date:'dd.MM.y'}}</ng-template>
     <ng-template #cellContent let-post="item">{{ post.publishedAt | date:'dd.MM.y'}}</ng-template>
   </grid>

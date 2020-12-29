@@ -2,7 +2,7 @@
   <div class="header">
     <h1 class="header__title" [ngSwitch]="isNewAggregator">
       <ng-container *ngSwitchCase="true">Новый агрегатор</ng-container>
-      <ng-container *ngSwitchCase="false">Агрегатор {{ aggregator?.name }}</ng-container>
+      <ng-container *ngSwitchCase="false">Агрегатор {{ aggregator?.name[lang] }}</ng-container>
     </h1>
 
     <div class="header__toolbar">
@@ -24,7 +24,7 @@
     >
       <label for="name" class="field__label">Название</label>
       <span class="field__control">
-        <input class="field__input" [formControl]="name" type="text" id="name">
+        <multilingual-control [formControl]="name" id="name"></multilingual-control>
       </span>
     </div>
 
@@ -34,7 +34,7 @@
     >
       <label for="clientName" class="field__label">Надпись над таблицей для клиента</label>
       <span class="field__control">
-        <input class="field__input" [formControl]="clientName" type="text" id="clientName">
+        <multilingual-control [formControl]="clientName" id="clientName"></multilingual-control>
       </span>
     </div>
 
@@ -67,7 +67,7 @@
                [routerLink]="['/', 'admin', 'product', 'edit', product.id]"
                target="_blank"
             >
-              {{ product.name }}
+              {{ product.name[lang] }}
             </a>
           </div>
         </div>

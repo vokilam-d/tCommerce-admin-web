@@ -14,8 +14,10 @@ export class UserService {
 
   user: UserDto;
 
-  constructor(private http: HttpClient,
-              @Optional() @Inject(REQUEST) private req: any) { }
+  constructor(
+    private http: HttpClient,
+    @Optional() @Inject(REQUEST) private req: any
+  ) { }
 
   login(loginDto: LoginDto) {
     return this.http.post<ResponseDto<UserDto>>(`${API_HOST}/api/v1/admin/user/login`, loginDto)
