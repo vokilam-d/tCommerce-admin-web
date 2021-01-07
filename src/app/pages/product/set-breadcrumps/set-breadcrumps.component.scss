@@ -1,0 +1,19 @@
+@import "variables";
+
+.breadcrumb-container {
+  width: 100%;
+}
+
+.breadcrumps {
+  display: block;
+
+  &::before {
+    content: '>';
+    font-weight: 600;
+    padding: 0 5px;
+  }
+}
+
+.active-breadcrump {
+  display: inline-flex;
+}

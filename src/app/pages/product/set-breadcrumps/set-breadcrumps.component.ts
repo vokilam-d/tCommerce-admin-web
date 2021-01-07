@@ -1,36 +1,50 @@
-import { AfterViewInit, Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NotyService } from 'src/app/noty/noty.service';
+import { DEFAULT_LANG } from 'src/app/shared/constants/constants';
 import { ProductService } from 'src/app/shared/services/product.service';
-import { ProductComponent } from '../product.component';
+import { ɵstringify } from '@angular/core';
+import { BreadcrumbDto } from './../../../shared/dtos/breadcrumb.dto';
+import { ProductDto } from './../../../shared/dtos/product.dto';
 
 @Component({
   selector: 'set-breadcrumps',
   templateUrl: './set-breadcrumps.component.html',
   styleUrls: ['./set-breadcrumps.component.scss'],
-  providers: [ ProductComponent ]
-
+  providers: [ ProductService ]
 })
-export class SetBreadcrumpsComponent implements AfterViewInit, OnInit {
+export class SetBreadcrumpsComponent implements OnInit {
   
-  @Input('breadcrumpsVarisnts') breadcrumpsVarisnts: any
+  @Output() onChange = new EventEmitter();
+  @Input() product: ProductDto;
+  breadcrumpsVariants: BreadcrumbDto[][];
+  activeBreadcrump: BreadcrumbDto[];
+  isVisible: boolean;
+  isDisabled: boolean;
+  hasEmpty: boolean;
+  isMultiSelect: boolean;
+  lang = DEFAULT_LANG;
 
   constructor(private productService: ProductService,
-              private notyService: NotyService) 
-{ }
+              private notyService: NotyService
+  ) {}
 
   ngOnInit(): void {
-    this.fetchBreadcrumpsVariants(this.breadcrumpsVarisnts.id)
+    this.fetchBreadcrumpsVariants(ɵstringify(this.product.id));
+    this.activeBreadcrump = this.product.breadcrumbs;
+  }
+ 
+  toggleVisibility(isVisible: boolean = !this.isVisible) {
+    if (this.isDisabled) {
+      return;
+    }
+    this.isVisible = isVisible;
   }
 
-  ngAfterViewInit() {
-    if (this.breadcrumpsVarisnts.breadcrumpsVariants) {
-      console.log(`this.breadcrumps.breadcrumpsVariants is ISSET`)
-      //console.table(this.breadcrumps.breadcrumpsVariants)
-    } else {
-      console.log(`this.breadcrumps.breadcrumpsVariants is UNDERFINED`)
-      this.breadcrumpsVarisnts.breadcrumpsVariants = this.breadcrumpsVarisnts.breadcrumbs;
-      //console.table(this.breadcrumps.breadcrumpsVariants)
-    }
+  selectOption(breadcrump) {
+    this.activeBreadcrump = breadcrump;
+    this.product.breadcrumbs = breadcrump;
+    this.isVisible = false;
+    this.fetchBreadcrumpsVariants(ɵstringify(this.product.id));
   }
 
   async fetchBreadcrumpsVariants (id: string) {
@@ -38,7 +52,7 @@ export class SetBreadcrumpsComponent implements AfterViewInit, OnInit {
     .pipe(this.notyService.attachNoty())
     .subscribe(
       response => {
-        console.table(response)
+        this.breadcrumpsVariants = response;
       },
       error => console.warn(error)
     );

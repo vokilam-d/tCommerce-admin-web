@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnInit, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CategoryTreeItem } from '../shared/dtos/category.dto';
@@ -52,6 +52,8 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
     this.onChange(categories);
     this.onTouched();
   }
+
+  @Output('toggleChanges') toggleChanges = new EventEmitter();
 
   constructor(
     private http: HttpClient,
@@ -119,6 +121,7 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
 
     this.onChange(this.value);
     this.onTouched();
+    this.toggleChanges.emit();
   }
 
   unselectOption(event: Event, category: ProductCategoryDto) {

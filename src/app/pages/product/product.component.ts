@@ -1,5 +1,4 @@
-import { SetBreadcrumpsComponent } from './set-breadcrumps/set-breadcrumps.component';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../shared/services/product.service';
 import { EPageAction } from '../../shared/enums/category-page-action.enum';
@@ -22,6 +21,8 @@ import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubsc
 import { getClientLinkPrefix } from '../../shared/helpers/get-client-link-prefix.function';
 import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
 import { Language } from '../../shared/enums/language.enum';
+import { BreadcrumbDto } from './../../shared/dtos/breadcrumb.dto';
+import { SetBreadcrumpsComponent } from './set-breadcrumps/set-breadcrumps.component';
 
 type PostAction = 'duplicate' | 'exit' | 'none';
 
@@ -30,9 +31,9 @@ type PostAction = 'duplicate' | 'exit' | 'none';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
-export class ProductComponent extends NgUnsubscribe implements OnInit {
+export class ProductComponent extends NgUnsubscribe implements OnInit, AfterViewChecked {
 
-  breadcrumpsVarisnts: any;
+  breadcrumpsVariants: BreadcrumbDto[][];
   isNewProduct: boolean;
   isNewProductBasedOn: boolean;
   product: ProductDto;
@@ -45,6 +46,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
   get isMultiVariant(): boolean { return this.variantsFormArray.controls.length > 1; }
 
   @ViewChild(OrderListViewerModalComponent) ordersModal: OrderListViewerModalComponent;
+  @ViewChild(SetBreadcrumpsComponent) setBreadcrumps: SetBreadcrumpsComponent;
 
   constructor(
     private productsService: ProductService,
@@ -52,6 +54,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
     private router: Router,
     private headService: HeadService,
     private notyService: NotyService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute
   ) {
     super();
@@ -59,6 +62,10 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
 
   ngOnInit() {
     this.init();
+  }
+
+  ngAfterViewChecked(): void {
+    this.changeDetectorRef.detectChanges();
   }
 
   private init() {
@@ -73,6 +80,10 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
       this.buildForm();
       this.headService.setTitle(`Новый товар`);
     }
+  }
+
+  toggleChanges() {
+    this.save();
   }
 
   save(postAction: PostAction = 'none') {
@@ -222,6 +233,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
               break;
             case 'none':
               this.product = response.data;
+              this.setBreadcrumps.selectOption(response.data.breadcrumbs);
               this.buildForm();
               break;
           }

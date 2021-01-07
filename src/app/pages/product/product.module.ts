@@ -44,7 +44,7 @@ import { MultilingualControlModule } from '../../multilingual-control/multilingu
     MultilingualControlModule
   ],
   exports: [],
-  providers: []
+  providers: [ SetBreadcrumpsComponent ]
 })
 export class ProductModule {
 }

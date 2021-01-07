@@ -1,1 +1,30 @@
-<p>set-breadcrumps works!</p>
+<div class="field">
+  <div class="field__control select breadcrumb-container" (clickOutside)="toggleVisibility(false)">
+
+    <button class="select__active"
+            [class.select__active--focused]="isVisible"
+            [disabled]="isDisabled"
+            (click)="toggleVisibility()"
+            type="button"
+    >
+      <span class="active-breadcrump breadcrumps" *ngFor="let currentBreadcrump of activeBreadcrump">
+        {{ currentBreadcrump?.name[lang] }}
+      </span>
+      
+    </button>
+
+    <div class="select__options" *ngIf="isVisible">
+      <div class="select__option"
+           *ngFor="let breadcrumps of breadcrumpsVariants"
+           [class.select__option--active]="breadcrumps"
+           (click)="selectOption(breadcrumps)" 
+      >
+        <span class="breadcrumps" *ngFor="let breadcrumb of breadcrumps">
+          {{ breadcrumb?.name[lang] }}
+        </span>  
+      </div>
+    </div>
+
+  </div>
+
+</div>

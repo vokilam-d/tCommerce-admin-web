@@ -83,16 +83,16 @@
         Категории
       </label>
       <span class="field__control">
-        <product-category-select [formControl]="categories"></product-category-select>
+        <product-category-select [formControl]="categories" (toggleChanges)="toggleChanges($event)"></product-category-select>
       </span>
     </div>
 
     <div class="product__field field">
       <label class="field__label">
-        Breadcrumps
+        Вариант хлебных крошек
       </label>
       <span class="field__control">
-        <set-breadcrumps [formControl]="breadcrumpsVarisnts" [breadcrumpsVarisnts]="product"></set-breadcrumps>
+        <set-breadcrumps [product]="product"></set-breadcrumps>
       </span>
     </div>
 
