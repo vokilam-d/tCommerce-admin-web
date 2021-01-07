@@ -75,5 +75,9 @@
       {{ product.createdAt | date:'dd.MM.y' }}
       <span class="product-time">{{ product.createdAt | date:'HH:mm:ss' }}</span>
     </ng-template>
+    <ng-template #cellContent let-product="item">
+      {{ product.updatedAt | date:'dd.MM.y' }}
+      <span class="product-time">{{ product.updatedAt | date:'HH:mm:ss' }}</span>
+    </ng-template>
   </grid>
 </div>

@@ -12,7 +12,7 @@ export class ShipmentDto {
   senderId: number = null;
   recipient?: ShipmentAddressDto = new ShipmentAddressDto();
   shipmentType?: ShipmentTypeEnum = ShipmentTypeEnum.WAREHOUSE_WAREHOUSE;
-  payerType?: ShipmentPayerEnum = ShipmentPayerEnum.RECIPIENT;
+  payerType?: ShipmentPayerEnum;
   paymentMethod?: ShipmentPaymentMethodEnum = ShipmentPaymentMethodEnum.CASH;
   date?: string = '';
   weight?: string = '';

@@ -19,6 +19,13 @@
       </div>
     </div>
 
+    <div class="announcement__field field" *ngIf="form.get('isFixed') as isFixed">
+      <label class="field__label">Прикреплено к потолку?</label>
+      <div class="field__control">
+        <toggle [formControl]="isFixed"></toggle>
+      </div>
+    </div>
+
     <div class="announcement__field field">
       <div class="field__label">Шаблон</div>
       <div class="field__control">

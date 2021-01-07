@@ -18,6 +18,7 @@ import { PaymentMethodEnum } from '../../shared/enums/payment-method.enum';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { ShipmentStatusEnum } from '../../shared/enums/shipment-status.enum';
 import { OrderItemDto } from '../../shared/dtos/order-item.dto';
+import { copyToClipboard } from '../../shared/helpers/copy-to-clipboard.function';
 
 @Component({
   selector: 'order-view',
@@ -351,5 +352,10 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
         this.isLoading = false;
         this.order = response.data;
       });
+  }
+
+  public copyOrderIdToClipboard(id: number) {
+    copyToClipboard(`Заказ № ${id}`);
+    this.notyService.showSuccessNoty(`Скопировано`);
   }
 }

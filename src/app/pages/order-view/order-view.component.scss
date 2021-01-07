@@ -1,7 +1,40 @@
 @import "variables";
+@import "mixins";
+
 
 .order-view {
   margin: 20px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  &__block {
+    width: 100%;
+
+    @include respond-to($media_max-content-width) {
+      width: 48%;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 2px;
+      box-shadow: 0 0 4px 0 #c8c8c8;
+
+      &:hover {
+        box-shadow: 0 0 4px 0 #a7a7a7;
+      }
+    }
+
+    &--wide {
+      width: 100%;
+    }
+
+    &--no-border {
+      box-shadow: none;
+
+      &:hover {
+        box-shadow: none;
+      }
+    }
+  }
 
   &__subtitle {
     margin: 30px 0 0;
@@ -10,19 +43,34 @@
     align-items: center;
     border-bottom: 1px solid $borderColor;
     font-size: 18px;
+
+    @include respond-to($media_max-content-width) {
+      align-items: flex-end;
+      margin-top: 5px;
+    }
   }
 
   &__status {
-    margin: 0 0 0 auto;
-    padding: 7px 15px 8px;
-    background: rgba($dark, 0.9);
+    margin: 0 35px;
+    padding: 10px 35px;
     border-radius: 20px;
+    background: rgba(65, 54, 47, 0.9);
+    font-size: 20px;
     font-weight: 500;
     color: #fff;
   }
 
-  &__block {
+  &__content {
+    width: 50%;
     margin: 10px 0 0;
+
+    @include respond-to($media_max-content-width) {
+      width: 100%;
+    }
+
+    &--wide {
+      width: 100%;
+    }
   }
 
   &__no-tracking-number {
@@ -46,21 +94,15 @@
   }
 
   &__finish-order {
-    margin: 40px 0 0;
-  }
-
-  &__summary-block {
+    margin: 20px 0 0;
     display: flex;
     justify-content: flex-end;
   }
-}
 
-.two-col {
-  display: flex;
-  justify-content: space-between;
-
-  &__col {
-    width: 47%;
+  &__summary-block {
+    margin: 10px 0 0;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 
@@ -225,4 +267,8 @@
   &__place-order {
     margin: 15px 0 0;
   }
+}
+
+.log {
+  margin: 5px 0 0;
 }

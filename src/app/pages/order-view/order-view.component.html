@@ -1,8 +1,8 @@
 <div class="page">
   <div class="header">
-    <h1 class="header__title">
-      Заказ №{{ order?.id }}
-    </h1>
+    <h1 class="header__title" (click)="copyOrderIdToClipboard(order.id)">Заказ №{{ order?.id }}</h1>
+
+    <div class="order-view__status" *ngIf="order?.statusDescription[lang] as statusDesc">{{ statusDesc }}</div>
 
     <div class="header__toolbar">
       <button class="header__btn toolbar-btn" (click)="goBack()" type="button">
@@ -63,221 +63,233 @@
   </div>
 
   <div class="order-view" *ngIf="customer">
-    <div class="order-view__subtitle">
-      Заказ
-      <div class="order-view__status">{{ order.statusDescription[lang] }}</div>
-    </div>
-    <div class="order-view__block two-col">
-      <div class="two-col__col info-table">
-        <div class="info-table__row">
-          <div class="info-table__block">Дата заказа</div>
-          <div class="info-table__block">{{ order.createdAt | date:'medium' }}</div>
-        </div>
-        <div class="info-table__row">
-          <div class="info-table__block">Оплачен ли товар поставщику</div>
-          <div class="info-table__block"></div>
-        </div>
-        <div class="info-table__row">
-          <div class="info-table__block">Клиент</div>
-          <div class="info-table__block">
-            <a class="order-view__client-link"
-               [routerLink]="['/', 'admin', 'customer', 'edit', order.customerId]"
-               target="_blank"
-            >
-              {{ order.customerFirstName }} {{ order.customerLastName }} ({{ order.customerEmail }})
-            </a>
+    <div class="order-view__block">
+      <div class="order-view__subtitle">
+        Заказ
+      </div>
+      <div class="order-view__content">
+        <div class="two-col__col info-table">
+          <div class="info-table__row">
+            <div class="info-table__block">Дата заказа</div>
+            <div class="info-table__block">{{ order.createdAt | date:'medium' }}</div>
           </div>
-        </div>
-        <div class="info-table__row">
-          <div class="info-table__block">Комментарий о клиенте</div>
-          <div class="info-table__block">{{ order.customerNote }}</div>
-        </div>
-        <div class="info-table__row">
-          <div class="info-table__block">Нужно ли связываться с клиентом для подтверждения заказа?</div>
-          <div class="info-table__block">{{ order.isCallbackNeeded ? 'Да' : 'Нет' }}</div>
-        </div>
-        <div class="info-table__row">
-          <div class="info-table__block">Комментарий клиента к заказу</div>
-          <div class="info-table__block">{{ order.clientNote }}</div>
-        </div>
-        <div class="info-table__row">
-          <div class="info-table__block">Комментарий менеджера <a class="order-view__edit-btn" *ngIf="!adminNoteControl" (click)="openAdminNoteForm()">изменить</a></div>
-          <div class="info-table__block">
-            <div class="update-note" *ngIf="adminNoteControl; else adminNoteText">
-              <textarea class="update-note__control" [formControl]="adminNoteControl"></textarea>
-
-              <button class="order-view__edit-btn" (click)="updateAdminNote()">
-                сохранить
-              </button>
-
-              <button class="order-view__edit-btn" (click)="closeAdminNoteForm()">
-                отменить
-              </button>
+          <div class="info-table__row">
+            <div class="info-table__block">Оплачен ли товар поставщику</div>
+            <div class="info-table__block"></div>
+          </div>
+          <div class="info-table__row">
+            <div class="info-table__block">Клиент</div>
+            <div class="info-table__block">
+              <a class="order-view__client-link"
+                 [routerLink]="['/', 'admin', 'customer', 'edit', order.customerId]"
+                 target="_blank"
+              >
+                {{ order.customerFirstName }} {{ order.customerLastName }} ({{ order.customerEmail }})
+              </a>
             </div>
+          </div>
+          <div class="info-table__row">
+            <div class="info-table__block">Комментарий о клиенте</div>
+            <div class="info-table__block">{{ order.customerNote }}</div>
+          </div>
+          <div class="info-table__row">
+            <div class="info-table__block">Нужно ли связываться с клиентом для подтверждения заказа?</div>
+            <div class="info-table__block">{{ order.isCallbackNeeded ? 'Да' : 'Нет' }}</div>
+          </div>
+          <div class="info-table__row">
+            <div class="info-table__block">Комментарий клиента к заказу</div>
+            <div class="info-table__block">{{ order.clientNote }}</div>
+          </div>
+          <div class="info-table__row">
+            <div class="info-table__block">Комментарий менеджера <a class="order-view__edit-btn" *ngIf="!adminNoteControl" (click)="openAdminNoteForm()">изменить</a></div>
+            <div class="info-table__block">
+              <div class="update-note" *ngIf="adminNoteControl; else adminNoteText">
+                <textarea class="update-note__control" [formControl]="adminNoteControl"></textarea>
 
-            <ng-template #adminNoteText>{{ order.adminNote }}</ng-template>
+                <button class="order-view__edit-btn" (click)="updateAdminNote()">
+                  сохранить
+                </button>
+
+                <button class="order-view__edit-btn" (click)="closeAdminNoteForm()">
+                  отменить
+                </button>
+              </div>
+
+              <ng-template #adminNoteText>{{ order.adminNote }}</ng-template>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="order-view__subtitle">
-      Новая Почта
+    <div class="order-view__block">
+      <div class="order-view__subtitle">
+        Адрес
 
-      <ng-container >
-        <button class="order-view__edit-btn" *ngIf="!trackingIdControl" (click)="openTrackingIdForm()">
+        <button class="order-view__edit-btn" (click)="openAddressForm()">
           изменить
         </button>
+      </div>
+      <div class="order-view__content order-view__address">
+        {{ order.shippingMethodName[lang] }}<br><br>
 
-        <button class="order-view__edit-btn" *ngIf="order.shipment.trackingNumber && !trackingIdControl" (click)="updateShipmentStatus()">
-          обновить статус
-        </button>
-      </ng-container>
+        {{ order.shipment.recipient.firstName }} {{ order.shipment.recipient.lastName }}, {{ order.shipment.recipient.phone | normalizedPhone }}
+        <br>
+        {{ order.shipment.recipient.settlement }}, {{ order.shipment.recipient.address }}<ng-container *ngIf="order.shipment.recipient.buildingNumber as buildingNumber">, {{ buildingNumber }} {{ order.shipment.recipient.flat }}</ng-container>
+      </div>
     </div>
 
     <div class="order-view__block">
-      <div class="tracking">
-        <div class="tracking__control" *ngIf="trackingIdControl; else trackingIdTmpl">
-          <input class="tracking__input" [formControl]="trackingIdControl" type="text" autofocus>
+      <div class="order-view__subtitle">
+        Оплата
+      </div>
+      <div class="order-view__content">
+        <div class="two-col__col method">
+          <div class="method__title">Способ оплаты</div>
+          <div class="method__name">{{ order.paymentMethodAdminName[lang] }}</div>
+          <div class="payment-status" *ngIf="isPaymentToggleVisible()">
+            Заказ оплачен? <toggle class="payment-status__control" [formControl]="paymentStatusControl"></toggle>
 
-          <button class="order-view__edit-btn" (click)="updateTrackingId()">
-            сохранить
-          </button>
-
-          <button class="order-view__edit-btn" (click)="closeTrackingIdForm()">
-            отменить
-          </button>
+            <div class="payment-status__error" *ngIf="paymentStatusError as error">
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <ng-template #trackingIdTmpl>
-          <span class="order-view__no-tracking-number" *ngIf="!order.shipment.trackingNumber; else hasNumberTmpl">
-            - Нет номера ТТН -
-          </span>
+    <div class="order-view__block">
+      <div class="order-view__subtitle">
+        Новая Почта
 
-          <ng-template #hasNumberTmpl>
-            {{ order.shipment.trackingNumber }}. {{ order.shipment.statusDescription }}<span *ngIf="isDeliveryDateVisible && order.shipment.estimatedDeliveryDate as date">. Ориентировочная дата прибытия: <b>{{ date }}</b></span>
+        <ng-container >
+          <button class="order-view__edit-btn" *ngIf="!trackingIdControl" (click)="openTrackingIdForm()">
+            изменить
+          </button>
+
+          <button class="order-view__edit-btn" *ngIf="order.shipment.trackingNumber && !trackingIdControl" (click)="updateShipmentStatus()">
+            обновить статус
+          </button>
+        </ng-container>
+      </div>
+      <div class="order-view__content">
+        <div class="tracking">
+          <div class="tracking__control" *ngIf="trackingIdControl; else trackingIdTmpl">
+            <input class="tracking__input" [formControl]="trackingIdControl" type="text" autofocus>
+
+            <button class="order-view__edit-btn" (click)="updateTrackingId()">
+              сохранить
+            </button>
+
+            <button class="order-view__edit-btn" (click)="closeTrackingIdForm()">
+              отменить
+            </button>
+          </div>
+
+          <ng-template #trackingIdTmpl>
+            <span class="order-view__no-tracking-number" *ngIf="!order.shipment.trackingNumber; else hasNumberTmpl">
+              - Нет номера ТТН -
+            </span>
+
+            <ng-template #hasNumberTmpl>
+              {{ order.shipment.trackingNumber }}. {{ order.shipment.statusDescription }}<span *ngIf="isDeliveryDateVisible && order.shipment.estimatedDeliveryDate as date">. Ориентировочная дата прибытия: <b>{{ date }}</b></span>
+            </ng-template>
           </ng-template>
-        </ng-template>
-      </div>
-    </div>
-
-    <div class="order-view__subtitle">
-      Адрес
-
-      <button class="order-view__edit-btn" (click)="openAddressForm()">
-        изменить
-      </button>
-    </div>
-
-    <div class="order-view__block order-view__address">
-      {{ order.shippingMethodName[lang] }}<br><br>
-
-      {{ order.shipment.recipient.firstName }} {{ order.shipment.recipient.lastName }}, {{ order.shipment.recipient.phone | normalizedPhone }}
-      <br>
-      {{ order.shipment.recipient.settlement }}, {{ order.shipment.recipient.address }}<ng-container *ngIf="order.shipment.recipient.buildingNumber as buildingNumber">, {{ buildingNumber }} {{ order.shipment.recipient.flat }}</ng-container>
-    </div>
-
-    <div class="order-view__subtitle">
-      Оплата
-    </div>
-
-    <div class="order-view__block two-col">
-      <div class="two-col__col method">
-        <div class="method__title">Способ оплаты</div>
-        <div class="method__name">{{ order.paymentMethodAdminName[lang] }}</div>
-        <div class="payment-status" *ngIf="isPaymentToggleVisible()">
-          Заказ оплачен? <toggle class="payment-status__control" [formControl]="paymentStatusControl"></toggle>
-
-          <div class="payment-status__error" *ngIf="paymentStatusError as error">
-            {{ error }}
-          </div>
         </div>
       </div>
     </div>
 
-    <div class="order-view__subtitle">
-      Товары в заказе
-    </div>
+    <div class="order-view__block order-view__block--wide">
+      <div class="order-view__subtitle">
+        Товары в заказе
+      </div>
+      <div class="order-view__content order-view__content--wide">
+        <table class="items-table">
+          <thead>
+            <tr class="items-table__row items-table__row--head">
+              <td class="items-table__block items-table__block--img">Фото</td>
+              <td class="items-table__block items-table__block--name">Название</td>
+              <td class="items-table__block items-table__block--sku">Код</td>
+              <td class="items-table__block items-table__block--vendor">Артикул</td>
+              <td class="items-table__block items-table__block--vendor">Доп. услуги</td>
+              <td class="items-table__block items-table__block--price">Цена</td>
+              <td class="items-table__block items-table__block--qty">Кол-во</td>
+              <td class="items-table__block items-table__block--cost">Стоимость</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="items-table__row"
+                 *ngFor="let item of order.items, even as even"
+                 [class.items-table__row--even]="even"
+            >
+              <td class="items-table__block items-table__block--img">
+                <img class="items-table__img" [src]="getItemThumbnail(item)">
+              </td>
+              <td class="items-table__block items-table__block--name">
+                <a class="items-table__link" [routerLink]="['/', 'admin', 'product', 'edit', item.productId]" target="_blank">
+                  {{ item.name[lang] }}
+                </a>
+              </td>
+              <td class="items-table__block items-table__block--sku">
+                {{ item.sku }}
+              </td>
+              <td class="items-table__block items-table__block--vendor">
+                {{ item.vendorCode }}
+              </td>
+              <td class="items-table__block items-table__block--additional-services">
+                <div *ngFor="let service of item.additionalServices">
+                  {{ service.name[lang] }} (+{{ service.price }}грн)
+                </div>
+              </td>
+              <td class="items-table__block items-table__block--price">
+                {{ item.price }} грн
+              </td>
+              <td class="items-table__block items-table__block--qty">
+                <div class="items-table__qty">{{ item.qty }}</div>
+              </td>
+              <td class="items-table__block items-table__block--cost">
+                {{ item.cost }} грн
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-    <div class="order-view__block">
-      <table class="items-table">
-        <thead>
-          <tr class="items-table__row items-table__row--head">
-            <td class="items-table__block items-table__block--img">Фото</td>
-            <td class="items-table__block items-table__block--name">Название</td>
-            <td class="items-table__block items-table__block--sku">Код</td>
-            <td class="items-table__block items-table__block--vendor">Артикул</td>
-            <td class="items-table__block items-table__block--vendor">Доп. услуги</td>
-            <td class="items-table__block items-table__block--price">Цена</td>
-            <td class="items-table__block items-table__block--qty">Кол-во</td>
-            <td class="items-table__block items-table__block--cost">Стоимость</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="items-table__row"
-               *ngFor="let item of order.items, even as even"
-               [class.items-table__row--even]="even"
-          >
-            <td class="items-table__block items-table__block--img">
-              <img class="items-table__img" [src]="getItemThumbnail(item)">
-            </td>
-            <td class="items-table__block items-table__block--name">
-              <a class="items-table__link" [routerLink]="['/', 'admin', 'product', 'edit', item.productId]" target="_blank">
-                {{ item.name[lang] }}
-              </a>
-            </td>
-            <td class="items-table__block items-table__block--sku">
-              {{ item.sku }}
-            </td>
-            <td class="items-table__block items-table__block--vendor">
-              {{ item.vendorCode }}
-            </td>
-            <td class="items-table__block items-table__block--additional-services">
-              <div *ngFor="let service of item.additionalServices">
-                {{ service.name[lang] }} (+{{ service.price }}грн)
+        <div class="order-view__summary-block">
+          <div class="order-view__summary summary">
+            <div class="summary__row">
+              <div class="summary__block">Стоимость товаров</div>
+              <div class="summary__block">{{ order.prices.itemsCost }} грн</div>
+            </div>
+            <div class="summary__row">
+              <div class="summary__block">
+                Скидка
+                <ng-container *ngIf="order.prices.discountPercent as discountPercent">
+                  <br> ({{ order.prices.discountLabel[lang] }}, {{ discountPercent }}%)
+                </ng-container>
               </div>
-            </td>
-            <td class="items-table__block items-table__block--price">
-              {{ item.price }} грн
-            </td>
-            <td class="items-table__block items-table__block--qty">
-              <div class="items-table__qty">{{ item.qty }}</div>
-            </td>
-            <td class="items-table__block items-table__block--cost">
-              {{ item.cost }} грн
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="order-view__block order-view__summary-block">
-        <div class="order-view__summary summary">
-          <div class="summary__row">
-            <div class="summary__block">Стоимость товаров</div>
-            <div class="summary__block">{{ order.prices.itemsCost }} грн</div>
-          </div>
-          <div class="summary__row">
-            <div class="summary__block">
-              Скидка
-              <ng-container *ngIf="order.prices.discountPercent as discountPercent">
-                <br> ({{ order.prices.discountLabel[lang] }}, {{ discountPercent }}%)
-              </ng-container>
+              <div class="summary__block">
+                -{{ order.prices.discountValue }} грн
+              </div>
             </div>
-            <div class="summary__block">
-              -{{ order.prices.discountValue }} грн
+            <div class="summary__row">
+              <div class="summary__block">Итого</div>
+              <div class="summary__block">{{ order.prices.totalCost }} грн</div>
             </div>
-          </div>
-          <div class="summary__row">
-            <div class="summary__block">Итого</div>
-            <div class="summary__block">{{ order.prices.totalCost }} грн</div>
           </div>
         </div>
       </div>
     </div>
 
-    <app-button class="order-view__finish-order" *ngIf="isFinishOrderVisible()" (click)="finishOrder()">
-      Завершить заказ
-    </app-button>
+    <div class="order-view__block order-view__block--no-border order-view__block--wide">
+      <div class="order-view__logs log" *ngFor="let log of order.logs">
+        <div class="log__data">{{ log.time | date: 'dd.MM.y HH:mm:ss' }} - {{ log.text }}</div>
+      </div>
+      <div class="order-view__finish-order">
+        <app-button *ngIf="isFinishOrderVisible()" (click)="finishOrder()">
+          Завершить заказ
+        </app-button>
+      </div>
+    </div>
   </div>
 </div>
 

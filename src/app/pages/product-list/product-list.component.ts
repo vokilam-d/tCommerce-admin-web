@@ -291,6 +291,15 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             isImage: false,
             isSortable: true,
             fieldName: getPropertyOf<ProductListItemDto>('createdAt')
+          },
+          {
+            isSearchable: false,
+            label: 'Дата изменения',
+            initialWidth: 82,
+            align: 'left',
+            isImage: false,
+            isSortable: true,
+            fieldName: getPropertyOf<ProductListItemDto>('updatedAt')
           }
         ];
       });

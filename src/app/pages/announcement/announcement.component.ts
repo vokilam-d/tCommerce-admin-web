@@ -77,6 +77,7 @@ export class AnnouncementComponent implements OnInit {
   private buildForm(announcement: AnnouncementDto) {
     this.form = this.formBuilder.group({
       isEnabled: [announcement.isEnabled],
+      isFixed: [announcement.isFixed],
       announcement: [announcement.announcement]
     });
   }

@@ -27,10 +27,9 @@ export class ShipmentInfoModalComponent implements OnInit {
   @Output('infoSubmit') infoSubmitEmitter = new EventEmitter<ShipmentDto>();
   @Output('trackingId') trackingIdEmitter = new EventEmitter<string>();
 
-  // Uncomment for selecting Payer Type
-  // payerTypeOptions: ISelectOption[] = [{ view: 'Получатель', data: ShipmentPayerEnum.RECIPIENT }, { view: 'Отправитель', data: ShipmentPayerEnum.SENDER }];
-  // get payerTypeForCost(): ShipmentPayerEnum { return this.cost < 1000 ? ShipmentPayerEnum.RECIPIENT : ShipmentPayerEnum.SENDER; }
-  // get payerTypeNameForCost(): string { return this.payerTypeOptions.find(o => o.data === this.payerTypeForCost).view; }
+  payerTypeOptions: ISelectOption[] = [{ view: 'Получатель', data: ShipmentPayerEnum.RECIPIENT }, { view: 'Отправитель', data: ShipmentPayerEnum.SENDER }];
+  get payerTypeForCost(): ShipmentPayerEnum { return this.cost < 1000 ? ShipmentPayerEnum.RECIPIENT : ShipmentPayerEnum.SENDER; }
+  get payerTypeNameForCost(): string { return this.payerTypeOptions.find(o => o.data === this.payerTypeForCost).view; }
 
   constructor(
     private shipmentSenderService: ShipmentSenderService,
@@ -61,9 +60,7 @@ export class ShipmentInfoModalComponent implements OnInit {
 
     let payerType: ShipmentPayerEnum = this.shipment.payerType;
     if (!payerType) {
-      // Uncomment for selecting Payer Type
-      // payerType = this.payerTypeForCost;
-      payerType = ShipmentPayerEnum.RECIPIENT;
+      payerType = this.payerTypeForCost;
     }
 
     const controls: Partial<Record<keyof ShipmentDto, any>> = {
