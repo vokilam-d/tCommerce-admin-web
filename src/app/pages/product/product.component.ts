@@ -22,7 +22,7 @@ import { getClientLinkPrefix } from '../../shared/helpers/get-client-link-prefix
 import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
 import { Language } from '../../shared/enums/language.enum';
 import { BreadcrumbDto } from './../../shared/dtos/breadcrumb.dto';
-import { SetBreadcrumbsComponent } from './set-breadcrumps/set-breadcrumbs.component';
+import { SetBreadcrumbsComponent } from './set-breadcrumbs/set-breadcrumbs.component';
 
 type PostAction = 'duplicate' | 'exit' | 'none';
 

@@ -18,7 +18,7 @@ import { OrderListViewerModule } from '../../order-list-viewer/order-list-viewer
 import { GridModule } from '../../grid/grid.module';
 import { RedirectControlModule } from '../../redirect-control/redirect-control.module';
 import { LinkedProductsModule } from '../../linked-products/linked-products.module';
-import { SetBreadcrumbsComponent } from './set-breadcrumps/set-breadcrumbs.component';
+import { SetBreadcrumbsComponent } from './set-breadcrumbs/set-breadcrumbs.component';
 import { MultilingualControlModule } from '../../multilingual-control/multilingual-control.module';
 
 
