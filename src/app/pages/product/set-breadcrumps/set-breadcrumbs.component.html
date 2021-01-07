@@ -7,19 +7,19 @@
             (click)="toggleVisibility()"
             type="button"
     >
-      <span class="active-breadcrump breadcrumps" *ngFor="let currentBreadcrump of activeBreadcrump">
-        {{ currentBreadcrump?.name[lang] }}
+      <span class="active-breadcrumb breadcrumbs" *ngFor="let currentBreadcrumb of activeBreadcrumb">
+        {{ currentBreadcrumb?.name[lang] }}
       </span>
       
     </button>
 
     <div class="select__options" *ngIf="isVisible">
       <div class="select__option"
-           *ngFor="let breadcrumps of breadcrumpsVariants"
-           [class.select__option--active]="breadcrumps"
-           (click)="selectOption(breadcrumps)" 
+           *ngFor="let breadcrumbs of breadcrumbsVariants"
+           [class.select__option--active]="breadcrumbs"
+           (click)="selectOption(breadcrumbs)" 
       >
-        <span class="breadcrumps" *ngFor="let breadcrumb of breadcrumps">
+        <span class="breadcrumbs" *ngFor="let breadcrumb of breadcrumbs">
           {{ breadcrumb?.name[lang] }}
         </span>  
       </div>

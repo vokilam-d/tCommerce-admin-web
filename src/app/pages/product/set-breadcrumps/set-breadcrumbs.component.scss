@@ -4,7 +4,7 @@
   width: 100%;
 }
 
-.breadcrumps {
+.breadcrumbs {
   display: block;
 
   &::before {
@@ -14,6 +14,6 @@
   }
 }
 
-.active-breadcrump {
+.active-breadcrumb {
   display: inline-flex;
 }

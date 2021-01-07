@@ -22,7 +22,7 @@ import { getClientLinkPrefix } from '../../shared/helpers/get-client-link-prefix
 import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
 import { Language } from '../../shared/enums/language.enum';
 import { BreadcrumbDto } from './../../shared/dtos/breadcrumb.dto';
-import { SetBreadcrumpsComponent } from './set-breadcrumps/set-breadcrumps.component';
+import { SetBreadcrumbsComponent } from './set-breadcrumps/set-breadcrumbs.component';
 
 type PostAction = 'duplicate' | 'exit' | 'none';
 
@@ -33,7 +33,7 @@ type PostAction = 'duplicate' | 'exit' | 'none';
 })
 export class ProductComponent extends NgUnsubscribe implements OnInit, AfterViewChecked {
 
-  breadcrumpsVariants: BreadcrumbDto[][];
+  breadcrumbsVariants: BreadcrumbDto[][];
   isNewProduct: boolean;
   isNewProductBasedOn: boolean;
   product: ProductDto;
@@ -46,7 +46,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit, AfterView
   get isMultiVariant(): boolean { return this.variantsFormArray.controls.length > 1; }
 
   @ViewChild(OrderListViewerModalComponent) ordersModal: OrderListViewerModalComponent;
-  @ViewChild(SetBreadcrumpsComponent) setBreadcrumps: SetBreadcrumpsComponent;
+  @ViewChild(SetBreadcrumbsComponent) setBreadcrumbs: SetBreadcrumbsComponent;
 
   constructor(
     private productsService: ProductService,
@@ -233,7 +233,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit, AfterView
               break;
             case 'none':
               this.product = response.data;
-              this.setBreadcrumps.selectOption(response.data.breadcrumbs);
+              this.setBreadcrumbs.selectOption(response.data.breadcrumbs);
               this.buildForm();
               break;
           }

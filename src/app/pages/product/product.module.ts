@@ -18,13 +18,13 @@ import { OrderListViewerModule } from '../../order-list-viewer/order-list-viewer
 import { GridModule } from '../../grid/grid.module';
 import { RedirectControlModule } from '../../redirect-control/redirect-control.module';
 import { LinkedProductsModule } from '../../linked-products/linked-products.module';
-import { SetBreadcrumpsComponent } from './set-breadcrumps/set-breadcrumps.component';
+import { SetBreadcrumbsComponent } from './set-breadcrumps/set-breadcrumbs.component';
 import { MultilingualControlModule } from '../../multilingual-control/multilingual-control.module';
 
 
 
 @NgModule({
-  declarations: [ProductComponent, AttributesEditorComponent, ReviewsViewerComponent, OrderListViewerModalComponent, SetBreadcrumpsComponent],
+  declarations: [ProductComponent, AttributesEditorComponent, ReviewsViewerComponent, OrderListViewerModalComponent, SetBreadcrumbsComponent],
   imports: [
     CommonModule,
     ProductRoutingModule,
@@ -44,7 +44,7 @@ import { MultilingualControlModule } from '../../multilingual-control/multilingu
     MultilingualControlModule
   ],
   exports: [],
-  providers: [ SetBreadcrumpsComponent ]
+  providers: [ SetBreadcrumbsComponent ]
 })
 export class ProductModule {
 }

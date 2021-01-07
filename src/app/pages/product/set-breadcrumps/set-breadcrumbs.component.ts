@@ -3,21 +3,21 @@ import { NotyService } from 'src/app/noty/noty.service';
 import { DEFAULT_LANG } from 'src/app/shared/constants/constants';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { ɵstringify } from '@angular/core';
-import { BreadcrumbDto } from './../../../shared/dtos/breadcrumb.dto';
-import { ProductDto } from './../../../shared/dtos/product.dto';
+import { BreadcrumbDto } from '../../../shared/dtos/breadcrumb.dto';
+import { ProductDto } from '../../../shared/dtos/product.dto';
 
 @Component({
-  selector: 'set-breadcrumps',
-  templateUrl: './set-breadcrumps.component.html',
-  styleUrls: ['./set-breadcrumps.component.scss'],
+  selector: 'set-breadcrumbs',
+  templateUrl: './set-breadcrumbs.component.html',
+  styleUrls: ['./set-breadcrumbs.component.scss'],
   providers: [ ProductService ]
 })
-export class SetBreadcrumpsComponent implements OnInit {
+export class SetBreadcrumbsComponent implements OnInit {
   
   @Output() onChange = new EventEmitter();
   @Input() product: ProductDto;
-  breadcrumpsVariants: BreadcrumbDto[][];
-  activeBreadcrump: BreadcrumbDto[];
+  breadcrumbsVariants: BreadcrumbDto[][];
+  activeBreadcrumb: BreadcrumbDto[];
   isVisible: boolean;
   isDisabled: boolean;
   hasEmpty: boolean;
@@ -29,8 +29,8 @@ export class SetBreadcrumpsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchBreadcrumpsVariants(ɵstringify(this.product.id));
-    this.activeBreadcrump = this.product.breadcrumbs;
+    this.fetchBreadcrumbsVariants(ɵstringify(this.product.id));
+    this.activeBreadcrumb = this.product.breadcrumbs;
   }
  
   toggleVisibility(isVisible: boolean = !this.isVisible) {
@@ -40,19 +40,19 @@ export class SetBreadcrumpsComponent implements OnInit {
     this.isVisible = isVisible;
   }
 
-  selectOption(breadcrump) {
-    this.activeBreadcrump = breadcrump;
-    this.product.breadcrumbs = breadcrump;
+  selectOption(breadcrumb) {
+    this.activeBreadcrumb = breadcrumb;
+    this.product.breadcrumbs = breadcrumb;
     this.isVisible = false;
-    this.fetchBreadcrumpsVariants(ɵstringify(this.product.id));
+    this.fetchBreadcrumbsVariants(ɵstringify(this.product.id));
   }
 
-  async fetchBreadcrumpsVariants (id: string) {
-    await this.productService.fetchProductBreadcrumps(id)
+  async fetchBreadcrumbsVariants (id: string) {
+    await this.productService.fetchProductBreadcrumbs(id)
     .pipe(this.notyService.attachNoty())
     .subscribe(
       response => {
-        this.breadcrumpsVariants = response;
+        this.breadcrumbsVariants = response;
       },
       error => console.warn(error)
     );
