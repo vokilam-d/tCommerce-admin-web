@@ -407,8 +407,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   }
 
   public copyOrderIdToClipboard(id: number) {
-    copyToClipboard(`Заказ № ${id}`);
-    this.notyService.showSuccessNoty(`Скопировано`);
+    this.copyToClipboard(`Заказ № ${id}`);
   }
 
   public togglePdfTooltip() {
@@ -445,12 +444,12 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
       );
   }
 
-  isAllOrderItemsPacked(): boolean {
-    return this.order.items.every(item => item.isPacked);
+  canCreateInternetDocument(): boolean {
+    return this.order.medias.length > 0 || this.order.items.every(item => item.isPacked);
   }
 
-  copyPhoneToClipboard() {
-    copyToClipboard(this.order.shipment.recipient.phone);
+  copyToClipboard(text: any): void {
+    copyToClipboard(text);
     this.notyService.showSuccessNoty(`Скопировано`);
   }
 }

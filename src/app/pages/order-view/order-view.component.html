@@ -59,7 +59,7 @@
 
         <div class="header__btn internet-document-btn" *ngIf="isCreateInternetDocumentVisible()">
           <app-button (click)="openShipmentInfo()"
-                      [disabled]="!isAllOrderItemsPacked()"
+                      [disabled]="!canCreateInternetDocument()"
                       [style.position]="'relative'"
                       btnStyle="primary"
                       type="button"
@@ -67,8 +67,8 @@
             Накладная
           </app-button>
 
-          <span class="tooltip tooltip--right-bottom" *ngIf="!isAllOrderItemsPacked()">
-            Не все товары упакованы
+          <span class="tooltip tooltip--right-bottom" *ngIf="!canCreateInternetDocument()">
+            Приложите фото или упакуйте все товары
           </span>
         </div>
       </ng-container>
@@ -160,7 +160,7 @@
       <div class="order-view__content order-view__address">
         {{ order.shippingMethodName[lang] }}<br><br>
 
-        {{ order.shipment.recipient.firstName }} {{ order.shipment.recipient.lastName }}, <span (click)="copyPhoneToClipboard()">{{ order.shipment.recipient.phone | beautifyPhone }}</span>
+        <span (click)="copyToClipboard(order.shipment.recipient.firstName + ' ' + order.shipment.recipient.lastName)">{{ order.shipment.recipient.firstName }} {{ order.shipment.recipient.lastName }}</span>, <span (click)="copyToClipboard(order.shipment.recipient.phone)">{{ order.shipment.recipient.phone | beautifyPhone }}</span>
         <br>
         {{ order.shipment.recipient.settlementFull || order.shipment.recipient.settlement }}, {{ order.shipment.recipient.addressFull || order.shipment.recipient.address }}<ng-container *ngIf="order.shipment.recipient.buildingNumber as buildingNumber">, {{ buildingNumber }} {{ order.shipment.recipient.flat }}</ng-container>
       </div>
@@ -219,7 +219,7 @@
             </span>
 
             <ng-template #hasNumberTmpl>
-              {{ order.shipment.trackingNumber }}. {{ order.shipment.statusDescription }}<span *ngIf="isDeliveryDateVisible && order.shipment.estimatedDeliveryDate as date">. Ориентировочная дата прибытия: <b>{{ date }}</b></span>
+              <span (click)="copyToClipboard(order.shipment.trackingNumber)">{{ order.shipment.trackingNumber }}. {{ order.shipment.statusDescription }}</span><span *ngIf="isDeliveryDateVisible && order.shipment.estimatedDeliveryDate as date">. Ориентировочная дата прибытия: <b>{{ date }}</b></span>
             </ng-template>
           </ng-template>
         </div>
