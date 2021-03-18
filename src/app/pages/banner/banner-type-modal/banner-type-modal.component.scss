@@ -66,6 +66,10 @@
   &__input {
     resize:vertical;
   }
+
+  &__btn {
+    width: 100%;
+  }
 }
 
 @keyframes slideIn {

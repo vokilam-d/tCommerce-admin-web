@@ -8,6 +8,7 @@ import { ProductLabelTypeEnum } from '../../shared/enums/product-label-type.enum
 import { EBannerItemType } from '../../shared/enums/banner-item-type.enum';
 import { CreateBannerItemDto } from '../../shared/dtos/create-banner-item.dto';
 import { UpdateBannerDto } from '../../shared/dtos/update-banner.dto';
+import { NotyService } from '../../noty/noty.service';
 
 
 @Component({
@@ -29,9 +30,10 @@ export class BannerComponent extends NgUnsubscribe implements OnInit {
   @ViewChild(BannerTypeModalComponent) bannerTypeModalSelectorCmp: BannerTypeModalComponent;
 
 
-  constructor(private bannerService: BannerService) {
-    super();
-  }
+  constructor(
+    private bannerService: BannerService,
+    private notyService: NotyService
+  ) { super(); }
 
   ngOnInit(): void {
     this.onInit();
@@ -68,17 +70,6 @@ export class BannerComponent extends NgUnsubscribe implements OnInit {
       );
   }
 
-  // private setBannerItems() {
-    // this.bannerService.fetchBanner()
-    //   .pipe(takeUntil(this.ngUnsubscribe))
-    //   .subscribe(bannerItem => {
-    //     console.log(bannerItem);
-
-        // this.bannerItems[this.clickedItemId] = bannerItem;
-        // this.setDiscountValue(bannerItem.item);
-    // });
-  // }
-
   private setDiscountValue(item) {
     if (!item.oldPrice) { return; }
     this.discountValue = Math.ceil((item.oldPrice - item.price) / item.oldPrice * 100);
@@ -89,14 +80,9 @@ export class BannerComponent extends NgUnsubscribe implements OnInit {
     this.bannerTypeModalSelectorCmp.openModal();
   }
 
-  getProductSrc(id: number): string {
-    const bannerItemUrl = this.bannerItems[id]?.media?.variantsUrls?.original;
-    return `${this.uploadedHost}${bannerItemUrl}`;
-  }
-
-  getPostSrc(id: number): string {
+  getBannerItemSrc(id: number): string {
     const bannerItem = this.bannerItems[id];
-    const bannerItemUrl = bannerItem.media?.variantsUrls?.original;
+    const bannerItemUrl = bannerItem?.media?.variantsUrls?.original;
     return `${this.uploadedHost}${bannerItemUrl}`;
   }
 
@@ -113,7 +99,9 @@ export class BannerComponent extends NgUnsubscribe implements OnInit {
     const updatedBanner = this.bannerItems.map(bannerItem => {
       return {
         id: bannerItem.id,
-        type: bannerItem.type
+        type: bannerItem.type,
+        slug: bannerItem.slug,
+        media: bannerItem.media
       };
     });
 
@@ -122,7 +110,10 @@ export class BannerComponent extends NgUnsubscribe implements OnInit {
     };
 
     this.bannerService.updateBanner(createdBannerItems)
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        this.notyService.attachNoty({ successText: 'Баннер успешно изменен' })
+      )
       .subscribe(
         response => {
           this.bannerItems = response.data;

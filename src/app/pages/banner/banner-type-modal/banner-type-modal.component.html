@@ -32,19 +32,23 @@
     </div>
 
     <div class="banner-item__field">
-      <product-category-select [isVisible]="true" [formControl]="categories"></product-category-select>
+      <product-category-select
+        [isVisible]="true"
+        [formControl]="categories"
+        (selectedOption)="onCategorySelect($event)"
+      ></product-category-select>
     </div>
   </div>
 </ng-container>
 
 <ng-container *ngIf="isItemModalVisible">
-  <div class="modal-overlay type-overlay" (click)="closeItemModal()"></div>
+  <div class="modal-overlay type-overlay" (click)="closeManualItemModal()"></div>
   <div class="modal banner-modal">
     <div class="modal__header">
       <div class="modal__title">
         Создайте секцию баннера:
       </div>
-      <div class="modal__close" (click)="closeItemModal()">
+      <div class="modal__close" (click)="closeManualItemModal()">
         <i class="ai ai-multiply modal__close-icon"></i>
       </div>
     </div>
@@ -69,14 +73,16 @@
       <div class="banner-item__field field">
         <label class="field__label banner-item__label">URL</label>
         <div class="field__control banner-item__control">
-          <textarea class="field__input banner-item__input" [formControl]="url" rows="2"></textarea>
-
-          <span class="field__error" *ngIf="isControlInvalid(url)">
-            URL может состоять только из маленьких латинских букв (a-z), цифр (0-9) и/или дефиса (-)
-          </span>
+          <textarea class="field__input banner-item__input" [formControl]="slug" rows="2"></textarea>
         </div>
       </div>
 
+      <div class="banner-item__field field">
+        <label class="field__label banner-item__label"></label>
+        <div class="field__control banner-item__control">
+          <button class="toolbar-main-btn banner-item__btn" (click)="saveManualItem()" type="button">Сохранить</button>
+        </div>
+      </div>
     </div>
   </div>
 </ng-container>

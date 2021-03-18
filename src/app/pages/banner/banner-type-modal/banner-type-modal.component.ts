@@ -6,10 +6,7 @@ import { EBannerItemType } from '../../../shared/enums/banner-item-type.enum';
 import { MediaDto } from '../../../shared/dtos/media.dto';
 import { API_HOST } from '../../../shared/constants/constants';
 import { FormControl } from '@angular/forms';
-import { CustomValidators } from '../../../shared/classes/validators';
-import { IBannerItem } from '../banner-item.interface';
 import { CreateBannerItemDto } from '../../../shared/dtos/create-banner-item.dto';
-import { UpdateBannerDto } from '../../../shared/dtos/update-banner.dto';
 
 
 @Component({
@@ -24,10 +21,7 @@ export class BannerTypeModalComponent implements OnInit {
   isCategoryModalVisible = false;
 
   mediaDto: MediaDto;
-  url: FormControl = new FormControl('', {
-    validators: CustomValidators.slug,
-    updateOn: 'blur'
-  });
+  slug = new FormControl('');
   categories = new FormControl([]);
 
   @Output() bannerItem = new EventEmitter<CreateBannerItemDto>();
@@ -67,7 +61,8 @@ export class BannerTypeModalComponent implements OnInit {
     this.isCategoryModalVisible = true;
   }
 
-  closeItemModal() {
+  closeManualItemModal() {
+    this.closeModal();
     this.isItemModalVisible = false;
   }
 
@@ -96,6 +91,27 @@ export class BannerTypeModalComponent implements OnInit {
     this.postSelectorCmp.hideSelector();
   }
 
+  onCategorySelect(category) {
+    const item: CreateBannerItemDto = {
+      id: category.id,
+      type: EBannerItemType.category
+    };
+
+    this.bannerItem.emit(item);
+    this.closeCategorySelectorModal();
+  }
+
+  saveManualItem() {
+    const item: CreateBannerItemDto = {
+      type: EBannerItemType.manual,
+      slug: this.slug.value,
+      media: this.mediaDto
+    };
+
+    this.bannerItem.emit(item);
+    this.closeManualItemModal();
+  }
+
   onMediaRemove() {
     this.mediaDto = null;
   }
@@ -106,9 +122,5 @@ export class BannerTypeModalComponent implements OnInit {
 
   mediaUploaded(media: MediaDto) {
     this.mediaDto = media;
-  }
-
-  isControlInvalid(control) {
-    return !control.valid && control.touched;
   }
 }

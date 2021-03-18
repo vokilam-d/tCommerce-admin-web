@@ -15,23 +15,17 @@
       <ng-template #defaultImg><img class="banner__add-btn" src="{{ itemImgSrc }}" alt="add"></ng-template>
 
       <ng-container *ngIf="bannerItem; else defaultImg">
-        <ng-container *ngIf="bannerItem?.type === bannerItemType.product">
-          <img class="banner__img" [src]="getProductSrc(i)" alt="item">
+        <img class="banner__img" [src]="getBannerItemSrc(i)" alt="item">
 
-          <div class="banner__sale-label" *ngIf="bannerItem?.oldPrice">
-            <span class="banner__sale-label--discount">-{{ discountValue }}%</span>
-            <span class="banner__sale-label--price">{{ bannerItem?.price }} грн</span>
-            <span class="banner__sale-label--old-price">{{ bannerItem?.oldPrice }} грн</span>
-          </div>
+        <div class="banner__sale-label" *ngIf="bannerItem?.oldPrice">
+          <span class="banner__sale-label--discount">-{{ discountValue }}%</span>
+          <span class="banner__sale-label--price">{{ bannerItem?.price }} грн</span>
+          <span class="banner__sale-label--old-price">{{ bannerItem?.oldPrice }} грн</span>
+        </div>
 
-          <span class="banner__label" [ngClass]="getLabelClass(bannerItem)" *ngIf="bannerItem?.label">
-            {{ bannerItem.label }}
-          </span>
-        </ng-container>
-
-        <ng-container *ngIf="bannerItem?.type === bannerItemType.post">
-          <img class="banner__img" [src]="getPostSrc(i)" alt="item">
-        </ng-container>
+        <span class="banner__label" [ngClass]="getLabelClass(bannerItem)" *ngIf="bannerItem?.label">
+          {{ bannerItem.label }}
+        </span>
       </ng-container>
     </div>
   </div>

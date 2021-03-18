@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component, EventEmitter,
+  forwardRef,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {CategoryTreeItem} from '../shared/dtos/category.dto';
@@ -28,6 +36,7 @@ type CategorySelectOption = CategoryTreeItem & {
 export class ProductCategorySelectComponent implements OnInit, ControlValueAccessor {
 
   @Input() isVisible: boolean = false;
+  @Output() selectedOption = new EventEmitter<CategorySelectOption>();
 
   isDisabled: boolean = false;
   options: CategorySelectOption[] = [];
@@ -126,6 +135,8 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
 
     this.onChange(this.value);
     this.onTouched();
+
+    this.selectedOption.emit(option);
   }
 
   unselectOption(event: Event, category: ProductCategoryDto) {
