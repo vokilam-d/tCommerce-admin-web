@@ -445,8 +445,8 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
       );
   }
 
-  isAllOrderItemsPacked(): boolean {
-    return this.order.items.every(item => item.isPacked);
+  canCreateInternetDocument(): boolean {
+    return this.order.medias.length > 0 || this.order.items.every(item => item.isPacked);
   }
 
   copyPhoneToClipboard() {

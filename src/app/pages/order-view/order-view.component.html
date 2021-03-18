@@ -59,7 +59,7 @@
 
         <div class="header__btn internet-document-btn" *ngIf="isCreateInternetDocumentVisible()">
           <app-button (click)="openShipmentInfo()"
-                      [disabled]="!isAllOrderItemsPacked()"
+                      [disabled]="!canCreateInternetDocument()"
                       [style.position]="'relative'"
                       btnStyle="primary"
                       type="button"
@@ -67,8 +67,8 @@
             Накладная
           </app-button>
 
-          <span class="tooltip tooltip--right-bottom" *ngIf="!isAllOrderItemsPacked()">
-            Не все товары упакованы
+          <span class="tooltip tooltip--right-bottom" *ngIf="!canCreateInternetDocument()">
+            Приложите фото или упакуйте все товары
           </span>
         </div>
       </ng-container>
