@@ -1,0 +1,91 @@
+<ng-container *ngIf="isModalVisible">
+  <div class="modal-overlay type-overlay" (click)="closeModal()"></div>
+  <div class="modal banner-modal">
+    <div class="modal__header">
+      <div class="modal__title">
+        Выберите тип:
+      </div>
+      <div class="modal__close" (click)="closeModal()">
+        <i class="ai ai-multiply modal__close-icon"></i>
+      </div>
+    </div>
+
+    <div class="modal__btns">
+      <app-button class="modal__btn" (click)="showProductSelector()">Продукт</app-button>
+      <app-button class="modal__btn" (click)="showCategorySelectorModal()">Категория</app-button>
+      <app-button class="modal__btn" (click)="showPostSelector()">Пост</app-button>
+      <app-button class="modal__btn" (click)="showItemModal()">Ручной ввод</app-button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isCategoryModalVisible">
+  <div class="modal-overlay type-overlay" (click)="closeCategorySelectorModal()"></div>
+  <div class="modal banner-modal banner-modal--category">
+    <div class="modal__header">
+      <div class="modal__title">
+        Выберите категорию:
+      </div>
+      <div class="modal__close" (click)="closeCategorySelectorModal()">
+        <i class="ai ai-multiply modal__close-icon"></i>
+      </div>
+    </div>
+
+    <div class="banner-item__field">
+      <product-category-select
+        [isVisible]="true"
+        [formControl]="categories"
+        (selectedOption)="onCategorySelect($event)"
+      ></product-category-select>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isItemModalVisible">
+  <div class="modal-overlay type-overlay" (click)="closeManualItemModal()"></div>
+  <div class="modal banner-modal">
+    <div class="modal__header">
+      <div class="modal__title">
+        Создайте секцию баннера:
+      </div>
+      <div class="modal__close" (click)="closeManualItemModal()">
+        <i class="ai ai-multiply modal__close-icon"></i>
+      </div>
+    </div>
+
+    <div class="banner-item">
+      <div class="banner-item__field field">
+        <label class="field__label banner-item__label">Картинка</label>
+        <div class="field__control banner-item__control media">
+          <media-asset class="media__asset"
+                       *ngIf="mediaDto"
+                       [media]="mediaDto"
+                       (remove)="onMediaRemove()"
+          ></media-asset>
+
+          <media-uploader class="media_asset"
+                          [uploadUrl]="getMediaUploadUrl()"
+                          (uploaded)="mediaUploaded($event)"
+          ></media-uploader>
+        </div>
+      </div>
+
+      <div class="banner-item__field field">
+        <label class="field__label banner-item__label">URL</label>
+        <div class="field__control banner-item__control">
+          <textarea class="field__input banner-item__input" [formControl]="slug" rows="2"></textarea>
+        </div>
+      </div>
+
+      <div class="banner-item__field field">
+        <label class="field__label banner-item__label"></label>
+        <div class="field__control banner-item__control">
+          <button class="toolbar-main-btn banner-item__btn" (click)="saveManualItem()" type="button">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<product-selector (selected)="onProductSelect($event)"></product-selector>
+<post-selector (selected)="onPostSelect($event)"></post-selector>

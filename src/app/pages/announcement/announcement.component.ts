@@ -59,7 +59,7 @@ export class AnnouncementComponent implements OnInit {
     const dto = {
       ...this.announcement,
       ...this.form.value
-    }
+    };
 
     this.isLoading = true;
     this.announcementService.updateAnnouncement(dto).pipe(

@@ -125,7 +125,7 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
         isOpened: false,
         isSingleVariant: product.variants.length === 1
       };
-    })
+    });
   }
 
   selectProduct(product: ProductForSelector, variant: VariantForSelector) {

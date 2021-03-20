@@ -237,6 +237,9 @@ const routes: Routes = [
         loadChildren: () => import('./pages/announcement/announcement.module').then(m => m.AnnouncementModule)
       },
       {
+        path: 'banner', loadChildren: () => import('./pages/banner/banner.module').then(m => m.BannerModule)
+      },
+      {
         path: '**',
         loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundModule)
       }

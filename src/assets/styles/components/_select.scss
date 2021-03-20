@@ -89,7 +89,8 @@ $fieldBorderColorFocus: $blue;
         right: 7px;
       }
     }
-    &:focus::after,
+
+    &--active::after,
     &--focused::after {
       transform: rotate(180deg);
     }

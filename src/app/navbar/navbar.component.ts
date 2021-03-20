@@ -194,6 +194,11 @@ const navBarMenu = [
         icon: 'navbar__icon ai ai-system'
       },
       {
+        name: 'Баннер',
+        link: '/admin/banner',
+        icon: 'navbar__icon ai ai-system'
+      },
+      {
         name: 'Emails',
         link: '/admin/emails-test',
         icon: 'navbar__icon ai ai-system'

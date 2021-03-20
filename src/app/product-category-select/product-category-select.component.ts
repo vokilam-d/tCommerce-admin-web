@@ -1,14 +1,26 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { CategoryTreeItem } from '../shared/dtos/category.dto';
-import { ResponseDto } from '../shared/dtos/response.dto';
-import { API_HOST, DEFAULT_LANG } from '../shared/constants/constants';
-import { ProductCategoryDto } from '../shared/dtos/product.dto';
-import { NotyService } from '../noty/noty.service';
-import { toHttpParams } from '../shared/helpers/to-http-params.function';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component, EventEmitter,
+  forwardRef,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {CategoryTreeItem} from '../shared/dtos/category.dto';
+import {ResponseDto} from '../shared/dtos/response.dto';
+import {API_HOST, DEFAULT_LANG} from '../shared/constants/constants';
+import {ProductCategoryDto} from '../shared/dtos/product.dto';
+import {NotyService} from '../noty/noty.service';
+import {toHttpParams} from '../shared/helpers/to-http-params.function';
 
-type CategorySelectOption = CategoryTreeItem & { isSelected: boolean; children: CategorySelectOption[]; };
+type CategorySelectOption = CategoryTreeItem & {
+  isSelected: boolean;
+  isFiltered?: boolean;
+  children: CategorySelectOption[];
+};
 
 @Component({
   selector: 'product-category-select',
@@ -23,10 +35,14 @@ type CategorySelectOption = CategoryTreeItem & { isSelected: boolean; children: 
 })
 export class ProductCategorySelectComponent implements OnInit, ControlValueAccessor {
 
-  isVisible: boolean = false;
+  @Input() isVisible: boolean = false;
+  @Output() selectedOption = new EventEmitter<CategorySelectOption>();
+
   isDisabled: boolean = false;
   options: CategorySelectOption[] = [];
   lang = DEFAULT_LANG;
+  searchValue: string;
+  isSearchTermFound: boolean;
 
   private _value: ProductCategoryDto[];
 
@@ -119,6 +135,8 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
 
     this.onChange(this.value);
     this.onTouched();
+
+    this.selectedOption.emit(option);
   }
 
   unselectOption(event: Event, category: ProductCategoryDto) {
@@ -162,8 +180,37 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
           }
         }
       }
-    }
+    };
 
     return findOption(this.options);
+  }
+
+  onSearchInputChange(searchTerm: string) {
+    const searchAsRegEx = new RegExp(searchTerm, 'gi');
+    this.isSearchTermFound = this.getFilteredCategory(this.options, searchAsRegEx);
+  }
+
+  private getFilteredCategory(categories: CategorySelectOption[], searchAsRegEx: RegExp) {
+    let isCategoryFiltered = false;
+
+    categories.forEach(category => {
+
+      if (category.children?.length) {
+        const isSubCategoryFiltered = this.getFilteredCategory(category.children, searchAsRegEx);
+        if (isSubCategoryFiltered) {
+          category.isFiltered = true;
+        } else {
+          category.isFiltered = !!category.name[DEFAULT_LANG].match(searchAsRegEx);
+        }
+      } else {
+        category.isFiltered = !!category.name[DEFAULT_LANG].match(searchAsRegEx);
+      }
+
+      if (category.isFiltered) {
+        isCategoryFiltered = true;
+      }
+    });
+
+    return isCategoryFiltered;
   }
 }
