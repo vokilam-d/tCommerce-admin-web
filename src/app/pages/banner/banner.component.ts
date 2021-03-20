@@ -5,7 +5,6 @@ import { BannerService } from '../../shared/services/banner.service';
 import { takeUntil } from 'rxjs/operators';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { ProductLabelTypeEnum } from '../../shared/enums/product-label-type.enum';
-import { EBannerItemType } from '../../shared/enums/banner-item-type.enum';
 import { CreateBannerItemDto } from '../../shared/dtos/create-banner-item.dto';
 import { UpdateBannerDto } from '../../shared/dtos/update-banner.dto';
 import { NotyService } from '../../noty/noty.service';
@@ -19,7 +18,6 @@ import { NotyService } from '../../noty/noty.service';
 export class BannerComponent extends NgUnsubscribe implements OnInit {
 
   bannerItems = new Array(4);
-  bannerItemType: typeof EBannerItemType = EBannerItemType;
   clickedItemId: number;
 
   discountValue: number;
@@ -56,7 +54,10 @@ export class BannerComponent extends NgUnsubscribe implements OnInit {
 
   createBannerItem(item: CreateBannerItemDto) {
     this.bannerService.createBannerItem(item)
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        this.notyService.attachNoty()
+      )
       .subscribe(
         response => {
           const bannerItem = response.data;
@@ -65,14 +66,13 @@ export class BannerComponent extends NgUnsubscribe implements OnInit {
 
           this.bannerItems[this.clickedItemId] = bannerItem;
           this.setDiscountValue(bannerItem);
-          },
-        error => console.warn(error)
+        }
       );
   }
 
   private setDiscountValue(item) {
     if (!item.oldPrice) { return; }
-    this.discountValue = Math.ceil((item.oldPrice - item.price) / item.oldPrice * 100);
+    item.discountValue = Math.ceil((item.oldPrice - item.price) / item.oldPrice * 100);
   }
 
   showBannerTypeModal(id: number) {
@@ -121,8 +121,7 @@ export class BannerComponent extends NgUnsubscribe implements OnInit {
           this.bannerItems.forEach(bannerItem => {
             this.setDiscountValue(bannerItem);
           });
-      },
-        error => console.warn(error)
+        }
       );
   }
 }
