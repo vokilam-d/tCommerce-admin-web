@@ -8,6 +8,7 @@ import { ProductLabelTypeEnum } from '../../shared/enums/product-label-type.enum
 import { CreateBannerItemDto } from '../../shared/dtos/create-banner-item.dto';
 import { UpdateBannerDto } from '../../shared/dtos/update-banner.dto';
 import { NotyService } from '../../noty/noty.service';
+import { BannerItemDto } from '../../shared/dtos/banner-item.dto';
 
 
 @Component({
@@ -17,10 +18,8 @@ import { NotyService } from '../../noty/noty.service';
 })
 export class BannerComponent extends NgUnsubscribe implements OnInit {
 
-  bannerItems = new Array(4);
+  bannerItems: BannerItemDto[] = new Array(4);
   clickedItemId: number;
-
-  discountValue: number;
 
   uploadedHost = UPLOADED_HOST;
   itemImgSrc = '/admin/assets/images/plus.svg';
@@ -86,8 +85,8 @@ export class BannerComponent extends NgUnsubscribe implements OnInit {
     return `${this.uploadedHost}${bannerItemUrl}`;
   }
 
-  getLabelClass(item) {
-    switch (item?.label) {
+  getLabelClass(item: BannerItemDto) {
+    switch (item?.label.type) {
       case ProductLabelTypeEnum.New:
         return 'banner__label--new';
       case ProductLabelTypeEnum.Top:
