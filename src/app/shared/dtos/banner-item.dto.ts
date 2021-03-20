@@ -10,5 +10,9 @@ export class BannerItemDto {
   slug: string;
   price?: number;
   oldPrice?: number;
-  label?: ProductLabelTypeEnum;
+  discountValue?: number;
+  label?: {
+    type: ProductLabelTypeEnum;
+    text: string;
+  };
 }
