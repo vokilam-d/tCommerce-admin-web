@@ -160,7 +160,7 @@
       <div class="order-view__content order-view__address">
         {{ order.shippingMethodName[lang] }}<br><br>
 
-        <span (click)="copyToClipboard(order.shipment.recipient.firstName + ' ' + order.shipment.recipient.middleName || order.shipment.recipient.lastName)">{{ order.shipment.recipient.lastName }} {{ order.shipment.recipient.firstName }} {{ order.shipment.recipient.middleName }}</span>, <span (click)="copyToClipboard(order.shipment.recipient.phone)">{{ order.shipment.recipient.phone | beautifyPhone }}</span>
+        <span (click)="copyToClipboard(order.shipment.recipient.lastName + ' ' + order.shipment.recipient.firstName + (order.shipment.recipient.middleName ? ' ' + order.shipment.recipient.middleName : ''))">{{ order.shipment.recipient.lastName }} {{ order.shipment.recipient.firstName }} {{ order.shipment.recipient.middleName }}</span>, <span (click)="copyToClipboard(order.shipment.recipient.phone)">{{ order.shipment.recipient.phone | beautifyPhone }}</span>
         <br>
         {{ order.shipment.recipient.settlementFull || order.shipment.recipient.settlement }}, {{ order.shipment.recipient.addressFull || order.shipment.recipient.address }}<ng-container *ngIf="order.shipment.recipient.buildingNumber as buildingNumber">, {{ buildingNumber }} {{ order.shipment.recipient.flat }}</ng-container>
       </div>
