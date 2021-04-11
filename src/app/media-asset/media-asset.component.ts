@@ -32,7 +32,7 @@ export class MediaAssetComponent implements OnInit {
     this.isDetailsVisible = false;
   }
 
-  getMediaUrl(original: boolean = false): string {
-    return UPLOADED_HOST + (original ? this.media.variantsUrls.original : this.media.variantsUrls.large);
+  getMediaUrl(size: 'small' | 'large' | 'original'): string {
+    return UPLOADED_HOST + (this.media.variantsUrls[size] || this.media.variantsUrls.original);
   }
 }
