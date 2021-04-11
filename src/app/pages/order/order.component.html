@@ -130,18 +130,6 @@
                           [address]="order.shipment.recipient"
                           [showIsDefault]="false"
             ></address-form>
-
-            <div class="field order__address-save-container" *ngIf="isNewAddress">
-              <div class="field__label"></div>
-              <label class="field__control">
-                <input class="order__address-save"
-                       [(ngModel)]="order.shouldSaveAddress"
-                       type="checkbox"
-                >
-
-                Сохранить в адресную книгу клиента?
-              </label>
-            </div>
           </div>
         </div>
 
