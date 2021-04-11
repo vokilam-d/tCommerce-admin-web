@@ -19,7 +19,7 @@ export class AddressService {
       name: query,
       limit: '60'
     };
-    return this.http.get<ResponseDto<SettlementDto[]>>(`${API_HOST}/api/v1/settlements`, { params: { name: query } });
+    return this.http.get<ResponseDto<SettlementDto[]>>(`${API_HOST}/api/v1/settlements`, { params });
   }
 
   fetchWarehouses(settlementId: string, query: string) {
