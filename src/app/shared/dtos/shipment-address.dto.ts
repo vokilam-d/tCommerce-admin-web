@@ -10,11 +10,6 @@ export class ShipmentAddressDto {
   addressId?: string = '';
   address?: string = '';
   addressFull?: string = '';
-  phone?: string = '';
-  firstName?: string = '';
-  lastName?: string = '';
-  middleName?: string = '';
   buildingNumber?: string = '';
   flat?: string = '';
-  note?: string = '';
 }

@@ -14,7 +14,6 @@ export class ShipmentDto {
   shipmentType?: ShipmentTypeEnum = ShipmentTypeEnum.WAREHOUSE_WAREHOUSE;
   payerType?: ShipmentPayerEnum;
   paymentMethod?: ShipmentPaymentMethodEnum = ShipmentPaymentMethodEnum.CASH;
-  date?: string = '';
   weight?: string = '';
   length?: string = '';
   width?: string = '';
