@@ -15,13 +15,18 @@ export class AddressService {
   }
 
   fetchSettlements(query: string) {
+    const params = {
+      name: query,
+      limit: '60'
+    };
     return this.http.get<ResponseDto<SettlementDto[]>>(`${API_HOST}/api/v1/settlements`, { params: { name: query } });
   }
 
   fetchWarehouses(settlementId: string, query: string) {
     const params = {
       settlementId,
-      filter: query
+      filter: query,
+      limit: '60'
     };
 
     return this.http.get<ResponseDto<WarehouseDto[]>>(`${API_HOST}/api/v1/warehouses`, { params });
@@ -30,7 +35,8 @@ export class AddressService {
   fetchStreets(settlementId: string, query: string) {
     const params = {
       settlementId,
-      filter: query
+      filter: query,
+      limit: '60'
     };
 
     return this.http.get<ResponseDto<StreetDto[]>>(`${API_HOST}/api/v1/streets`, { params });

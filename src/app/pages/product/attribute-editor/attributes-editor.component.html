@@ -154,7 +154,7 @@
              {{ i + 1}}.
             <span *ngFor="let attribute of variant.attributes, last as last">
               {{ attributeService.getAttributeLabel(attribute.attributeId) }}: <span class="summary-block__attr-value">{{ attributeService.getValueLabel(attribute.attributeId, attribute.valueIds) }}</span><ng-container *ngIf="!last">, </ng-container>
-            </span> - {{ variant.name }}
+            </span> - {{ variant.name[lang] }}
           </div>
         </div>
       </div>
@@ -171,7 +171,7 @@
             <span *ngFor="let attribute of variant.attributes, last as last"> {{ attributeService.getAttributeLabel(attribute.attributeId) }}:
               <span class="summary-block__attr-value"> {{ attributeService.getValueLabel(attribute.attributeId, attribute.valueIds) }}</span>
               <ng-container *ngIf="!last">, </ng-container>
-            </span>  - {{ variant.name }}
+            </span>  - {{ variant.name[lang] }}
 
           </div>
         </div>

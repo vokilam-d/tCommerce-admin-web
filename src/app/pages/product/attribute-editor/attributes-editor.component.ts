@@ -82,6 +82,9 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
   }
 
   get variantsToRemove(): AddOrUpdateProductVariantDto[] {
+    // if (this.initialFormValue.variants.length === 1) {
+    //   return [];
+    // }
     return this.initialFormValue.variants.filter((variant, index) =>
       this.truncVariants.every(truncVariant => truncVariant.existingVariantIndex !== index)
     );
@@ -199,20 +202,33 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
 
     const usedExistingIndices = new Set<number>();
     this.truncVariants = this.truncVariants.map(truncVariant => {
+      const initialAttributeKeys = Object.keys(this.initialFormValue.variants[0].attributes);
       const attributeKeys = Object.keys(truncVariant.attributes);
+      const filteredAttributeKeys = attributeKeys.filter(key => initialAttributeKeys.includes(key));
 
       const setExistingVariantIndex = (matchEveryAttr: boolean, attrAndValue: boolean) => {
         truncVariant.existingVariantIndex = this.initialFormValue.variants.findIndex(variant => {
 
           const hasAttrAndValue = (attribute: ProductSelectedAttributeDto) =>
-            attributeKeys.find(attrKey =>
+            filteredAttributeKeys.find(attrKey =>
               attribute.attributeId === attrKey && attribute.valueIds.includes(truncVariant.attributes[attrKey])
             );
 
           const hasAttr = (attribute: ProductSelectedAttributeDto) =>
-            attributeKeys.find(attrKey =>
+            filteredAttributeKeys.find(attrKey =>
               attribute.attributeId === attrKey
             );
+
+          if (this.initialFormValue.variants.length === 1 && matchEveryAttr && attrAndValue) {
+            return this.initialFormValue.attributes.some((attribute: ProductSelectedAttributeDto) =>
+              attributeKeys.find(attrKey =>
+                attribute.attributeId === attrKey && attribute.valueIds.includes(truncVariant.attributes[attrKey])
+              ));
+          }
+
+          if (variant.attributes.length === 0) {
+            return false;
+          }
 
           if (matchEveryAttr) {
             if (attrAndValue) {
