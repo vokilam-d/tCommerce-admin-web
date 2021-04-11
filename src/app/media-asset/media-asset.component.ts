@@ -33,13 +33,6 @@ export class MediaAssetComponent implements OnInit {
   }
 
   getMediaUrl(size: 'small' | 'large' | 'original'): string {
-    switch (size) {
-      case 'small':
-        return UPLOADED_HOST + (this.media.variantsUrls.small ? this.media.variantsUrls.small : this.media.variantsUrls.original);
-      case 'large':
-        return UPLOADED_HOST + (this.media.variantsUrls.large ? this.media.variantsUrls.large : this.media.variantsUrls.original);
-      case 'original':
-        return UPLOADED_HOST + (this.media.variantsUrls.original ? this.media.variantsUrls.original : this.media.variantsUrls.large);
-    }
+    return UPLOADED_HOST + (this.media.variantsUrls[size] || this.media.variantsUrls.original);
   }
 }
