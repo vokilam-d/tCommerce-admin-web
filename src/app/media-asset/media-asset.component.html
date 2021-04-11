@@ -1,6 +1,6 @@
 <div class="media">
   <div class="media__img-container" (click)="showDetails()">
-    <img class="media__img" [src]="getMediaUrl()" draggable="false">
+    <img class="media__img" [src]="getMediaUrl('small')" draggable="false">
 
     <div class="media__is-hidden" *ngIf="media.isHidden">Скрыто</div>
   </div>
@@ -27,13 +27,13 @@
 
   <div class="details__container">
     <div class="details__img-container">
-      <img class="details__img" [src]="getMediaUrl()">
+      <img class="details__img" [src]="getMediaUrl('large')">
     </div>
 
     <div class="details__info">
       <div class="details__row">
         <div class="details__value blue-link">
-          <a class="blue-link details__show-original" [href]="getMediaUrl(true)" target="_blank">
+          <a class="blue-link details__show-original" [href]="getMediaUrl('original')" target="_blank">
             Посмотреть в полном размере
           </a>
         </div>
