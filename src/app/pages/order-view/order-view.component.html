@@ -10,30 +10,46 @@
       </button>
 
       <ng-container *ngIf="order">
-        <app-button class="header__btn" (click)="deleteOrder()" type="button" btnStyle="danger">
-          Удалить заказ
-        </app-button>
-        <app-button class="header__btn" (click)="reorder()" type="button">
-          Повторить заказ
-        </app-button>
-        <app-button class="header__btn pdf-btn" (click)="togglePdfTooltip()" (clickOutside)="isPdfButtonsVisible = false" type="button">
-          Распечатать PDF
+        <app-button class="header__btn tooltip-btn"
+                    (click)="isOperationsButtonsVisible = !isOperationsButtonsVisible"
+                    (clickOutside)="isOperationsButtonsVisible = false"
+        >
+          Операции с заказом
 
-          <div class="tooltip tooltip--right-bottom" *ngIf="isPdfButtonsVisible">
-            <app-button class="header__btn pdf-btn__action" (click)="printOrder()" type="button">
-              Заказ
+          <div class="tooltip tooltip--right-bottom" *ngIf="isOperationsButtonsVisible">
+            <app-button class="header__btn tooltip-btn__action" (click)="deleteOrder()" type="button" btnStyle="danger">
+              Удалить заказ
             </app-button>
 
-            <app-button class="header__btn pdf-btn__action" (click)="openInvoicePopup()" type="button">
-              Накладная / Счёт
+            <app-button class="header__btn tooltip-btn__action" (click)="reorder()" type="button">
+              Повторить заказ
+            </app-button>
+
+            <app-button class="header__btn tooltip-btn__action" *ngIf="isCancelOrderVisible()" (click)="cancelOrder()" type="button">
+              Отменить заказ
+            </app-button>
+
+            <app-button class="header__btn" *ngIf="isEditOrderVisible()" (click)="editOrder()" type="button">
+              Редактировать
             </app-button>
           </div>
         </app-button>
-        <app-button class="header__btn" *ngIf="isCancelOrderVisible()" (click)="cancelOrder()" type="button">
-          Отменить заказ
-        </app-button>
-        <app-button class="header__btn" *ngIf="isEditOrderVisible()" (click)="editOrder()" type="button">
-          Редактировать
+
+        <app-button class="header__btn tooltip-btn"
+                    (click)="togglePdfTooltip()"
+                    (clickOutside)="isPdfButtonsVisible = false"
+        >
+          Распечатать PDF
+
+          <div class="tooltip tooltip--right-bottom" *ngIf="isPdfButtonsVisible">
+            <app-button class="header__btn tooltip-btn__action" (click)="printOrder()" type="button">
+              Заказ
+            </app-button>
+
+            <app-button class="header__btn tooltip-btn__action" (click)="openInvoicePopup()" type="button">
+              Накладная / Счёт
+            </app-button>
+          </div>
         </app-button>
 
         <ng-container *ngIf="isReturnBtnsVisible()">

@@ -47,6 +47,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   paymentStatusError: string | null = null;
   isLoading: boolean = false;
   isPdfButtonsVisible: boolean = false;
+  isOperationsButtonsVisible: boolean = false;
   customerAvgStoreReviewsRating: number = 0;
   customerAvgProductReviewsRating: number = 0;
 
@@ -166,8 +167,6 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   }
 
   editOrder() {
-    if (!confirm(`Вы уверены, что хотите изменить этот заказ?`)) { return; }
-
     this.router.navigate(['admin', 'order', 'edit', this.order.id]);
   }
 
