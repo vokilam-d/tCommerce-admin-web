@@ -18,7 +18,7 @@ import { BannerItemDto } from '../../shared/dtos/banner-item.dto';
 })
 export class BannerComponent extends NgUnsubscribe implements OnInit {
 
-  bannerItems: BannerItemDto[] = new Array(4);
+  bannerItems: BannerItemDto[] = [];
   clickedItemId: number;
 
   uploadedHost = UPLOADED_HOST;
