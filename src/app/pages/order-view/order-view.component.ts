@@ -28,6 +28,7 @@ import { ISelectOption } from '../../shared/components/select/select-option.inte
 import { InvoiceModalComponent } from './invoice-modal/invoice-modal.component';
 import { InvoiceEditDto } from '../../shared/dtos/invoice-edit.dto';
 import { ConfirmPackItemModalComponent } from './confirm-pack-item-modal/confirm-pack-item-modal.component';
+import { CreateInternetDocumentDto } from '../../shared/dtos/create-internet-document.dto';
 
 @Component({
   selector: 'order-view',
@@ -304,9 +305,9 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
     this.shipmentInfoModalCmp.openModal();
   }
 
-  onShipmentInfoSubmit(shipment: ShipmentDto) {
+  onShipmentInfoSubmit(createIntDocDto: CreateInternetDocumentDto) {
     this.isLoading = true;
-    this.orderService.createInternetDocument(this.order.id, shipment)
+    this.orderService.createInternetDocument(this.order.id, createIntDocDto)
       .pipe(
         this.notyService.attachNoty({ successText: `Накладная успешно создана` }),
         finalize(() => this.isLoading = false)

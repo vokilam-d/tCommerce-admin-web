@@ -43,7 +43,7 @@ export class OrderDto extends AddOrUpdateOrderDto {
 }
 
 export class UpdateOrderAdminNote {
-  adminNote: string;
+  note: string;
 }
 
 export class UpdateOrderAdminManager {

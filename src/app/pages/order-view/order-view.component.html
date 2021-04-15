@@ -330,6 +330,8 @@
                      [media]="media"
                      [showRemoveBtn]="false"
         ></media-asset>
+
+        <ng-container *ngIf="order.medias.length === 0">Нет фото</ng-container>
       </div>
     </div>
 
