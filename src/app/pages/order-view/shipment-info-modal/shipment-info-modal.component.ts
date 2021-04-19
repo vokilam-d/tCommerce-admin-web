@@ -7,6 +7,7 @@ import { ShipmentSenderDto } from '../../../shared/dtos/shipment-sender.dto';
 import { ShipmentPayerEnum } from '../../../shared/enums/shipment-payer.enum';
 import { NotyService } from '../../../noty/noty.service';
 import { AddressTypeEnum } from '../../../shared/enums/address-type.enum';
+import { CreateInternetDocumentDto } from '../../../shared/dtos/create-internet-document.dto';
 
 @Component({
   selector: 'shipment-info-modal',
@@ -67,7 +68,7 @@ export class ShipmentInfoModalComponent implements OnInit {
       payerType = this.payerTypeForCost;
     }
 
-    const controls: Partial<Record<keyof ShipmentDto, any>> = {
+    const controls: Omit<Record<keyof CreateInternetDocumentDto, any>, 'trackingNumber'> = {
       senderId: [this.defaultSenderId || this.shipment.senderId, Validators.required],
       weight: [this.shipment.weight, Validators.required],
       width: [this.shipment.width, Validators.required],

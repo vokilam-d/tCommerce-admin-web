@@ -337,8 +337,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
         senderId: orderDto.shipment.senderId,
         recipient: orderDto.shipment.recipient,
         shipmentType: orderDto.shipment.shipmentType,
-        payerType: orderDto.shipment.payerType,
-        paymentMethod: orderDto.shipment.paymentMethod
+        payerType: orderDto.shipment.payerType
       },
       prices: {
         discountValue: orderDto.prices.discountValue,
