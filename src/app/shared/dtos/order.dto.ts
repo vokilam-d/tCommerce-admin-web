@@ -1,44 +1,36 @@
+import { MultilingualTextDto } from './multilingual-text.dto';
 import { OrderItemDto } from './order-item.dto';
 import { ShipmentDto } from './shipment.dto';
-import { OrderStatusEnum } from '../enums/order-status.enum';
-import { PaymentMethodEnum } from '../enums/payment-method.enum';
-import { OrderPricesDto } from './order-prices.dto';
-import { MultilingualTextDto } from './multilingual-text.dto';
-import { LogDto } from './log.dto';
-import { ManagerDto } from './manager.dto';
 import { MediaDto } from './media.dto';
+import { LogDto } from './log.dto';
+import { CustomerContactInfoDto } from './customer-contact-info.dto';
+import { ManagerDto } from './manager.dto';
+import { OrderStatusEnum } from '../enums/order-status.enum';
+import { OrderPricesDto } from './order-prices.dto';
+import { OrderNotesDto } from './order-notes.dto';
+import { OrderPaymentInfoDto } from './order-payment-info.dto';
 
-export class AddOrUpdateOrderDto {
-  customerId: number;
-  customerFirstName: string = '';
-  customerLastName: string = '';
-  customerEmail: string = '';
-  customerPhoneNumber: string = '';
-  customerNote: string = '';
-  shipment: ShipmentDto = new ShipmentDto();
-  createdAt: Date;
-  isConfirmationEmailSent: boolean = false;
-  paymentType: PaymentMethodEnum;
-  paymentMethodId: string;
-  paymentMethodAdminName: MultilingualTextDto = new MultilingualTextDto();
-  paymentMethodClientName: MultilingualTextDto = new MultilingualTextDto();
-  shippingMethodName: MultilingualTextDto = new MultilingualTextDto();
-  isCallbackNeeded: boolean = false;
-  items: OrderItemDto[] = [];
-  status: OrderStatusEnum = OrderStatusEnum.NEW;
-  clientNote: string = '';
-  adminNote: string = '';
-  prices: OrderPricesDto = new OrderPricesDto();
-  manager: ManagerDto = new ManagerDto();
-  isOrderPaid: boolean = false;
-  logs: LogDto[];
-  medias: MediaDto[];
-}
 
-export class OrderDto extends AddOrUpdateOrderDto {
+export class OrderDto {
   id: number;
-  statusDescription: MultilingualTextDto = new MultilingualTextDto();
+  idForCustomer: string;
+  customerContactInfo: CustomerContactInfoDto;
+  customerId: number;
+  isCallbackNeeded: boolean;
+  isOrderPaid: boolean;
+  items: OrderItemDto[];
+  logs: LogDto[];
+  manager: ManagerDto;
+  medias: MediaDto[];
+  notes: OrderNotesDto;
+  paymentInfo: OrderPaymentInfoDto;
+  prices: OrderPricesDto;
+  shipment: ShipmentDto;
   source: 'client' | 'manager';
+  status: OrderStatusEnum;
+  statusDescription: MultilingualTextDto;
+  createdAt: Date;
+  updatedAt: Date;
   shippedAt: Date;
 }
 

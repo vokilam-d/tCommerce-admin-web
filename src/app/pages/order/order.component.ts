@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AddOrUpdateOrderDto, OrderDto } from '../../shared/dtos/order.dto';
+import { OrderDto } from '../../shared/dtos/order.dto';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { OrderService } from '../../shared/services/order.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +20,7 @@ import { catchError, finalize, switchMap, takeUntil, tap } from 'rxjs/operators'
 import { EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { ResponseDto } from '../../shared/dtos/response.dto';
 import { ManagerDto } from '../../shared/dtos/manager.dto';
+import { AddOrUpdateOrderDto } from '../../shared/dtos/add-or-update-order.dto';
 
 @Component({
   selector: 'order',
