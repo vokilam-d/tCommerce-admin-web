@@ -3,13 +3,13 @@ import { AddressTypeEnum } from '../enums/address-type.enum';
 export class ShipmentAddressDto {
   isDefault: boolean = false;
   id?: string;
-  settlement: string = '';
-  settlementFull: string = '';
+  settlementName: string = '';
+  settlementNameFull: string = '';
   settlementId: string = '';
-  addressType: AddressTypeEnum = AddressTypeEnum.WAREHOUSE;
+  type: AddressTypeEnum = AddressTypeEnum.WAREHOUSE;
   addressId?: string = '';
-  address?: string = '';
-  addressFull?: string = '';
+  addressName?: string = '';
+  addressNameFull?: string = '';
   buildingNumber?: string = '';
   flat?: string = '';
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ResponseDto } from '../dtos/response.dto';
-import { AddOrUpdateOrderDto, OrderDto, UpdateOrderAdminManager, UpdateOrderAdminNote } from '../dtos/order.dto';
+import { OrderDto, UpdateOrderAdminManager, UpdateOrderAdminNote } from '../dtos/order.dto';
 import { toHttpParams } from '../helpers/to-http-params.function';
 import { OrderItemDto } from '../dtos/order-item.dto';
 import { CreateOrderItemDto } from '../dtos/create-order-item.dto';
@@ -15,6 +15,7 @@ import { CalculatePricesDto } from '../dtos/calculate-prices.dto';
 import { OrderPricesDto } from '../dtos/order-prices.dto';
 import { PackOrderItemDto } from '../dtos/pack-order-item.dto';
 import { CreateInternetDocumentDto } from '../dtos/create-internet-document.dto';
+import { AddOrUpdateOrderDto } from '../dtos/add-or-update-order.dto';
 
 interface IFetchOrderOptions {
   customerId?: number;
