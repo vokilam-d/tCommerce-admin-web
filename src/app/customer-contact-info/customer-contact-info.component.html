@@ -1,0 +1,20 @@
+<div class="customer-contact-info">
+  <div class="customer-contact-info__email">
+    <label class="field__label" for="email">Email</label>
+    <div class="field__control customer-contact-info__control">
+      <input class="field__input"
+             [formControl]="emailControl"
+             [class.field__input--invalid]="isEmailInvalid()"
+             id="email"
+             type="email"
+      >
+
+      <div class="field__error" *ngIf="isEmailInvalid()">
+        Некорректный адрес электронной почты
+      </div>
+    </div>
+  </div>
+
+
+  <contact-info [contactInfo]="contactInfo"></contact-info>
+</div>

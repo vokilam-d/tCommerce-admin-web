@@ -263,7 +263,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   }
 
   openAdminNoteForm() {
-    this.adminNoteControl = new FormControl(this.order.adminNote);
+    this.adminNoteControl = new FormControl(this.order.notes.fromAdmin);
   }
 
   closeAdminNoteForm() {
@@ -371,7 +371,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   }
 
   isCashOnDelivery() {
-    return this.order.paymentType === PaymentMethodEnum.CASH_ON_DELIVERY;
+    return this.order.paymentInfo.type === PaymentMethodEnum.CASH_ON_DELIVERY;
   }
 
   getItemThumbnail(item: OrderItemDto): string {

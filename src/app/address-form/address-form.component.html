@@ -14,64 +14,24 @@
   </div>
 
   <div class="address-form__field field"
-       *ngIf="addressForm.get('lastName') as lastName"
-       [class.field--invalid]="isControlInvalid(lastName)"
-  >
-    <label for="addr-lastName" class="field__label">Фамилия</label>
-    <span class="field__control address-form__control">
-      <input class="field__input" [formControl]="lastName" type="text" id="addr-lastName">
-    </span>
-  </div>
-
-  <div class="address-form__field field"
-       *ngIf="addressForm.get('firstName') as firstName"
-       [class.field--invalid]="isControlInvalid(firstName)"
-  >
-    <label for="addr-firstName" class="field__label">Имя</label>
-    <span class="field__control address-form__control">
-      <input class="field__input" [formControl]="firstName" type="text" id="addr-firstName">
-    </span>
-  </div>
-
-  <div class="address-form__field field"
-       *ngIf="addressForm.get('middleName') as middleName"
-       [class.field--invalid]="isControlInvalid(middleName)"
-  >
-    <label for="addr-middleName" class="field__label">Отчество</label>
-    <span class="field__control address-form__control">
-      <input class="field__input" [formControl]="middleName" type="text" id="addr-middleName">
-    </span>
-  </div>
-
-  <div class="address-form__field field"
-       *ngIf="addressForm.get('phone') as phone"
-       [class.field--invalid]="isControlInvalid(phone)"
-  >
-    <label for="addr-phone" class="field__label">Телефон</label>
-    <span class="field__control address-form__control">
-      <input class="field__input" [formControl]="phone" type="text" id="addr-phone">
-    </span>
-  </div>
-
-  <div class="address-form__field field"
-       *ngIf="addressForm.get('addressType') as addressType"
-       [class.field--invalid]="isControlInvalid(addressType)"
+       *ngIf="addressForm.get('type') as type"
+       [class.field--invalid]="isControlInvalid(type)"
   >
     <label class="field__label">Тип доставки</label>
     <div class="field__control address-form__control">
       <div class="tabs">
         <button class="tabs__tab"
-                *ngFor="let type of addressTypes"
-                [class.tabs__tab--active]="type.data === addressType.value"
-                (click)="setAddressType(type)"
+                *ngFor="let addressType of addressTypes"
+                [class.tabs__tab--active]="addressType.data === type.value"
+                (click)="setAddressType(addressType)"
         >
-          {{ type.view }}
+          {{ addressType.view }}
         </button>
       </div>
     </div>
   </div>
 
-  <div class="address-form__field field" *ngIf="addressForm.get('settlement') as settlementControl">
+  <div class="address-form__field field" *ngIf="addressForm.get('settlementName') as settlementControl">
     <label class="field__label">Город</label>
     <div class="field__control address-form__control">
       <select-autocomplete type="settlement"
@@ -85,12 +45,12 @@
     </div>
   </div>
 
-  <ng-container [ngSwitch]="addressForm.get('addressType').value">
+  <ng-container [ngSwitch]="addressForm.get('type').value">
 
     <ng-container *ngSwitchCase="addressTypeEnum.WAREHOUSE">
 
       <div class="address-form__field field"
-           *ngIf="addressForm.get('address') as addressControl"
+           *ngIf="addressForm.get('addressName') as addressControl"
            [class.field--invalid]="isControlInvalid(addressControl)"
       >
         <label class="field__label">Отделение</label>
@@ -113,7 +73,7 @@
     <ng-container *ngSwitchCase="addressTypeEnum.DOORS">
 
       <div class="address-form__field field"
-           *ngIf="addressForm.get('address') as addressControl"
+           *ngIf="addressForm.get('addressName') as addressControl"
            [class.field--invalid]="isControlInvalid(addressControl)"
       >
         <label class="field__label">Улица</label>

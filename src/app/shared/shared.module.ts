@@ -17,6 +17,7 @@ import { DraggableItemDirective } from './directives/draggable-item/draggable-it
 import { RouterModule } from '@angular/router';
 import { AdditionalServiceSelectComponent } from './components/additional-service-select/additional-service-select.component';
 import { BeautifyPhonePipe } from './pipes/beautify-phone.pipe';
+import { InputCapitalizeDirective } from './directives/input-capitalize/input-capitalize.directive';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { BeautifyPhonePipe } from './pipes/beautify-phone.pipe';
     NormalizedPhonePipe,
     BeautifyPhonePipe,
     AutofocusDirective,
-    DraggableItemDirective
+    DraggableItemDirective,
+    InputCapitalizeDirective
   ],
   exports: [
     ClickOutsideDirective,
@@ -52,7 +54,8 @@ import { BeautifyPhonePipe } from './pipes/beautify-phone.pipe';
     NormalizedPhonePipe,
     BeautifyPhonePipe,
     AutofocusDirective,
-    DraggableItemDirective
+    DraggableItemDirective,
+    InputCapitalizeDirective
   ],
   imports: [
     CommonModule,

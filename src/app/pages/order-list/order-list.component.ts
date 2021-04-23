@@ -24,6 +24,10 @@ import { DatePipe } from '@angular/common';
 import { ReadableCurrencyPipe } from '../../shared/pipes/readable-currency.pipe';
 import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
 import { ManagerDto } from '../../shared/dtos/manager.dto';
+import { ShipmentCounterpartyDto } from '../../shared/dtos/shipment-counterparty.dto';
+import { ContactInfoDto } from '../../shared/dtos/contact-info.dto';
+import { OrderNotesDto } from '../../shared/dtos/order-notes.dto';
+import { OrderPaymentInfoDto } from '../../shared/dtos/order-payment-info.dto';
 
 @Component({
   selector: 'order-list',
@@ -100,10 +104,17 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
   }
 
   hasDifferentName(order: OrderDto): string {
-    if (!order.customerFirstName && !order.customerLastName) { return; }
-    if (order.customerFirstName === order.shipment.recipient.firstName && order.customerLastName === order.shipment.recipient.lastName) { return; }
+    if (!order.customerContactInfo.firstName && !order.customerContactInfo.lastName) {
+      return;
+    }
+    if (
+      order.customerContactInfo.firstName === order.shipment.recipient.contactInfo.firstName
+      && order.customerContactInfo.lastName === order.shipment.recipient.contactInfo.lastName
+    ) {
+      return;
+    }
 
-    return `${order.customerFirstName} ${order.customerLastName}`;
+    return `${order.customerContactInfo.firstName} ${order.customerContactInfo.lastName}`;
   }
 
   copyOrdersToClipboard() {
@@ -116,19 +127,18 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
         const fields: (string | number)[] = [
           order.id,
           `${this.datePipe.transform(order.createdAt, 'dd.MM.y')} ${this.datePipe.transform(order.createdAt, 'HH:mm:ss')}`,
-          `${order.shipment.recipient.firstName} ${order.shipment.recipient.lastName} ${order.shipment.recipient.phone}`,
-          order.customerNote,
-          order.shipment.recipient.settlement,
-          order.shipment.recipient.address,
+          `${order.shipment.recipient.contactInfo.firstName} ${order.shipment.recipient.contactInfo.lastName} ${order.shipment.recipient.contactInfo.phoneNumber}`,
+          order.notes.aboutCustomer,
+          order.shipment.recipient.address.addressName,
           `${order.prices.totalCost} ${this.readableCurrencyPipe.transform(this.defaultCurrency)}`,
           order.statusDescription[DEFAULT_LANG],
           order.shipment.statusDescription,
           order.shipment.trackingNumber,
-          order.adminNote,
+          order.notes.fromAdmin,
           `${order.isOrderPaid ? 'Да' : 'Нет'}`,
-          order.paymentMethodAdminName[DEFAULT_LANG],
+          order.paymentInfo.methodAdminName[DEFAULT_LANG],
           `${order.isCallbackNeeded ? 'Да' : 'Нет'}`,
-          order.clientNote
+          order.notes.fromCustomer
         ];
 
         switch (order.source) {
@@ -157,6 +167,8 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
 
 const shipmentProp = getPropertyOf<OrderDto>('shipment');
 const recipientProp = getPropertyOf<ShipmentDto>('recipient');
+const counterPartyContactInfoProp = getPropertyOf<ShipmentCounterpartyDto>('contactInfo');
+const counterPartyAddressProp = getPropertyOf<ShipmentCounterpartyDto>('address');
 const orderGridCells: IGridCell[] = [
   {
     isSearchable: true,
@@ -185,7 +197,7 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: false,
-    fieldName: `${shipmentProp}.${recipientProp}.${getPropertyOf<ShipmentAddressDto>('lastName')}|${shipmentProp}.${recipientProp}.${getPropertyOf<ShipmentAddressDto>('phone')}`
+    fieldName: `${shipmentProp}.${recipientProp}.${counterPartyContactInfoProp}.${getPropertyOf<ContactInfoDto>('lastName')}|${shipmentProp}.${recipientProp}.${counterPartyContactInfoProp}.${getPropertyOf<ContactInfoDto>('phoneNumber')}`
   },
   {
     isSearchable: true,
@@ -194,7 +206,7 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: `${shipmentProp}.${recipientProp}.${getPropertyOf<ShipmentAddressDto>('settlement')}|${shipmentProp}.${recipientProp}.${getPropertyOf<ShipmentAddressDto>('settlementFull')}`
+    fieldName: `${shipmentProp}.${recipientProp}.${counterPartyAddressProp}.${getPropertyOf<ShipmentAddressDto>('settlementName')}|${shipmentProp}.${recipientProp}.${counterPartyAddressProp}.${getPropertyOf<ShipmentAddressDto>('settlementNameFull')}`
   },
   {
     isSearchable: true,
@@ -212,7 +224,7 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<OrderDto>('adminNote')
+    fieldName: `${getPropertyOf<OrderDto>('notes')}.${getPropertyOf<OrderNotesDto>('fromAdmin')}`
   },
   {
     isSearchable: false,
@@ -273,7 +285,7 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: `${getPropertyOf<OrderDto>('paymentMethodAdminName')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
+    fieldName: `${getPropertyOf<OrderDto>('paymentInfo')}.${getPropertyOf<OrderPaymentInfoDto>('methodAdminName')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
   },
   {
     isSearchable: false,
@@ -291,7 +303,7 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<OrderDto>('clientNote')
+    fieldName: `${getPropertyOf<OrderDto>('notes')}.${getPropertyOf<OrderNotesDto>('fromCustomer')}`
   },
   {
     isSearchable: false,
@@ -323,6 +335,6 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: false,
-    fieldName: getPropertyOf<OrderDto>('customerNote')
+    fieldName: `${getPropertyOf<OrderDto>('notes')}.${getPropertyOf<OrderNotesDto>('aboutCustomer')}`
   },
 ];

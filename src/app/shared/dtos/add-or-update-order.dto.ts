@@ -6,6 +6,7 @@ import { ManagerDto } from './manager.dto';
 import { OrderPricesDto } from './order-prices.dto';
 
 export class AddOrUpdateOrderDto {
+  id?: number;
   customerId: number;
   customerContactInfo: CustomerContactInfoDto = new CustomerContactInfoDto();
   recipientContactInfo: ContactInfoDto = new ContactInfoDto();

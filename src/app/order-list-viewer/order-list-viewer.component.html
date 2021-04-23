@@ -22,16 +22,16 @@
   </ng-template>
   <ng-template #cellContent let-order="item">
     <div class="order__name">
-      {{ order.shipment.recipient.firstName }} {{ order.shipment.recipient.lastName }}
+      {{ order.shipment.recipient.contactInfo.firstName }} {{ order.shipment.recipient.contactInfo.lastName }}
     </div>
   </ng-template>
   <ng-template #cellContent let-order="item">
       <span class="order__city">
-        {{ order.shipment.recipient.settlement }}
+        {{ order.shipment.recipient.address.settlementName }}
       </span>
   </ng-template>
   <ng-template #cellContent let-order="item">{{ order.prices.totalCost }} {{ defaultCurrency | readableCurrency }}</ng-template>
-  <ng-template #cellContent let-order="item">{{ order.adminNote }}</ng-template>
+  <ng-template #cellContent let-order="item">{{ order.notes.fromAdmin }}</ng-template>
   <ng-template #cellContent let-order="item">{{ order.statusDescription[lang] }}</ng-template>
   <ng-template #cellContent let-order="item">
       <span class="order__shipment-status">
@@ -39,5 +39,5 @@
       </span>
   </ng-template>
   <ng-template #cellContent let-order="item">{{ order.shipment.trackingNumber }}</ng-template>
-  <ng-template #cellContent let-order="item">{{ order.clientNote }}</ng-template>
+  <ng-template #cellContent let-order="item">{{ order.notes.fromCustomer }}</ng-template>
 </grid>

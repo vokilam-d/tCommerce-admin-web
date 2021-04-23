@@ -1,0 +1,65 @@
+<div class="personal-info">
+
+  <div class="personal-info__form__control"
+       *ngIf="contactForm.get('lastName') as lastName"
+       [class.field--invalid]="isControlInvalid(lastName)"
+  >
+    <label for="addr-lastName" class="field__label">Фамилия</label>
+    <div class="personal-info__control">
+      <input class="field__input" [formControl]="lastName" type="text" id="addr-lastName" inputCapitalize>
+    </div>
+
+    <div class="field__error" *ngIf="isControlInvalid(lastName)">
+      Это обязательное поле
+    </div>
+  </div>
+
+  <div class="personal-info__form__control"
+       *ngIf="contactForm.get('firstName') as firstName"
+       [class.field--invalid]="isControlInvalid(firstName)"
+  >
+    <label for="addr-firstName" class="field__label">Имя</label>
+    <div class="personal-info__control">
+      <input class="field__input" [formControl]="firstName" type="text" id="addr-firstName" inputCapitalize>
+    </div>
+
+    <div class="field__error" *ngIf="isControlInvalid(firstName)">
+      Это обязательное поле
+    </div>
+  </div>
+
+  <div class="personal-info__form__control"
+       *ngIf="contactForm.get('middleName') as middleName"
+       [class.field--invalid]="isControlInvalid(middleName)"
+  >
+    <label for="addr-middleName" class="field__label">Отчество</label>
+    <div class="personal-info__control">
+      <input class="field__input" [formControl]="middleName" type="text" id="addr-middleName" inputCapitalize>
+    </div>
+
+    <div class="field__error" *ngIf="isControlInvalid(middleName)">
+      Это обязательное поле
+    </div>
+  </div>
+
+  <div class="personal-info__form__control"
+       *ngIf="contactForm.get('phoneNumber') as phoneNumber"
+       [class.field--invalid]="isControlInvalid(phoneNumber)"
+  >
+    <label for="addr-phone" class="field__label">Телефон</label>
+    <div class="personal-info__control">
+      <input class="field__input"
+             [formControl]="phoneNumber"
+             mask="+00 (000) 000-00-00-00000000000"
+             inputmode="tel"
+             type="text"
+             id="addr-phone"
+      >
+    </div>
+
+    <div class="field__error" *ngIf="isControlInvalid(phoneNumber)">
+      Это обязательное поле
+    </div>
+  </div>
+
+</div>

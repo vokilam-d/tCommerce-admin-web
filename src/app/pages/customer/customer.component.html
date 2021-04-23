@@ -6,7 +6,9 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="false">
-        {{ customer?.firstName }} {{ customer?.lastName }}
+        <ng-container *ngIf="customer">
+          {{ customer.contactInfo.firstName }} {{ customer.contactInfo.lastName }}
+        </ng-container>
       </ng-container>
     </h1>
 
@@ -25,70 +27,34 @@
     <ng-template #tabContent>
       <form class="customer-form" *ngIf="infoForm" [formGroup]="infoForm">
 
-        <div class="customer-form__field field field--required"
-             *ngIf="infoForm.get('firstName') as firstName"
-             [class.field--invalid]="isControlInvalid(firstName)"
-        >
-          <label for="firstName" class="field__label">Имя</label>
-          <span class="field__control">
-            <input class="field__input" [formControl]="firstName" type="text" id="firstName">
-          </span>
-        </div>
+        <customer-contact-info [customer]="customer"></customer-contact-info>
 
-        <div class="customer-form__field field field--required"
-             *ngIf="infoForm.get('lastName') as lastName"
-             [class.field--invalid]="isControlInvalid(lastName)"
-        >
-          <label for="lastName" class="field__label">Фамилия</label>
-          <span class="field__control">
-            <input class="field__input" [formControl]="lastName" type="text" id="lastName">
-          </span>
-        </div>
+        <div class="customer-form__fields">
+          <div class="customer-form__field"
+               *ngIf="infoForm.get('note') as note"
+               [class.field--invalid]="isControlInvalid(note)"
+          >
+            <label for="note" class="field__label">Комментарий о клиенте</label>
+            <div class="customer-form__control">
+              <input class="field__input" [formControl]="note" type="text" id="note">
+            </div>
+          </div>
 
-        <div class="customer-form__field field"
-             *ngIf="infoForm.get('email') as email"
-             [class.field--invalid]="isControlInvalid(email)"
-        >
-          <label for="email" class="field__label">Email</label>
-          <span class="field__control">
-            <input class="field__input" [formControl]="email" type="text" id="email">
-          </span>
-        </div>
-
-        <div class="customer-form__field field"
-             *ngIf="infoForm.get('phoneNumber') as phoneNumber"
-             [class.field--invalid]="isControlInvalid(phoneNumber)"
-        >
-          <label for="phoneNumber" class="field__label">Телефон</label>
-          <span class="field__control">
-            <input class="field__input" [formControl]="phoneNumber" type="text" id="phoneNumber">
-          </span>
-        </div>
-
-        <div class="customer-form__field field"
-             *ngIf="infoForm.get('note') as note"
-             [class.field--invalid]="isControlInvalid(note)"
-        >
-          <label for="note" class="field__label">Комментарий о клиенте</label>
-          <span class="field__control">
-            <input class="field__input" [formControl]="note" type="text" id="note">
-          </span>
-        </div>
-
-        <div class="customer-form__field field"
-             *ngIf="infoForm.get('discountPercent') as discountPercent"
-        >
-          <label for="discountPercent" class="field__label">Скидка, %</label>
-          <span class="field__control">
-            <input class="field__input customer-form__discount-input"
-                   [formControl]="discountPercent"
-                   numberInput
-                   min="0"
-                   max="100"
-                   type="number"
-                   id="discountPercent"
-            >
-          </span>
+          <div class="customer-form__field"
+               *ngIf="infoForm.get('discountPercent') as discountPercent"
+          >
+            <label for="discountPercent" class="field__label">Скидка, %</label>
+            <div class="customer-form__control">
+              <input class="field__input customer-form__discount-input"
+                     [formControl]="discountPercent"
+                     numberInput
+                     min="0"
+                     max="100"
+                     type="number"
+                     id="discountPercent"
+              >
+            </div>
+          </div>
         </div>
 
       </form>
@@ -110,20 +76,14 @@
                [class.address--faded]="activeAddress && activeAddress !== address"
                [class.address--default]="address.isDefault"
           >
-            <div class="address__block address__block--name">
-              {{ address.firstName }} {{ address.lastName }}
-            </div>
             <div class="address__block">
-              {{ address.phone | beautifyPhone }}
+              {{ address.settlementNameFull || address.settlementName }}
             </div>
-            <div class="address__block">
-              {{ address.settlementFull || address.settlement }}
-            </div>
-            <div class="address__block" [ngSwitch]="address.addressType">
+            <div class="address__block" [ngSwitch]="address.type">
               Тип доставки: <ng-container *ngSwitchCase="addressTypes.WAREHOUSE">в отделение</ng-container><ng-container *ngSwitchCase="addressTypes.DOORS">адресная Новой Почтой</ng-container>
             </div>
             <div class="address__block">
-              {{ address.address }}<ng-container *ngIf="addressTypes.DOORS">, {{ address.buildingNumber }} {{ address.flat }}</ng-container>
+              {{ address.addressName }}<ng-container *ngIf="addressTypes.DOORS">, {{ address.buildingNumber }} {{ address.flat }}</ng-container>
             </div>
 
             <div class="address__edit-container">

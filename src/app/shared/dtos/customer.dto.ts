@@ -9,7 +9,7 @@ export class AddOrUpdateCustomerDto {
   discountPercent: number = 0;
 }
 
-export class CustomerDto {
+export class CustomerDto extends AddOrUpdateCustomerDto {
   id: number;
   createdAt: Date = undefined;
   lastLoggedIn: Date = undefined;

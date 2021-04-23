@@ -14,7 +14,7 @@ import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
 })
 export class AppComponent implements OnInit {
 
-  private appVersion = '1.0';
+  private appVersion = '2.0';
 
   get isLoggedIn(): boolean { return this.userService.user !== null; };
 

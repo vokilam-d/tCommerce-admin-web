@@ -31,7 +31,7 @@ export class ShipmentInfoModalComponent implements OnInit {
 
   payerTypeOptions: ISelectOption[] = [{ view: 'Клиент', data: ShipmentPayerEnum.RECIPIENT }, { view: 'Мы', data: ShipmentPayerEnum.SENDER }];
   get payerTypeForCost(): ShipmentPayerEnum {
-    const isToWarehouse = this.shipment.recipient.addressType === AddressTypeEnum.WAREHOUSE;
+    const isToWarehouse = this.shipment.recipient.address.type === AddressTypeEnum.WAREHOUSE;
     return isToWarehouse && this.cost >= 1000 ? ShipmentPayerEnum.SENDER : ShipmentPayerEnum.RECIPIENT;
   }
   get payerTypeNameForCost(): string { return this.payerTypeOptions.find(o => o.data === this.payerTypeForCost).view; }
@@ -69,7 +69,7 @@ export class ShipmentInfoModalComponent implements OnInit {
     }
 
     const controls: Omit<Record<keyof CreateInternetDocumentDto, any>, 'trackingNumber'> = {
-      senderId: [this.defaultSenderId || this.shipment.senderId, Validators.required],
+      senderId: [this.defaultSenderId, Validators.required],
       weight: [this.shipment.weight, Validators.required],
       width: [this.shipment.width, Validators.required],
       height: [this.shipment.height, Validators.required],

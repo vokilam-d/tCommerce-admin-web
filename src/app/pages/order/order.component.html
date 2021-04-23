@@ -3,7 +3,7 @@
     <h1 class="header__title">
       <ng-container *ngIf="isEditOrder; else newOrderTitle">
         Редактирование заказа #{{ order?.id }}
-      </ng-container><ng-container *ngIf="customer"> для <ng-container *ngIf="!isNewCustomer; else newCustomerText">{{ customer.firstName }} {{ customer.lastName }}</ng-container></ng-container>
+      </ng-container><ng-container *ngIf="customer"> для <ng-container *ngIf="!isNewCustomer; else newCustomerText">{{ customer.contactInfo.firstName }} {{ customer.contactInfo.lastName }}</ng-container></ng-container>
 
       <ng-template #newOrderTitle>Новый заказ</ng-template>
 
@@ -59,45 +59,40 @@
           </div>
 
           <div class="order__block">
-            <ng-container *ngIf="isNewCustomer">
-              <div class="order__field field">
-                <label for="email" class="field__label">Email</label>
-                <span class="field__control">
-                  <input class="field__input" [(ngModel)]="order.customerEmail" type="text" id="email">
-                </span>
-              </div>
+            <customer-contact-info [customer]="customer"></customer-contact-info>
 
-              <div class="order__field field">
-                <label for="phoneNumber" class="field__label">Телефон</label>
-                <span class="field__control">
-                  <input class="field__input" [(ngModel)]="order.customerPhoneNumber" type="text" id="phoneNumber">
-                </span>
-              </div>
-            </ng-container>
 
-            <div class="order__customer" *ngIf="!isNewCustomer">
-              <div *ngIf="order.customerEmail as email">
-                Email: {{ email }}
-              </div>
-
-              <div *ngIf="order.customerPhoneNumber as phone">
-                Телефон: {{ phone | beautifyPhone }}
-              </div>
-
-              <div>
+            <div class="customer-contact-info__additional-info">
+              <div class="customer-contact-info__reviews">
                 Отзывов о магазине: <b>{{ customer.storeReviewIds.length }}</b><span *ngIf="customer.storeReviewIds.length > 0">. Средняя оценка: <b>{{ customerAvgStoreReviewsRating }}</b></span>
               </div>
 
-              <div>
+              <div class="customer-contact-info__reviews">
                 Отзывов о товаре: <b>{{ customer.productReviewIds.length }}</b><span *ngIf="customer.productReviewIds.length> 0">. Средняя оценка: <b>{{ customerAvgProductReviewsRating }}</b></span>
               </div>
 
               <div>
-                Коммент о клиенте: <b><span class="order__customer-note">{{ customer.note }}</span></b>
+                Коммент о клиенте: <b><span class="customer-contact-info__note">{{ customer.note }}</span></b>
               </div>
             </div>
           </div>
         </div>
+
+        <div class="order__block-container">
+          <div class="order__subtitle">
+            Кто покупатель?
+          </div>
+
+          <div class="order__block">
+            <recipient-contact-info [contactInfo]="customer.contactInfo"></recipient-contact-info>
+          </div>
+        </div>
+
+
+
+
+
+
 
         <div class="order__block-container">
           <div class="order__subtitle">
@@ -127,31 +122,9 @@
             </div>
 
             <address-form class="order__address"
-                          [address]="order.shipment.recipient"
+                          [address]="order.address"
                           [showIsDefault]="false"
             ></address-form>
-          </div>
-        </div>
-
-        <div class="order__block-container">
-          <div class="order__subtitle">
-            Доп. информация
-          </div>
-          <div class="order__block">
-            <div class="order__field field">
-              <label for="adminNote" class="field__label">Комментарий менеджера</label>
-              <span class="field__control">
-                <input class="field__input" [(ngModel)]="order.adminNote" type="text" id="adminNote">
-              </span>
-            </div>
-          </div>
-          <div class="order__block">
-            <div class="order__field field">
-              <label class="field__label">Менеджер</label>
-              <div class="field__control">
-                <app-select [options]="managerSelectOptions" [(ngModel)]="order.manager.userId"></app-select>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -247,7 +220,7 @@
           </div>
         </div>
 
-        <div class="order__block-container">
+        <div class="order__block-container order__block-container--total">
           <div class="order__subtitle">
             Оплата
           </div>
@@ -257,12 +230,7 @@
                                      (selected)="onPaymentMethodSelect($event)"
             ></payment-method-selector>
           </div>
-        </div>
 
-        <div class="order__block-container">
-          <div class="order__subtitle">
-            Итого
-          </div>
           <div class="order__block order__summary-block">
             <div class="order__summary summary">
               <div class="summary__row">
@@ -295,6 +263,28 @@
               >
                 Разместить заказ
               </app-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="order__block-container">
+          <div class="order__subtitle">
+            Доп. информация
+          </div>
+          <div class="order__block">
+            <div class="order__field field">
+              <label for="adminNote" class="field__label">Комментарий менеджера</label>
+              <span class="field__control">
+                <input class="field__input" [(ngModel)]="order.note" type="text" id="adminNote">
+              </span>
+            </div>
+          </div>
+          <div class="order__block">
+            <div class="order__field field">
+              <label class="field__label">Менеджер</label>
+              <div class="field__control">
+                <app-select [options]="managerSelectOptions" [(ngModel)]="order.manager.userId"></app-select>
+              </div>
             </div>
           </div>
         </div>

@@ -60,11 +60,7 @@ export class OrderService {
   }
 
   updateOrderAddress(id: number, address: ShipmentAddressDto) {
-    const payload: Partial<ShipmentDto> = {
-      recipient: address
-    };
-
-    return this.http.patch<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/shipment`, payload);
+    return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/recipient-address`, address);
   }
 
   updateOrderTrackingId(id: number, trackingNumber: string) {
@@ -72,7 +68,7 @@ export class OrderService {
       trackingNumber
     };
 
-    return this.http.patch<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/shipment`, payload);
+    return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/tracking-number`, payload);
   }
 
   updateOrderAdminNote(id: number, adminNote: string) {

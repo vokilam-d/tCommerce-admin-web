@@ -1,0 +1,19 @@
+@import "variables";
+@import "mixins";
+
+
+.personal-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  &__form__control {
+    width: calc(50% - 10px);
+    margin: 13px 0 0;
+  }
+
+  &__control{
+    width: 100%;
+    margin: 6px 0 0;
+  }
+}

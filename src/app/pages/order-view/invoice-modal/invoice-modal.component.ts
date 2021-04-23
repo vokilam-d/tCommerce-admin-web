@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NotyService } from '../../../noty/noty.service';
 import { OrderDto } from '../../../shared/dtos/order.dto';
 import { InvoiceEditDto } from '../../../shared/dtos/invoice-edit.dto';
-import { ShipmentTypeEnum } from '../../../shared/enums/shipment-type.enum';
 import { NgUnsubscribe } from '../../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
+import { AddressTypeEnum } from '../../../shared/enums/address-type.enum';
 
 @Component({
   selector: 'invoice-modal',
@@ -21,8 +21,8 @@ export class InvoiceModalComponent extends NgUnsubscribe implements OnInit {
   @Input() order: OrderDto;
   @Output('print') printEmitter = new EventEmitter<InvoiceEditDto>();
 
-  get isWarehouseShipment(): boolean {
-    return this.order.shipment.shipmentType === ShipmentTypeEnum.WAREHOUSE_DOORS;
+  get isShipmentToDoors(): boolean {
+    return this.order.shipment.recipient.address.type === AddressTypeEnum.DOORS;
   }
 
   constructor(
@@ -39,17 +39,17 @@ export class InvoiceModalComponent extends NgUnsubscribe implements OnInit {
   private buildForm() {
     const controls: Partial<Record<keyof InvoiceEditDto, any>> = {
       title: this.titles[0],
-      address: this.order.shipment.recipient.addressFull || this.order.shipment.recipient.address,
-      addressCity: this.order.shipment.recipient.settlementFull || this.order.shipment.recipient.settlement,
-      addressName: `${this.order.shipment.recipient.firstName} ${this.order.shipment.recipient.lastName}`,
-      addressPhone: this.order.shipment.recipient.phone,
+      address: this.order.shipment.recipient.address.addressNameFull || this.order.shipment.recipient.address.addressName,
+      addressCity: this.order.shipment.recipient.address.settlementNameFull || this.order.shipment.recipient.address.settlementName,
+      addressName: `${this.order.shipment.recipient.contactInfo.firstName} ${this.order.shipment.recipient.contactInfo.lastName}`,
+      addressPhone: this.order.shipment.recipient.contactInfo.phoneNumber,
       hideStamp: false,
       withoutDiscounts: false
     };
 
-    if (this.isWarehouseShipment) {
-      controls.addressBuildingNumber = this.order.shipment.recipient.buildingNumber;
-      controls.addressFlatNumber = this.order.shipment.recipient.flat;
+    if (this.isShipmentToDoors) {
+      controls.addressBuildingNumber = this.order.shipment.recipient.address.buildingNumber;
+      controls.addressFlatNumber = this.order.shipment.recipient.address.flat;
     }
 
     this.form = this.formBuilder.group(controls);

@@ -12,6 +12,9 @@ import { PaymentMethodSelectorComponent } from './payment-method-selector/paymen
 import { ProductSelectorModule } from '../../product-selector/product-selector.module';
 import { GridModule } from '../../grid/grid.module';
 import { PreloaderModule } from '../../preloader/preloader.module';
+import { ContactInfoModule } from '../../contact-info/contact-info.module';
+import { CustomerContactInfoModule } from '../../customer-contact-info/customer-contact-info.module';
+import { RecipientContactInfoModule } from '../../recipient-contact-info/recipient-contact-info.module';
 
 
 @NgModule({
@@ -25,7 +28,10 @@ import { PreloaderModule } from '../../preloader/preloader.module';
     AddressFormModule,
     GridModule,
     ProductSelectorModule,
-    PreloaderModule
+    PreloaderModule,
+    ContactInfoModule,
+    CustomerContactInfoModule,
+    RecipientContactInfoModule
   ]
 })
 export class OrderModule { }

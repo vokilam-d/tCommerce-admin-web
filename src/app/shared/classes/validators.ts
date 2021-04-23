@@ -1,4 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { DEFAULT_PHONE_NUMBER_VALUE } from '../constants/constants';
 
 export class CustomValidators {
   private static invalidSlugRegex = /[^a-z0-9\-.]/;
@@ -34,5 +35,20 @@ export class CustomValidators {
     }
 
     return { invalid: true };
+  }
+
+  static phoneNumber(phoneControl: AbstractControl): ValidationErrors | null {
+    const value: string = phoneControl.value;
+    if (!value) {
+      return { error: true };
+    }
+
+    const defaultValue = value.indexOf(DEFAULT_PHONE_NUMBER_VALUE) === 0
+      || value.indexOf(DEFAULT_PHONE_NUMBER_VALUE.slice(1)) === 0;
+    if (defaultValue && value.length !== 12) {
+      return { error: true };
+    }
+
+    return null;
   }
 }
