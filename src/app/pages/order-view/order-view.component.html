@@ -176,7 +176,9 @@
       <div class="order-view__content order-view__address">
         {{ order.shipment.shippingMethodDescription[lang] }}<br><br>
 
-        <span (click)="copyToClipboard(order.shipment.recipient.contactInfo.lastName + ' ' + order.shipment.recipient.contactInfo.firstName + (order.shipment.recipient.contactInfo.middleName ? ' ' + order.shipment.recipient.contactInfo.middleName : ''))">{{ order.shipment.recipient.contactInfo.lastName }} {{ order.shipment.recipient.contactInfo.firstName }} {{ order.shipment.recipient.contactInfo.middleName }}</span>, <span (click)="copyToClipboard(order.shipment.recipient.contactInfo.phoneNumber)">{{ order.shipment.recipient.contactInfo.phoneNumber | beautifyPhone }}</span>
+        <ng-container *ngIf="order.shipment.recipient.contactInfo as contacts">
+          <span (click)="copyToClipboard(contacts.lastName + ' ' + contacts.firstName + (contacts.middleName ? ' ' + contacts.middleName : ''))">{{ contacts.lastName }} {{ contacts.firstName }} {{ contacts.middleName }}</span>, <span (click)="copyToClipboard(contacts.phoneNumber)">{{ contacts.phoneNumber | beautifyPhone }}</span>
+        </ng-container>
         <br>
         {{ order.shipment.recipient.address.settlementNameFull || order.shipment.recipient.address.settlementName }}, {{ order.shipment.recipient.address.addressNameFull || order.shipment.recipient.address.addressName }}<ng-container *ngIf="order.shipment.recipient.address.buildingNumber as buildingNumber">, {{ buildingNumber }} {{ order.shipment.recipient.address.flat }}</ng-container>
       </div>
