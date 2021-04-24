@@ -12,9 +12,9 @@
   <span grid-no-items>Клиенты не найдены</span>
 
   <ng-template #cellContent let-customer="item">{{ customer.id }}</ng-template>
-  <ng-template #cellContent let-customer="item">{{ customer.firstName }} {{ customer.lastName }}</ng-template>
-  <ng-template #cellContent let-customer="item">{{ customer.email }}</ng-template>
-  <ng-template #cellContent let-customer="item">{{ customer.phoneNumber | beautifyPhone }}</ng-template>
+  <ng-template #cellContent let-customer="item">{{ customer.contactInfo.firstName }} {{ customer.contactInfo.lastName }}</ng-template>
+  <ng-template #cellContent let-customer="item">{{ customer.contactInfo.email }}</ng-template>
+  <ng-template #cellContent let-customer="item">{{ customer.contactInfo.phoneNumber | beautifyPhone }}</ng-template>
   <ng-template #cellContent let-customer="item">{{ customer.addresses[0]?.city }}</ng-template>
   <ng-template #cellContent let-customer="item">{{ customer.createdAt | date }}</ng-template>
   <ng-template #cellContent let-customer="item">{{ customer.note }}</ng-template>

@@ -10,6 +10,7 @@ import { AddressFormModule } from '../../address-form/address-form.module';
 import { OrderListViewerModule } from '../../order-list-viewer/order-list-viewer.module';
 import { StoreReviewListViewerModule } from '../../store-review-list-viewer/store-review-list-viewer.module';
 import { ProductReviewListViewerModule } from '../../product-review-list-viewer/product-review-list-viewer.module';
+import { CustomerContactInfoModule } from '../../customer-contact-info/customer-contact-info.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { ProductReviewListViewerModule } from '../../product-review-list-viewer/
     OrderListViewerModule,
     AddressFormModule,
     StoreReviewListViewerModule,
-    ProductReviewListViewerModule
+    ProductReviewListViewerModule,
+    CustomerContactInfoModule
   ]
 })
 export class CustomerModule { }

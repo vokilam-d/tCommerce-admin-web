@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ResponseDto } from '../dtos/response.dto';
-import { AddOrUpdateOrderDto, OrderDto, UpdateOrderAdminManager, UpdateOrderAdminNote } from '../dtos/order.dto';
+import { OrderDto, UpdateOrderAdminManager, UpdateOrderAdminNote } from '../dtos/order.dto';
 import { toHttpParams } from '../helpers/to-http-params.function';
 import { OrderItemDto } from '../dtos/order-item.dto';
 import { CreateOrderItemDto } from '../dtos/create-order-item.dto';
@@ -14,6 +14,8 @@ import { OrderStatusEnum } from '../enums/order-status.enum';
 import { CalculatePricesDto } from '../dtos/calculate-prices.dto';
 import { OrderPricesDto } from '../dtos/order-prices.dto';
 import { PackOrderItemDto } from '../dtos/pack-order-item.dto';
+import { CreateInternetDocumentDto } from '../dtos/create-internet-document.dto';
+import { AddOrUpdateOrderDto } from '../dtos/add-or-update-order.dto';
 
 interface IFetchOrderOptions {
   customerId?: number;
@@ -58,11 +60,7 @@ export class OrderService {
   }
 
   updateOrderAddress(id: number, address: ShipmentAddressDto) {
-    const payload: Partial<ShipmentDto> = {
-      recipient: address
-    };
-
-    return this.http.patch<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/shipment`, payload);
+    return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/recipient-address`, address);
   }
 
   updateOrderTrackingId(id: number, trackingNumber: string) {
@@ -70,12 +68,12 @@ export class OrderService {
       trackingNumber
     };
 
-    return this.http.patch<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/shipment`, payload);
+    return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/tracking-number`, payload);
   }
 
   updateOrderAdminNote(id: number, adminNote: string) {
     const payload: UpdateOrderAdminNote = {
-      adminNote
+      note: adminNote
     };
 
     return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/note`, payload);
@@ -120,13 +118,13 @@ export class OrderService {
     return `${API_HOST}/api/v1/admin/orders/${id}/invoice-pdf`;
   }
 
-  createInternetDocument(id: number, shipment: ShipmentDto) {
-    return this.http.post<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/internet-document`, shipment);
+  createInternetDocument(id: number, createIntDocDto: CreateInternetDocumentDto) {
+    return this.http.post<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/internet-document`, createIntDocDto);
   }
 
   createInternetDocumentByTrackingId(id: number, trackingId: string) {
-    const shipment = { trackingNumber: trackingId } as ShipmentDto;
-    return this.createInternetDocument(id, shipment);
+    const createIntDocDto = { trackingNumber: trackingId } as CreateInternetDocumentDto;
+    return this.createInternetDocument(id, createIntDocDto);
   }
 
   changeStatus(id: number, nextStatus: OrderStatusEnum, shipment?: ShipmentDto) {

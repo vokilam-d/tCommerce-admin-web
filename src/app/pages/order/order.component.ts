@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AddOrUpdateOrderDto, OrderDto } from '../../shared/dtos/order.dto';
+import { OrderDto } from '../../shared/dtos/order.dto';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { OrderService } from '../../shared/services/order.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +20,9 @@ import { catchError, finalize, switchMap, takeUntil, tap } from 'rxjs/operators'
 import { EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { ResponseDto } from '../../shared/dtos/response.dto';
 import { ManagerDto } from '../../shared/dtos/manager.dto';
+import { AddOrUpdateOrderDto } from '../../shared/dtos/add-or-update-order.dto';
+import { CustomerContactInfoComponent } from '../../customer-contact-info/customer-contact-info.component';
+import { RecipientContactInfoComponent } from '../../recipient-contact-info/recipient-contact-info.component';
 
 @Component({
   selector: 'order',
@@ -35,7 +38,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
   isEditOrder: boolean;
   isNewCustomer: boolean = false;
   isLoading: boolean = false;
-  order: OrderDto;
+  order: AddOrUpdateOrderDto;
   customer: CustomerDto;
   addressSelectControl: FormControl;
   addressSelectOptions: ISelectOption[] = [];
@@ -45,8 +48,8 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
   private newAddress: ShipmentAddressDto = new ShipmentAddressDto();
   private arePricesValid: boolean = true;
 
-  get isNewAddress(): boolean { return this.order.shipment.recipient === this.newAddress; }
-
+  @ViewChild(CustomerContactInfoComponent) customerContactInfoCmp: CustomerContactInfoComponent;
+  @ViewChild(RecipientContactInfoComponent) recipientContactInfoCmp: RecipientContactInfoComponent;
   @ViewChild(ProductSelectorComponent) productSelectorCmp: ProductSelectorComponent;
   @ViewChild(AddressFormComponent) addressFormCmp: AddressFormComponent;
 
@@ -72,7 +75,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
     this.isEditOrder = this.route.snapshot.data.action === EPageAction.Edit;
 
     if (this.isNewOrder) {
-      this.order = new OrderDto();
+      this.order = new AddOrUpdateOrderDto();
       this.headService.setTitle(`Новый заказ`);
     } else {
       this.fetchOrder();
@@ -96,7 +99,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
 
   private fetchCustomer(customerId: number) {
     return this.customerService.fetchCustomer(customerId)
-      .pipe( tap(response => this.selectCustomer(response.data)) )
+      .pipe( tap(response => this.selectCustomer(response.data)) );
   }
 
   navigateToOrderList() {
@@ -115,7 +118,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
 
       this.customer = null;
       this.isNewCustomer = false;
-      this.order = new OrderDto();
+      this.order = new AddOrUpdateOrderDto();
 
     } else {
       if (!confirm(`Вы уверены, что хотите отменить редактирование этого заказа?`)) {
@@ -139,6 +142,14 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
       this.notyService.showErrorNoty(`Ошибка в форме адреса`);
       return;
     }
+    if (!this.customerContactInfoCmp.checkValidity()) {
+      this.notyService.showErrorNoty(`Ошибка в форме клиента`);
+      return;
+    }
+    if (!this.recipientContactInfoCmp.checkValidity()) {
+      this.notyService.showErrorNoty(`Ошибка в форме получателя`);
+      return;
+    }
     if (!this.order.paymentMethodId) {
       this.notyService.showErrorNoty(`Не выбран способ оплаты`);
       return;
@@ -146,10 +157,9 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
 
     const dto: AddOrUpdateOrderDto = {
       ...this.order,
-      shipment: {
-        ...this.order.shipment,
-        recipient: this.addressFormCmp.getValue()
-      }
+      customerContactInfo: this.customerContactInfoCmp.getValue(),
+      recipientContactInfo: this.recipientContactInfoCmp.getValue(),
+      address: this.addressFormCmp.getValue()
     };
 
 
@@ -169,7 +179,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
       )
       .subscribe(
         response => {
-          this.order = response.data;
+          this.order.id = response.data.id;
           this.navigateToOrderView();
         },
         error => console.warn(error)
@@ -194,25 +204,19 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
 
     if (this.isNewOrder) {
       this.order.customerId = customer.id;
-      this.order.customerFirstName = customer.firstName;
-      this.order.customerLastName = customer.lastName;
-      this.order.customerEmail = customer.email;
-      this.order.customerPhoneNumber = customer.phoneNumber;
+      this.order.customerContactInfo.firstName = customer.contactInfo.firstName;
+      this.order.customerContactInfo.lastName = customer.contactInfo.lastName;
+      this.order.customerContactInfo.middleName = customer.contactInfo.middleName;
+      this.order.customerContactInfo.email = customer.contactInfo.email;
+      this.order.customerContactInfo.phoneNumber = customer.contactInfo.phoneNumber;
 
-      this.order.shipment.recipient = this.customer.addresses.find(a => a.isDefault) || this.customer.addresses[0] || this.newAddress;
-    }
-
-    if (!this.isNewCustomer) {
-      this.customerService.fetchCustomerReviewsAvgRating(this.customer.id)
-        .subscribe(
-          response => {
-            this.customerAvgStoreReviewsRating = response.data.storeReviews.avgRating;
-            this.customerAvgProductReviewsRating = response.data.productReviews.avgRating;
-          }
-        );
+      this.order.address = this.customer.addresses.find(a => a.isDefault) || this.customer.addresses[0] || this.newAddress;
     }
 
     this.handleAddressForm();
+    if (!this.isNewCustomer) {
+      this.getReviewsRating();
+    }
   }
 
   createNewCustomer() {
@@ -281,15 +285,13 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
 
   onPaymentMethodSelect(paymentMethod: PaymentMethodDto) {
     this.order.paymentMethodId = paymentMethod.id;
-    this.order.paymentMethodClientName = paymentMethod.clientName;
-    this.order.paymentMethodAdminName = paymentMethod.adminName;
   }
 
   private handleAddressForm() {
     this.addressSelectOptions = [
       { data: this.newAddress, view: 'Создать новый адрес' },
       ...this.customer.addresses.map(address => {
-        let view = `${address.lastName} ${address.firstName}, ${address.settlementFull || address.settlement}, ${address.addressFull || address.address}`;
+        let view = `${address.settlementNameFull || address.settlementName}, ${address.addressNameFull || address.addressName}`;
         if (address.buildingNumber) {
           view += `${address.buildingNumber}, ${address.flat}`;
         }
@@ -301,10 +303,10 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
       })
     ];
 
-    this.addressSelectControl = new FormControl(this.order.shipment.recipient);
+    this.addressSelectControl = new FormControl(this.order.address);
     this.addressSelectControl.valueChanges
       .pipe( takeUntil(this.ngUnsubscribe) )
-      .subscribe(value => this.order.shipment.recipient = value)
+      .subscribe(value => this.order.address = value);
   }
 
   private setOrder(orderDto: OrderDto) {
@@ -312,58 +314,49 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
       orderDto.manager = new ManagerDto();
     }
 
-    if (!this.isReorder) {
+    if (this.isReorder) {
+      this.headService.setTitle(`Повторить заказ №${orderDto.id}`);
+    } else {
       this.headService.setTitle(`Изменить заказ №${orderDto.id}`);
-      this.order = orderDto;
-      return;
     }
 
-    this.headService.setTitle(`Повторить заказ №${orderDto.id}`);
     this.order = {
       id: orderDto.id,
-      customerEmail: orderDto.customerEmail,
-      customerFirstName: orderDto.customerFirstName,
-      customerLastName: orderDto.customerLastName,
       customerId: orderDto.customerId,
-      customerPhoneNumber: orderDto.customerPhoneNumber,
-      items: orderDto.items,
-      paymentType: orderDto.paymentType,
-      paymentMethodId: orderDto.paymentMethodId,
-      paymentMethodAdminName: orderDto.paymentMethodAdminName,
-      paymentMethodClientName: orderDto.paymentMethodClientName,
-      shippingMethodName: orderDto.shippingMethodName,
+      customerContactInfo: orderDto.customerContactInfo,
+      recipientContactInfo: orderDto.shipment.recipient.contactInfo,
+      address: orderDto.shipment.recipient.address,
+      paymentMethodId: orderDto.paymentInfo.methodId,
       isCallbackNeeded: orderDto.isCallbackNeeded,
-      shipment: {
-        senderId: orderDto.shipment.senderId,
-        recipient: orderDto.shipment.recipient,
-        shipmentType: orderDto.shipment.shipmentType,
-        payerType: orderDto.shipment.payerType,
-        paymentMethod: orderDto.shipment.paymentMethod
-      },
-      prices: {
-        discountValue: orderDto.prices.discountValue,
-        totalCost: orderDto.prices.totalCost,
-        itemsCost: orderDto.prices.itemsCost
-      },
-      manager: {
-        name: orderDto.manager.name,
-        userId: orderDto.manager.userId
-      }
-    } as OrderDto;
+      items: orderDto.items,
+      note: orderDto.notes.fromAdmin,
+      manager: orderDto.manager,
+      prices: orderDto.prices
+    };
   }
 
-  private addOrderItem(sku: string, item: OrderItemDto) {
+  private addOrderItem(sku: string, itemArg: OrderItemDto) {
     const foundIdx = this.order.items.findIndex(item => item.sku === sku);
     if (foundIdx === -1) {
-      this.order.items.push(item);
+      this.order.items.push(itemArg);
     } else {
-      this.order.items[foundIdx] = item;
+      this.order.items[foundIdx] = itemArg;
     }
   }
 
   onDiscountValueChange(target: any) {
     const discountValue = parseInt(target.value);
     this.order.prices.totalCost = this.order.prices.itemsCost - discountValue;
+  }
+
+  private getReviewsRating() {
+    this.customerService.fetchCustomerReviewsAvgRating(this.customer.id)
+      .subscribe(
+        response => {
+          this.customerAvgStoreReviewsRating = response.data.storeReviews.avgRating;
+          this.customerAvgProductReviewsRating = response.data.productReviews.avgRating;
+        }
+      );
   }
 
   calculateOrderPrices() {

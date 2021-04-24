@@ -37,20 +37,16 @@ export class AddressFormComponent extends NgUnsubscribe implements OnChanges {
   private buildAddressForm(address: ShipmentAddressDto) {
     const controls: Partial<Record<keyof ShipmentAddressDto, any>> = {
       isDefault: [address.isDefault],
-      firstName: [address.firstName, Validators.required],
-      lastName: [address.lastName, Validators.required],
-      middleName: [address.middleName],
-      phone: [address.phone, Validators.required],
-      addressType: [address.addressType, Validators.required],
-      settlement: [address.settlement, Validators.required],
-      settlementFull: [address.settlementFull],
+      type: [address.type, Validators.required],
+      settlementName: [address.settlementName, Validators.required],
+      settlementNameFull: [address.settlementNameFull],
       settlementId: [address.settlementId, Validators.required],
-      address: [address.address, Validators.required],
-      addressFull: [address.addressFull],
+      addressName: [address.addressName, Validators.required],
+      addressNameFull: [address.addressNameFull],
       addressId: [address.addressId, Validators.required],
       buildingNumber: address.buildingNumber,
       flat: address.flat
-    }
+    };
 
     this.addressForm = this.formBuilder.group(controls);
     this.addressForm.get(addressTypeProp).valueChanges
@@ -63,7 +59,7 @@ export class AddressFormComponent extends NgUnsubscribe implements OnChanges {
           this.addressForm.get(buildingProp).reset('');
           this.addressForm.get(flatProp).reset('');
         }
-      })
+      });
   }
 
   private validateControls(form: FormGroup | FormArray) {
@@ -132,11 +128,11 @@ export class AddressFormComponent extends NgUnsubscribe implements OnChanges {
 }
 
 const settlementIdProp: keyof ShipmentAddressDto = 'settlementId';
-const settlementProp: keyof ShipmentAddressDto = 'settlement';
-const settlementFullProp: keyof ShipmentAddressDto = 'settlementFull';
+const settlementProp: keyof ShipmentAddressDto = 'settlementName';
+const settlementFullProp: keyof ShipmentAddressDto = 'settlementNameFull';
 const addressIdProp: keyof ShipmentAddressDto = 'addressId';
-const addressProp: keyof ShipmentAddressDto = 'address';
-const addressFullProp: keyof ShipmentAddressDto = 'addressFull';
-const addressTypeProp: keyof ShipmentAddressDto = 'addressType';
+const addressProp: keyof ShipmentAddressDto = 'addressName';
+const addressFullProp: keyof ShipmentAddressDto = 'addressNameFull';
+const addressTypeProp: keyof ShipmentAddressDto = 'type';
 const buildingProp: keyof ShipmentAddressDto = 'buildingNumber';
 const flatProp: keyof ShipmentAddressDto = 'flat';

@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { GridComponent } from '../../grid/grid.component';
 import { AttributeDto } from '../../shared/dtos/attribute.dto';
 import { HeadService } from '../../shared/services/head.service';
+import { CustomerContactInfoDto } from '../../shared/dtos/customer-contact-info.dto';
 
 
 @Component({
@@ -72,6 +73,7 @@ export class CustomerListComponent implements OnInit, AfterViewInit {
   }
 }
 
+const contactInfoProp: keyof CustomerDto = 'contactInfo';
 const customerGridCells: IGridCell[] = [
   {
     isSearchable: false,
@@ -89,7 +91,7 @@ const customerGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: false,
-    fieldName: `${getPropertyOf<CustomerDto>('firstName')}|${getPropertyOf<CustomerDto>('lastName')}`
+    fieldName: `${contactInfoProp}.${getPropertyOf<CustomerContactInfoDto>('firstName')}|${contactInfoProp}.${getPropertyOf<CustomerContactInfoDto>('lastName')}`
   },
   {
     isSearchable: true,
@@ -98,7 +100,7 @@ const customerGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: false,
-    fieldName: getPropertyOf<CustomerDto>('email')
+    fieldName: `${contactInfoProp}.${getPropertyOf<CustomerContactInfoDto>('email')}`
   },
   {
     isSearchable: true,
@@ -107,7 +109,7 @@ const customerGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: false,
-    fieldName: getPropertyOf<CustomerDto>('phoneNumber')
+    fieldName: `${contactInfoProp}.${getPropertyOf<CustomerContactInfoDto>('phoneNumber')}`
   },
   {
     isSearchable: true,
@@ -116,7 +118,7 @@ const customerGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: false,
-    fieldName: `${getPropertyOf<CustomerDto>('addresses')}.${getPropertyOf<ShipmentAddressDto>('settlement')}|${getPropertyOf<CustomerDto>('addresses')}.${getPropertyOf<ShipmentAddressDto>('settlementFull')}`
+    fieldName: `${getPropertyOf<CustomerDto>('addresses')}.${getPropertyOf<ShipmentAddressDto>('settlementName')}|${getPropertyOf<CustomerDto>('addresses')}.${getPropertyOf<ShipmentAddressDto>('settlementNameFull')}`
   },
   {
     isSearchable: false,

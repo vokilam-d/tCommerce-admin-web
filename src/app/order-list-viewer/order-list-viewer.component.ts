@@ -15,6 +15,9 @@ import { OrderStatusEnum } from '../shared/enums/order-status.enum';
 import { ShipmentStatusEnum } from '../shared/enums/shipment-status.enum';
 import { DEFAULT_LANG, TRANSLATIONS_MAP } from '../shared/constants/constants';
 import { OrderPricesDto } from '../shared/dtos/order-prices.dto';
+import { ShipmentCounterpartyDto } from '../shared/dtos/shipment-counterparty.dto';
+import { ContactInfoDto } from '../shared/dtos/contact-info.dto';
+import { OrderNotesDto } from '../shared/dtos/order-notes.dto';
 
 @Component({
   selector: 'order-list-viewer',
@@ -80,8 +83,11 @@ export class OrderListViewerComponent implements OnInit, AfterViewInit {
   }
 }
 
+const notesProp = getPropertyOf<OrderDto>('notes');
 const shipmentProp = getPropertyOf<OrderDto>('shipment');
 const recipientProp = getPropertyOf<ShipmentDto>('recipient');
+const contactInfoProp = getPropertyOf<ShipmentCounterpartyDto>('contactInfo');
+const addressProp = getPropertyOf<ShipmentCounterpartyDto>('address');
 const orderGridCells: IGridCell[] = [
   {
     isSearchable: false,
@@ -108,7 +114,7 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: false,
-    fieldName: `${shipmentProp}.${recipientProp}.${getPropertyOf<ShipmentAddressDto>('lastName')}|${shipmentProp}.${recipientProp}.${getPropertyOf<ShipmentAddressDto>('firstName')}`
+    fieldName: `${shipmentProp}.${recipientProp}.${contactInfoProp}.${getPropertyOf<ContactInfoDto>('lastName')}|${shipmentProp}.${recipientProp}.${contactInfoProp}.${getPropertyOf<ContactInfoDto>('firstName')}`
   },
   {
     isSearchable: true,
@@ -117,7 +123,7 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: `${shipmentProp}.${recipientProp}.${getPropertyOf<ShipmentAddressDto>('settlement')}|${shipmentProp}.${recipientProp}.${getPropertyOf<ShipmentAddressDto>('settlementFull')}`
+    fieldName: `${shipmentProp}.${recipientProp}.${addressProp}.${getPropertyOf<ShipmentAddressDto>('settlementName')}|${shipmentProp}.${recipientProp}.${addressProp}.${getPropertyOf<ShipmentAddressDto>('settlementNameFull')}`
   },
   {
     isSearchable: true,
@@ -135,7 +141,7 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<OrderDto>('adminNote')
+    fieldName: `${notesProp}.${getPropertyOf<OrderNotesDto>('fromAdmin')}`
   },
   {
     isSearchable: false,
@@ -177,6 +183,6 @@ const orderGridCells: IGridCell[] = [
     align: 'left',
     isImage: false,
     isSortable: true,
-    fieldName: getPropertyOf<OrderDto>('clientNote')
+    fieldName: `${notesProp}.${getPropertyOf<OrderNotesDto>('fromCustomer')}`
   }
 ];

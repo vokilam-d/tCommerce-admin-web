@@ -1,0 +1,14 @@
+.recipient {
+  margin: 0 0 10px;
+
+  &__control {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    margin: 10px 0 0 30px;
+  }
+
+  &__label {
+    margin: 0 0 0 5px;
+  }
+}

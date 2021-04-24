@@ -4,12 +4,14 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotyService } from '../../noty/noty.service';
 import { EPageAction } from '../../shared/enums/category-page-action.enum';
-import { CustomerDto } from '../../shared/dtos/customer.dto';
+import { AddOrUpdateCustomerDto, CustomerDto } from '../../shared/dtos/customer.dto';
 import { ShipmentAddressDto } from '../../shared/dtos/shipment-address.dto';
 import { finalize } from 'rxjs/operators';
 import { HeadService } from '../../shared/services/head.service';
 import { AddressFormComponent } from '../../address-form/address-form.component';
 import { AddressTypeEnum } from '../../shared/enums/address-type.enum';
+import { CustomerContactInfoComponent } from '../../customer-contact-info/customer-contact-info.component';
+import { CustomerContactInfoDto } from '../../shared/dtos/customer-contact-info.dto';
 
 @Component({
   selector: 'customer',
@@ -28,6 +30,7 @@ export class CustomerComponent implements OnInit {
 
   tabsLabels: string[] = ['Информация о клиенте', 'Адреса', 'Заказы', 'Корзина', 'Отзывы о товарах', 'Отзывы о магазине', 'Список желаний'];
 
+  @ViewChild(CustomerContactInfoComponent) contactInfoCmp: CustomerContactInfoComponent;
   @ViewChild(AddressFormComponent) addressFormCmp: AddressFormComponent;
 
   constructor(
@@ -55,6 +58,11 @@ export class CustomerComponent implements OnInit {
   }
 
   save() {
+    if (this.contactInfoCmp && !this.contactInfoCmp.checkValidity()) {
+      this.notyService.showErrorNoty(`Ошибка в форме`);
+      return;
+    }
+
     if (this.infoForm.invalid) {
       this.notyService.showErrorNoty(`Ошибка в форме`);
       this.validateControls(this.infoForm);
@@ -85,10 +93,6 @@ export class CustomerComponent implements OnInit {
 
   private buildInfoForm() {
     this.infoForm = this.formBuilder.group({
-      firstName: [this.customer.firstName, Validators.required],
-      lastName: [this.customer.lastName, Validators.required],
-      email: this.customer.email,
-      phoneNumber: this.customer.phoneNumber,
       note: this.customer.note,
       discountPercent: this.customer.discountPercent
     });
@@ -103,7 +107,7 @@ export class CustomerComponent implements OnInit {
         response => {
           this.customer = response.data;
           this.buildInfoForm();
-          this.headService.setTitle(this.customer.firstName + ' ' + this.customer.lastName);
+          this.headService.setTitle(this.customer.contactInfo.firstName + ' ' + this.customer.contactInfo.lastName);
         },
         error => console.warn(error)
       );
@@ -124,7 +128,12 @@ export class CustomerComponent implements OnInit {
   }
 
   private addNewCustomer() {
-    const dto = { ...this.customer, ...this.infoForm.value };
+    const contactInfo: CustomerContactInfoDto = this.contactInfoCmp ? this.contactInfoCmp.getValue() : this.customer.contactInfo;
+    const dto: AddOrUpdateCustomerDto = {
+      ...this.customer,
+      ...this.infoForm.value,
+      contactInfo
+    };
 
     this.customersService.addNewCustomer(dto)
       .pipe(this.notyService.attachNoty({ successText: 'Клиент успешно добавлен' }))
@@ -137,7 +146,12 @@ export class CustomerComponent implements OnInit {
   }
 
   private updateCustomer() {
-    const dto = { ...this.customer, ...this.infoForm.value };
+    const contactInfo: CustomerContactInfoDto = this.contactInfoCmp ? this.contactInfoCmp.getValue() : this.customer.contactInfo;
+    const dto: AddOrUpdateCustomerDto = {
+      ...this.customer,
+      ...this.infoForm.value,
+      contactInfo
+    };
 
     this.customersService.updateCustomer(this.customer.id, dto)
       .pipe(this.notyService.attachNoty({ successText: 'Клиент успешно обновлён' }))

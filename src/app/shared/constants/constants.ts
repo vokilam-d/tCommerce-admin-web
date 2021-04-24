@@ -19,6 +19,8 @@ export const SOCKET = {
 export const DEFAULT_LANG: Language = Language.RU;
 export const INPUT_MEDIA_ACCEPT_TYPES = '.jpg,.jpeg,.png,.webp,.svg,.tiff,.gif';
 export const DEFAULT_ERROR_TEXT = 'Что-то пошло не так. Пожалуйста, попробуйте позже';
+export const DEFAULT_PHONE_NUMBER_VALUE = '380';
+export const IS_EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/;
 export const TRANSLATIONS_MAP = {
   [OrderStatusEnum.NEW]: 'Новый',
   [OrderStatusEnum.PROCESSING]: 'Обрабатывается',

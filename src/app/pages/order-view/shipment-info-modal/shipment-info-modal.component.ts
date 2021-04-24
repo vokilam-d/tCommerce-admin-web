@@ -7,6 +7,7 @@ import { ShipmentSenderDto } from '../../../shared/dtos/shipment-sender.dto';
 import { ShipmentPayerEnum } from '../../../shared/enums/shipment-payer.enum';
 import { NotyService } from '../../../noty/noty.service';
 import { AddressTypeEnum } from '../../../shared/enums/address-type.enum';
+import { CreateInternetDocumentDto } from '../../../shared/dtos/create-internet-document.dto';
 
 @Component({
   selector: 'shipment-info-modal',
@@ -30,7 +31,7 @@ export class ShipmentInfoModalComponent implements OnInit {
 
   payerTypeOptions: ISelectOption[] = [{ view: 'Клиент', data: ShipmentPayerEnum.RECIPIENT }, { view: 'Мы', data: ShipmentPayerEnum.SENDER }];
   get payerTypeForCost(): ShipmentPayerEnum {
-    const isToWarehouse = this.shipment.recipient.addressType === AddressTypeEnum.WAREHOUSE;
+    const isToWarehouse = this.shipment.recipient.address.type === AddressTypeEnum.WAREHOUSE;
     return isToWarehouse && this.cost >= 1000 ? ShipmentPayerEnum.SENDER : ShipmentPayerEnum.RECIPIENT;
   }
   get payerTypeNameForCost(): string { return this.payerTypeOptions.find(o => o.data === this.payerTypeForCost).view; }
@@ -67,8 +68,8 @@ export class ShipmentInfoModalComponent implements OnInit {
       payerType = this.payerTypeForCost;
     }
 
-    const controls: Partial<Record<keyof ShipmentDto, any>> = {
-      senderId: [this.defaultSenderId || this.shipment.senderId, Validators.required],
+    const controls: Omit<Record<keyof CreateInternetDocumentDto, any>, 'trackingNumber'> = {
+      senderId: [this.defaultSenderId, Validators.required],
       weight: [this.shipment.weight, Validators.required],
       width: [this.shipment.width, Validators.required],
       height: [this.shipment.height, Validators.required],

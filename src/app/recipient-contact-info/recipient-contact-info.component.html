@@ -1,0 +1,20 @@
+<div class="recipient">
+  <label class="field__label recipient__control" *ngFor="let recipientType of recipientTypes">
+    <input class="recipient__radio" [value]="recipientType"
+           [formControl]="recipientControl"
+           name="address-type"
+           type="radio"
+    >
+
+    <i class="mbi recipient__radio-icon"></i>
+
+    <span class="recipient__label" [ngSwitch]="recipientType">
+      <ng-container *ngSwitchCase="recipientTypeEnum.CUSTOMER">Клиент</ng-container>
+      <ng-container *ngSwitchCase="recipientTypeEnum.ANOTHER_PERSON">Другой человек</ng-container>
+    </span>
+  </label>
+</div>
+
+<ng-container *ngIf="recipientControl.value === recipientTypeEnum.ANOTHER_PERSON">
+  <contact-info [contactInfo]="contactInfo"></contact-info>
+</ng-container>

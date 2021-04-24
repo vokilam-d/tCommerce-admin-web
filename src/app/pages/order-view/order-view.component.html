@@ -119,7 +119,7 @@
                  [routerLink]="['/', 'admin', 'customer', 'edit', order.customerId]"
                  target="_blank"
               >
-                {{ order.customerFirstName }} {{ order.customerLastName }} ({{ order.customerEmail }})
+                {{ order.customerContactInfo.lastName }} {{ order.customerContactInfo.firstName }} {{ order.customerContactInfo.middleName }}  ({{ order.customerContactInfo.email }})
               </a>
             </div>
           </div>
@@ -133,7 +133,7 @@
           </div>
           <div class="info-table__row">
             <div class="info-table__block">Комментарий о клиенте</div>
-            <div class="info-table__block">{{ order.customerNote }}</div>
+            <div class="info-table__block">{{ order.notes.aboutCustomer }}</div>
           </div>
           <div class="info-table__row">
             <div class="info-table__block">Нужно ли связываться с клиентом для подтверждения заказа?</div>
@@ -141,7 +141,7 @@
           </div>
           <div class="info-table__row">
             <div class="info-table__block">Комментарий клиента к заказу</div>
-            <div class="info-table__block">{{ order.clientNote }}</div>
+            <div class="info-table__block">{{ order.notes.fromCustomer }}</div>
           </div>
           <div class="info-table__row">
             <div class="info-table__block">Комментарий менеджера <a class="order-view__edit-btn" *ngIf="!adminNoteControl" (click)="openAdminNoteForm()">изменить</a></div>
@@ -158,7 +158,7 @@
                 </button>
               </div>
 
-              <ng-template #adminNoteText>{{ order.adminNote }}</ng-template>
+              <ng-template #adminNoteText>{{ order.notes.fromAdmin }}</ng-template>
             </div>
           </div>
         </div>
@@ -174,11 +174,13 @@
         </button>
       </div>
       <div class="order-view__content order-view__address">
-        {{ order.shippingMethodName[lang] }}<br><br>
+        {{ order.shipment.shippingMethodDescription[lang] }}<br><br>
 
-        <span (click)="copyToClipboard(order.shipment.recipient.lastName + ' ' + order.shipment.recipient.firstName + (order.shipment.recipient.middleName ? ' ' + order.shipment.recipient.middleName : ''))">{{ order.shipment.recipient.lastName }} {{ order.shipment.recipient.firstName }} {{ order.shipment.recipient.middleName }}</span>, <span (click)="copyToClipboard(order.shipment.recipient.phone)">{{ order.shipment.recipient.phone | beautifyPhone }}</span>
+        <ng-container *ngIf="order.shipment.recipient.contactInfo as contacts">
+          <span (click)="copyToClipboard(contacts.lastName + ' ' + contacts.firstName + (contacts.middleName ? ' ' + contacts.middleName : ''))">{{ contacts.lastName }} {{ contacts.firstName }} {{ contacts.middleName }}</span>, <span (click)="copyToClipboard(contacts.phoneNumber)">{{ contacts.phoneNumber | beautifyPhone }}</span>
+        </ng-container>
         <br>
-        {{ order.shipment.recipient.settlementFull || order.shipment.recipient.settlement }}, {{ order.shipment.recipient.addressFull || order.shipment.recipient.address }}<ng-container *ngIf="order.shipment.recipient.buildingNumber as buildingNumber">, {{ buildingNumber }} {{ order.shipment.recipient.flat }}</ng-container>
+        {{ order.shipment.recipient.address.settlementNameFull || order.shipment.recipient.address.settlementName }}, {{ order.shipment.recipient.address.addressNameFull || order.shipment.recipient.address.addressName }}<ng-container *ngIf="order.shipment.recipient.address.buildingNumber as buildingNumber">, {{ buildingNumber }} {{ order.shipment.recipient.address.flat }}</ng-container>
       </div>
     </div>
 
@@ -189,7 +191,7 @@
       <div class="order-view__content">
         <div class="two-col__col method">
           <div class="method__title">Способ оплаты</div>
-          <div class="method__name">{{ order.paymentMethodAdminName[lang] }}</div>
+          <div class="method__name">{{ order.paymentInfo.methodAdminName[lang] }}</div>
           <div class="payment-status" *ngIf="isPaymentToggleVisible()">
             Заказ оплачен? <toggle class="payment-status__control" [formControl]="paymentStatusControl"></toggle>
 
@@ -346,6 +348,8 @@
                      [media]="media"
                      [showRemoveBtn]="false"
         ></media-asset>
+
+        <ng-container *ngIf="order.medias.length === 0">Нет фото</ng-container>
       </div>
     </div>
 
@@ -375,7 +379,7 @@
     </div>
 
     <div class="modal__content">
-      <address-form class="address-form__form" [address]="order.shipment.recipient" [showIsDefault]="false"></address-form>
+      <address-form class="address-form__form" [address]="order.shipment.recipient.address" [showIsDefault]="false"></address-form>
 
       <div class="address-form__submit-container">
         <app-button class="address-form__submit" (click)="submitAddressForm()" btnStyle="primary">
