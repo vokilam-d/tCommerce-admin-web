@@ -62,7 +62,7 @@
             <customer-contact-info [customer]="customer"></customer-contact-info>
 
 
-            <div class="customer-contact-info__additional-info">
+            <div class="customer-contact-info">
               <div class="customer-contact-info__reviews">
                 Отзывов о магазине: <b>{{ customer.storeReviewIds.length }}</b><span *ngIf="customer.storeReviewIds.length > 0">. Средняя оценка: <b>{{ customerAvgStoreReviewsRating }}</b></span>
               </div>
@@ -80,19 +80,13 @@
 
         <div class="order__block-container">
           <div class="order__subtitle">
-            Кто покупатель?
+            Кто получатель?
           </div>
 
           <div class="order__block">
             <recipient-contact-info [contactInfo]="customer.contactInfo"></recipient-contact-info>
           </div>
         </div>
-
-
-
-
-
-
 
         <div class="order__block-container">
           <div class="order__subtitle">
@@ -255,14 +249,6 @@
                 <div class="summary__block">Итого к оплате</div>
                 <div class="summary__block">{{ order.prices.totalCost }} грн</div>
               </div>
-
-              <app-button class="summary__place-order"
-                          (click)="placeOrder()"
-                          btnStyle="primary"
-                          btnSize="big"
-              >
-                Разместить заказ
-              </app-button>
             </div>
           </div>
         </div>
@@ -287,6 +273,15 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="place-order">
+          <app-button (click)="placeOrder()"
+                      btnStyle="primary"
+                      btnSize="big"
+          >
+            Разместить заказ
+          </app-button>
         </div>
 
       </div>

@@ -83,7 +83,7 @@
               Тип доставки: <ng-container *ngSwitchCase="addressTypes.WAREHOUSE">в отделение</ng-container><ng-container *ngSwitchCase="addressTypes.DOORS">адресная Новой Почтой</ng-container>
             </div>
             <div class="address__block">
-              {{ address.addressName }}<ng-container *ngIf="addressTypes.DOORS">, {{ address.buildingNumber }} {{ address.flat }}</ng-container>
+              {{ address.addressName }}<ng-container *ngIf="address.type === addressTypes.DOORS">, {{ address.buildingNumber }} {{ address.flat }}</ng-container>
             </div>
 
             <div class="address__edit-container">

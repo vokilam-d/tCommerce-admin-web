@@ -64,10 +64,10 @@
   }
 
   &__address {
-    margin: 0 0 20px 20px;
+    margin: 0 20px 20px 0;
 
-    &:first-child {
-      margin-left: 0;
+    &:last-child {
+      margin-right: 0;
     }
   }
 }
