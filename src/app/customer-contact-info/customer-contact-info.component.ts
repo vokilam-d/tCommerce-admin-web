@@ -14,7 +14,7 @@ import { CustomerContactInfoDto } from '../shared/dtos/customer-contact-info.dto
 })
 export class CustomerContactInfoComponent extends NgUnsubscribe implements OnInit {
 
-  emailControl: FormControl = new FormControl('', [Validators.pattern(IS_EMAIL_REGEX), Validators.required]);
+  emailControl: FormControl = new FormControl('', [Validators.pattern(IS_EMAIL_REGEX)]);
 
   contactInfo: ContactInfoDto;
 
