@@ -4,7 +4,7 @@ export class CreateInternetDocumentDto {
   senderId: number;
   trackingNumber: string;
   backwardMoneyDelivery: string;
-  cost: string;
+  cost: number;
   description: string;
   height: string;
   length: string;

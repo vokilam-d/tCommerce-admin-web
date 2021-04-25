@@ -64,7 +64,7 @@
     <ng-template #cellContent let-order="item">{{ order.shipment.trackingNumber }}</ng-template>
     <ng-template #cellContent let-order="item">
       <div class="order__is-paid"
-           *ngIf="order.paymentType !== paymentTypes.CASH_ON_DELIVERY"
+           *ngIf="order.paymentInfo.type !== paymentTypes.CASH_ON_DELIVERY"
            [class.order__is-paid--danger]="!order.isOrderPaid"
       >
         {{ order.isOrderPaid ? 'Да' : 'Нет' }}
