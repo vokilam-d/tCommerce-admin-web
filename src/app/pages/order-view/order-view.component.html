@@ -167,10 +167,14 @@
 
     <div class="order-view__block">
       <div class="order-view__subtitle">
-        Адрес
+        Доставка
+
+        <button class="order-view__edit-btn" (click)="contactInfoModalCmp.openModal()">
+          изменить получателя
+        </button>
 
         <button class="order-view__edit-btn" (click)="openAddressForm()">
-          изменить
+          изменить адрес
         </button>
       </div>
       <div class="order-view__content order-view__address">
@@ -390,15 +394,20 @@
   </div>
 </div>
 
-<shipment-info-modal *ngIf="order"
-                     [shipment]="order.shipment"
-                     [cost]="order.prices.totalCost"
-                     [setBackwardDeliveryAsCost]="isCashOnDelivery()"
-                     (infoSubmit)="onShipmentInfoSubmit($event)"
-                     (trackingId)="onTrackingIdSubmit($event)"
-></shipment-info-modal>
+<ng-container *ngIf="order">
+  <shipment-info-modal [shipment]="order.shipment"
+                       [cost]="order.prices.totalCost"
+                       [setBackwardDeliveryAsCost]="isCashOnDelivery()"
+                       (infoSubmit)="onShipmentInfoSubmit($event)"
+                       (trackingId)="onTrackingIdSubmit($event)"
+  ></shipment-info-modal>
 
-<invoice-modal *ngIf="order" [order]="order" (print)="printInvoice($event)"></invoice-modal>
+  <invoice-modal [order]="order" (print)="printInvoice($event)"></invoice-modal>
+
+  <contact-info-modal [contactInfo]="order.shipment.recipient.contactInfo"
+                      (contactInfoSubmit)="onRecipientContactInfoSubmit($event)"
+  ></contact-info-modal>
+</ng-container>
 
 <preloader class="preloader" *ngIf="!customer || isLoading" [hasMargins]="false"></preloader>
 

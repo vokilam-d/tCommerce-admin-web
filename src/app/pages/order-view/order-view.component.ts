@@ -29,6 +29,8 @@ import { InvoiceModalComponent } from './invoice-modal/invoice-modal.component';
 import { InvoiceEditDto } from '../../shared/dtos/invoice-edit.dto';
 import { ConfirmPackItemModalComponent } from './confirm-pack-item-modal/confirm-pack-item-modal.component';
 import { CreateInternetDocumentDto } from '../../shared/dtos/create-internet-document.dto';
+import { ContactInfoDto } from '../../shared/dtos/contact-info.dto';
+import { ContactInfoModalComponent } from './contact-info-modal/contact-info-modal.component';
 
 @Component({
   selector: 'order-view',
@@ -59,6 +61,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   @ViewChild(ShipmentInfoModalComponent) shipmentInfoModalCmp: ShipmentInfoModalComponent;
   @ViewChild(InvoiceModalComponent) invoiceModalCmp: InvoiceModalComponent;
   @ViewChild(ConfirmPackItemModalComponent) confirmPackCmp: ConfirmPackItemModalComponent;
+  @ViewChild(ContactInfoModalComponent) contactInfoModalCmp: ContactInfoModalComponent;
 
   get nextOrderStatus(): OrderStatusEnum | null {
     switch (this.order.status) {
@@ -227,7 +230,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
     this.isLoading = true;
     this.orderService.updateOrderAddress(this.order.id, address)
       .pipe(
-        this.notyService.attachNoty({ successText: 'Адрес в заказе успешно изменён' }),
+        this.notyService.attachNoty({ successText: 'Адрес в заказе успешно обновлён' }),
         finalize(() => this.isLoading = false)
       )
       .subscribe(
@@ -251,7 +254,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
     this.isLoading = true;
     this.orderService.updateOrderTrackingId(this.order.id, trackingNumber)
       .pipe(
-        this.notyService.attachNoty({ successText: 'Номер ТТН успешно изменён' }),
+        this.notyService.attachNoty({ successText: 'Номер ТТН успешно обновлён' }),
         finalize(() => this.isLoading = false)
       )
       .subscribe(
@@ -275,7 +278,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
     this.isLoading = true;
     this.orderService.updateOrderAdminNote(this.order.id, adminNote)
       .pipe(
-        this.notyService.attachNoty({ successText: 'Комментарий менеджера успешно изменён' }),
+        this.notyService.attachNoty({ successText: 'Комментарий менеджера успешно обновлён' }),
         finalize(() => this.isLoading = false)
       )
       .subscribe(
@@ -451,5 +454,20 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   copyToClipboard(text: any): void {
     copyToClipboard(text);
     this.notyService.showSuccessNoty(`Скопировано`);
+  }
+
+  onRecipientContactInfoSubmit(contactInfo: ContactInfoDto) {
+    this.isLoading = true;
+    this.orderService.updateRecipientContactInfo(this.order.id, contactInfo)
+      .pipe(
+        this.notyService.attachNoty({ successText: 'Получатель успешно обновлён' }),
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe(
+        response => {
+          this.order = response.data;
+          this.contactInfoModalCmp.closeModal();
+        }
+      );
   }
 }

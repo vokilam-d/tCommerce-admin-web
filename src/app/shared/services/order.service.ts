@@ -16,6 +16,7 @@ import { OrderPricesDto } from '../dtos/order-prices.dto';
 import { PackOrderItemDto } from '../dtos/pack-order-item.dto';
 import { CreateInternetDocumentDto } from '../dtos/create-internet-document.dto';
 import { AddOrUpdateOrderDto } from '../dtos/add-or-update-order.dto';
+import { ContactInfoDto } from '../dtos/contact-info.dto';
 
 interface IFetchOrderOptions {
   customerId?: number;
@@ -61,6 +62,10 @@ export class OrderService {
 
   updateOrderAddress(id: number, address: ShipmentAddressDto) {
     return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/recipient-address`, address);
+  }
+
+  updateRecipientContactInfo(id: number, contactInfo: ContactInfoDto) {
+    return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/recipient-contact-info`, contactInfo);
   }
 
   updateOrderTrackingId(id: number, trackingNumber: string) {

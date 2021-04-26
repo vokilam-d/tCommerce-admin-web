@@ -11,10 +11,12 @@ import { ShipmentInfoModalComponent } from './shipment-info-modal/shipment-info-
 import { InvoiceModalComponent } from './invoice-modal/invoice-modal.component';
 import { ConfirmPackItemModalComponent } from './confirm-pack-item-modal/confirm-pack-item-modal.component';
 import { MediaAssetModule } from '../../media-asset/media-asset.module';
+import { ContactInfoModalComponent } from './contact-info-modal/contact-info-modal.component';
+import { ContactInfoModule } from '../../contact-info/contact-info.module';
 
 
 @NgModule({
-  declarations: [OrderViewComponent, ShipmentInfoModalComponent, InvoiceModalComponent, ConfirmPackItemModalComponent],
+  declarations: [OrderViewComponent, ShipmentInfoModalComponent, InvoiceModalComponent, ConfirmPackItemModalComponent, ContactInfoModalComponent],
   imports: [
     CommonModule,
     OrderViewRoutingModule,
@@ -22,7 +24,8 @@ import { MediaAssetModule } from '../../media-asset/media-asset.module';
     AddressFormModule,
     PreloaderModule,
     ReactiveFormsModule,
-    MediaAssetModule
+    MediaAssetModule,
+    ContactInfoModule
   ]
 })
 export class OrderViewModule { }

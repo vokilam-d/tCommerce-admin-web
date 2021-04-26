@@ -1,0 +1,24 @@
+<ng-container *ngIf="isModalVisible">
+  <div class="modal-overlay" (click)="closeModal()"></div>
+  <div class="modal contact-info">
+    <div class="modal__header">
+      <div class="modal__title">
+        Изменить получателя
+      </div>
+      <div class="modal__close" (click)="closeModal()">
+        <i class="ai ai-multiply modal__close-icon"></i>
+      </div>
+    </div>
+
+    <div class="modal__content">
+
+      <contact-info [contactInfo]="contactInfo"></contact-info>
+
+      <div class="contact-info__submit">
+        <app-button (click)="onContactInfoSubmit()" btnStyle="primary" type="button">
+          Сохранить
+        </app-button>
+      </div>
+    </div>
+  </div>
+</ng-container>
