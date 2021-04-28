@@ -6,7 +6,7 @@ export function authInitFactory(userService: UserService, location: Location) {
     if (location.path() === '/admin/login') {
       return true;
     } else {
-      userService.fetchUser().toPromise().catch(_ => { });
+      return userService.fetchUser().toPromise().catch(_ => { });
     }
   }
 }
