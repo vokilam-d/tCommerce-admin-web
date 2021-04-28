@@ -177,7 +177,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
 
     const productsStr = [headerStr, ...productsStrArray].join('\n');
     copyToClipboard(productsStr);
-    this.notyService.showSuccessNoty(`Скопировано`);
+    this.notyService.showSuccessNoty(`Скопировано "${productsStrArray.length}" товаров`);
   }
 
   private setGridCells() {

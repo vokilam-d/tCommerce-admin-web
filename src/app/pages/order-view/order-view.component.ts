@@ -453,7 +453,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
 
   copyToClipboard(text: any): void {
     copyToClipboard(text);
-    this.notyService.showSuccessNoty(`Скопировано`);
+    this.notyService.showSuccessNoty(`Скопировано "${text}"`);
   }
 
   onRecipientContactInfoSubmit(contactInfo: ContactInfoDto) {

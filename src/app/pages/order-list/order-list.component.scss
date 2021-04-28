@@ -20,11 +20,6 @@
     color: rgba($dark, 0.6);
   }
 
-  &__shipment-status,
-  &__city {
-    font-size: 12px;
-  }
-
   &__is-paid {
     position: absolute;
     top: 0;
@@ -50,4 +45,8 @@
     vertical-align: middle;
     margin: 0 0 0 6px;
   }
+}
+
+.small {
+  font-size: 12px;
 }

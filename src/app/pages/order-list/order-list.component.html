@@ -47,13 +47,13 @@
       </div>
     </ng-template>
     <ng-template #cellContent let-order="item">
-      <span class="order__city">{{ order.shipment.recipient.address.settlementName || order.shipment.recipient.address.settlementNameFull }}</span>
+      <span class="small">{{ order.shipment.recipient.address.settlementName || order.shipment.recipient.address.settlementNameFull }}</span>
     </ng-template>
     <ng-template #cellContent let-order="item">{{ order.prices.totalCost }} {{ defaultCurrency | readableCurrency }}</ng-template>
     <ng-template #cellContent let-order="item">{{ order.notes.fromAdmin }}</ng-template>
     <ng-template #cellContent let-order="item">{{ order.statusDescription[lang] }}</ng-template>
     <ng-template #cellContent let-order="item">
-      <span class="order__shipment-status">
+      <span class="small">
         {{ order.shipment.statusDescription }}
       </span>
     </ng-template>
@@ -73,6 +73,9 @@
     <ng-template #cellContent let-order="item">{{ order.paymentInfo.methodAdminName[lang] }}</ng-template>
     <ng-template #cellContent let-order="item">{{ order.isCallbackNeeded ? 'Да' : 'Нет' }}</ng-template>
     <ng-template #cellContent let-order="item">{{ order.notes.fromCustomer }}</ng-template>
+    <ng-template #cellContent let-order="item">
+        {{order.shipment.sender.contactInfo.firstName}}
+    </ng-template>
     <ng-template #cellContent let-order="item">{{ order.manager.name }}</ng-template>
     <ng-template #cellContent let-order="item">
       <ng-container [ngSwitch]="order.source">
@@ -81,7 +84,7 @@
       </ng-container>
     </ng-template>
     <ng-template #cellContent let-order="item">
-      <span class="order__city">{{ order.notes.aboutCustomer }}</span>
+      <span class="small">{{ order.notes.aboutCustomer }}</span>
     </ng-template>
   </grid>
 

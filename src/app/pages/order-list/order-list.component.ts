@@ -28,6 +28,7 @@ import { ShipmentCounterpartyDto } from '../../shared/dtos/shipment-counterparty
 import { ContactInfoDto } from '../../shared/dtos/contact-info.dto';
 import { OrderNotesDto } from '../../shared/dtos/order-notes.dto';
 import { OrderPaymentInfoDto } from '../../shared/dtos/order-payment-info.dto';
+import { ShipmentSenderService } from '../../shared/services/shipment-sender.service';
 
 @Component({
   selector: 'order-list',
@@ -43,7 +44,7 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
   pagesTotal: number = 1;
   isGridLoading: boolean = false;
   gridLinkUrl: string = 'view';
-  gridCells: IGridCell[] = orderGridCells;
+  gridCells: IGridCell[] = [];
   defaultCurrency = DEFAULT_CURRENCY_CODE;
   lang = DEFAULT_LANG;
   statusControl = new FormControl();
@@ -54,6 +55,7 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
 
   constructor(
     private ordersService: OrderService,
+    private shipmentSenderService: ShipmentSenderService,
     private route: ActivatedRoute,
     private headService: HeadService,
     private cdr: ChangeDetectorRef,
@@ -68,6 +70,7 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
   ngOnInit() {
     this.headService.setTitle(`Заказы`);
     this.handleStatusControl();
+    this.setGridCells();
   }
 
   ngAfterViewInit(): void {
@@ -128,34 +131,28 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
           order.id,
           `${this.datePipe.transform(order.createdAt, 'dd.MM.y')} ${this.datePipe.transform(order.createdAt, 'HH:mm:ss')}`,
           `${order.shipment.recipient.contactInfo.firstName} ${order.shipment.recipient.contactInfo.lastName} ${order.shipment.recipient.contactInfo.phoneNumber}`,
-          order.notes.aboutCustomer,
           order.shipment.recipient.address.addressName,
           `${order.prices.totalCost} ${this.readableCurrencyPipe.transform(this.defaultCurrency)}`,
+          order.notes.fromAdmin,
           order.statusDescription[DEFAULT_LANG],
           order.shipment.statusDescription,
+          `${this.datePipe.transform(order.shippedAt, 'dd.MM.y')} ${this.datePipe.transform(order.shippedAt, 'HH:mm:ss')}`,
           order.shipment.trackingNumber,
-          order.notes.fromAdmin,
           `${order.isOrderPaid ? 'Да' : 'Нет'}`,
           order.paymentInfo.methodAdminName[DEFAULT_LANG],
           `${order.isCallbackNeeded ? 'Да' : 'Нет'}`,
-          order.notes.fromCustomer
+          order.notes.fromCustomer,
+          `${order.shipment.sender.contactInfo.firstName} ${order.shipment.sender.contactInfo.lastName}`,
+          order.manager.name,
+          `${order.source === 'client' ? 'Клиент' : 'Менеджер'}`,
+          order.notes.aboutCustomer
         ];
-
-        switch (order.source) {
-          case 'client':
-            fields.push(`Клиент`);
-            break;
-          case 'manager':
-            fields.push(`Менеджер`);
-            break;
-        }
-
         return fields.join('\t');
       });
 
     const ordersStr = [headerStr, ...ordersStrArray].join('\n');
     copyToClipboard(ordersStr);
-    this.notyService.showSuccessNoty(`Скопировано`);
+    this.notyService.showSuccessNoty(`Скопировано "${ordersStrArray.length}" заказов`);
   }
 
   private handleStatusControl() {
@@ -163,9 +160,34 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(_ => this.fetchOrders());
   }
+
+  private setGridCells(): void {
+    this.shipmentSenderService.fetchAllSenders()
+      .pipe(this.takeUntilDestroy())
+      .subscribe(
+        response => {
+          const senderCellIdx = orderGridCells.findIndex(cell => cell.label === senderLabel);
+          if (senderCellIdx > -1) {
+            orderGridCells[senderCellIdx].filterFields = response.data
+              .map(sender => ({
+                data: sender.senderId,
+                view: sender.firstName
+              }))
+              .filter((option, index, arr) => arr.findIndex(el => el.data === option.data) === index);
+          }
+
+          this.gridCells = orderGridCells;
+        },
+        error => {
+          this.gridCells = orderGridCells;
+        }
+      );
+  }
 }
 
+const senderLabel = 'Отправитель';
 const shipmentProp = getPropertyOf<OrderDto>('shipment');
+const senderProp = getPropertyOf<ShipmentDto>('sender');
 const recipientProp = getPropertyOf<ShipmentDto>('recipient');
 const counterPartyContactInfoProp = getPropertyOf<ShipmentCounterpartyDto>('contactInfo');
 const counterPartyAddressProp = getPropertyOf<ShipmentCounterpartyDto>('address');
@@ -304,6 +326,14 @@ const orderGridCells: IGridCell[] = [
     isImage: false,
     isSortable: true,
     fieldName: `${getPropertyOf<OrderDto>('notes')}.${getPropertyOf<OrderNotesDto>('fromCustomer')}`
+  },
+  {
+    label: senderLabel,
+    initialWidth: 85,
+    align: 'left',
+    isSortable: true,
+    fieldName: `${shipmentProp}.${senderProp}.${getPropertyOf<ShipmentCounterpartyDto>('id')}`,
+    filterFields: []
   },
   {
     isSearchable: false,
