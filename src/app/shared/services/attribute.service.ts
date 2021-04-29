@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AttributeDto, CreateAttributeDto, UpdateAttributeDto } from '../dtos/attribute.dto';
+import { AttributeDto, AttributeValueDto, CreateAttributeDto, UpdateAttributeDto } from '../dtos/attribute.dto';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ResponseDto } from '../dtos/response.dto';
 import { tap } from 'rxjs/operators';
@@ -52,6 +52,11 @@ export class AttributeService {
 
   updateAttribute(id: string, dto: UpdateAttributeDto): Observable<ResponseDto<AttributeDto>> {
     return this.http.put<ResponseDto<AttributeDto>>(`${API_HOST}/api/v1/admin/attributes/${id}`, dto)
+      .pipe( tap(() => this.setAttributes()) );
+  }
+
+  addAttributeValue(attributeId: string, dto: AttributeValueDto): Observable<ResponseDto<AttributeDto>> {
+    return this.http.post<ResponseDto<AttributeDto>>(`${API_HOST}/api/v1/admin/attributes/${attributeId}/value`, dto)
       .pipe( tap(() => this.setAttributes()) );
   }
 

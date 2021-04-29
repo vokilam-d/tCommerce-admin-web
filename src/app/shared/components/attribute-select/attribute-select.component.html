@@ -15,22 +15,70 @@
     </button>
 
     <div class="select__options" *ngIf="isVisible">
+      <div class="select__search" *ngIf="!isAddValueControlVisible">
+        <input class="field__input control__input select__search-control" [formControl]="searchControl" autofocus>
+      </div>
+
+      <div class="select__new-option">
+        <div class="select__label-control" *ngIf="isAddValueControlVisible">
+          <multilingual-control [formControl]="labelControl"></multilingual-control>
+        </div>
+
+        <img class="select__add-btn"
+             src="/admin/assets/images/plus.svg"
+             alt="add-btn"
+             (click)="toggleValueControlVisibility()"
+        >
+        <img class="select__save-btn"
+             src="/admin/assets/images/success_bw.svg"
+             alt="save-btn"
+             *ngIf="!isSuccessfullyAdded && this.isAddValueControlVisible"
+             (click)="addNewAttributeValue()"
+        >
+        <img
+          class="select__save-btn"
+          src="/admin/assets/images/success.svg"
+          alt="save-btn"
+          *ngIf="isSuccessfullyAdded && this.isAddValueControlVisible"
+        >
+
+        <preloader class="preloader new-option-preloader" *ngIf="isLoading"></preloader>
+      </div>
+
       <div class="select__option"
            *ngIf="hasEmpty"
            (click)="selectEmptyOption()"
       ></div>
 
-      <div class="select__option"
-           *ngFor="let option of options"
-           [class.select__option--active]="option.isSelected"
-           (click)="selectOption(option)"
-      >
+      <ng-container *ngIf="!filteredOptions.length && !searchControl.value">
+        <div class="select__option"
+             *ngFor="let option of options"
+             [class.select__option--active]="option.isSelected"
+             (click)="selectOption(option)"
+        >
         <span class="select__checkbox" *ngIf="isMultiSelect">
           <i class="ai ai-checkmark select__checkmark" *ngIf="option.isSelected"></i>
         </span>
 
-        {{ option.view || option.data }}
-      </div>
+          {{ option.view || option.data }}
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="filteredOptions.length">
+        <div class="select__option"
+             *ngFor="let option of filteredOptions"
+             [class.select__option--active]="option.isSelected"
+             (click)="selectOption(option)"
+        >
+        <span class="select__checkbox" *ngIf="isMultiSelect">
+          <i class="ai ai-checkmark select__checkmark" *ngIf="option.isSelected"></i>
+        </span>
+
+          {{ option.view || option.data }}
+        </div>
+      </ng-container>
+
+      <div class="select__option" *ngIf="!filteredOptions.length && searchControl.value && !isAddValueControlVisible">Ничего не найдено</div>
     </div>
 
   </div>

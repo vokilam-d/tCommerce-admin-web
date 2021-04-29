@@ -18,6 +18,8 @@ import { RouterModule } from '@angular/router';
 import { AdditionalServiceSelectComponent } from './components/additional-service-select/additional-service-select.component';
 import { BeautifyPhonePipe } from './pipes/beautify-phone.pipe';
 import { InputCapitalizeDirective } from './directives/input-capitalize/input-capitalize.directive';
+import { MultilingualControlModule } from '../multilingual-control/multilingual-control.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -60,7 +62,9 @@ import { InputCapitalizeDirective } from './directives/input-capitalize/input-ca
   imports: [
     CommonModule,
     PreloaderModule,
-    RouterModule
+    RouterModule,
+    MultilingualControlModule,
+    ReactiveFormsModule
   ]
 })
 export class SharedModule {
