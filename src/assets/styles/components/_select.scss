@@ -109,6 +109,40 @@ $fieldBorderColorFocus: $blue;
     z-index: 101;
   }
 
+  &__search-control {
+    width: calc(100% - 6px);
+    margin: 3px;
+  }
+
+  &__label-control{
+    margin-top: 17px;
+  }
+
+  &__add-btn {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 25px;
+    padding: 3px;
+    opacity: 0.7;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__save-btn {
+    position: absolute;
+    top: 6px;
+    right: 35px;
+    width: 28px;
+    padding: 3px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   &__option {
     display: flex;
     align-items: center;
