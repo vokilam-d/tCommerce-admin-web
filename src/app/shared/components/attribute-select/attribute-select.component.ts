@@ -41,7 +41,7 @@ export class AttributeSelectComponent extends SelectComponent implements OnInit,
 
   labelControl: FormControl = new FormControl();
   searchControl: FormControl = new FormControl();
-  filteredOptions: ISelectOption[] = [];
+  filteredOptions: ISelectOption[];
 
   @Input('selectedAttr') productSelectedAttr: ProductSelectedAttributeDto;
 
@@ -66,6 +66,7 @@ export class AttributeSelectComponent extends SelectComponent implements OnInit,
 
         if (this.attribute) {
           this.options = this.attribute.values.map(value => ({ data: value.id, view: value.label[DEFAULT_LANG] })) || [];
+          this.filteredOptions = this.options;
           if (this.attribute.type === EAttributeType.MultiSelect) {
             this.isMultiSelect = true;
           }

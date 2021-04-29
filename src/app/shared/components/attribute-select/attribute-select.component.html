@@ -50,33 +50,17 @@
            (click)="selectEmptyOption()"
       ></div>
 
-      <ng-container *ngIf="!filteredOptions.length && !searchControl.value">
-        <div class="select__option"
-             *ngFor="let option of options"
-             [class.select__option--active]="option.isSelected"
-             (click)="selectOption(option)"
-        >
-        <span class="select__checkbox" *ngIf="isMultiSelect">
-          <i class="ai ai-checkmark select__checkmark" *ngIf="option.isSelected"></i>
-        </span>
+      <div class="select__option"
+           *ngFor="let option of filteredOptions"
+           [class.select__option--active]="option.isSelected"
+           (click)="selectOption(option)"
+      >
+      <span class="select__checkbox" *ngIf="isMultiSelect">
+        <i class="ai ai-checkmark select__checkmark" *ngIf="option.isSelected"></i>
+      </span>
 
-          {{ option.view || option.data }}
-        </div>
-      </ng-container>
-
-      <ng-container *ngIf="filteredOptions.length">
-        <div class="select__option"
-             *ngFor="let option of filteredOptions"
-             [class.select__option--active]="option.isSelected"
-             (click)="selectOption(option)"
-        >
-        <span class="select__checkbox" *ngIf="isMultiSelect">
-          <i class="ai ai-checkmark select__checkmark" *ngIf="option.isSelected"></i>
-        </span>
-
-          {{ option.view || option.data }}
-        </div>
-      </ng-container>
+        {{ option.view || option.data }}
+      </div>
 
       <div class="select__option" *ngIf="!filteredOptions.length && searchControl.value && !isAddValueControlVisible">Ничего не найдено</div>
     </div>
