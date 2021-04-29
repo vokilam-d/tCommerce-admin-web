@@ -55,9 +55,9 @@
            [class.select__option--active]="option.isSelected"
            (click)="selectOption(option)"
       >
-      <span class="select__checkbox" *ngIf="isMultiSelect">
-        <i class="ai ai-checkmark select__checkmark" *ngIf="option.isSelected"></i>
-      </span>
+        <span class="select__checkbox" *ngIf="isMultiSelect">
+          <i class="ai ai-checkmark select__checkmark" *ngIf="option.isSelected"></i>
+        </span>
 
         {{ option.view || option.data }}
       </div>
