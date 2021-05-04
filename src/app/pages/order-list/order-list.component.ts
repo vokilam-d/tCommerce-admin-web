@@ -171,7 +171,7 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
             orderGridCells[senderCellIdx].filterFields = response.data
               .map(sender => ({
                 data: sender.senderId,
-                view: sender.firstName
+                view: `${sender.firstName} ${sender.lastName.slice(0, 1)}.`
               }))
               .filter((option, index, arr) => arr.findIndex(el => el.data === option.data) === index);
           }
