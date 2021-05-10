@@ -155,6 +155,10 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
     this.notyService.showSuccessNoty(`Скопировано "${ordersStrArray.length}" заказов`);
   }
 
+  isOrderGrey(order: OrderDto): boolean {
+    return order.status === OrderStatusEnum.CANCELED;
+  }
+
   private handleStatusControl() {
     this.statusControl.valueChanges
       .pipe(takeUntil(this.ngUnsubscribe))

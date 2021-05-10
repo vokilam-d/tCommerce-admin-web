@@ -69,6 +69,10 @@
     &--has-sub {
       flex-wrap: wrap;
     }
+
+    &--grey {
+      color: rgba($dark, 0.4);
+    }
   }
 
   &__search {

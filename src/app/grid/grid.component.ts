@@ -69,6 +69,7 @@ export class GridComponent<T extends { isOpened?: boolean } = any> extends NgUns
   @Input() trackByFieldName: string;
   @Input() pagesTotal: number;
   @Input() itemsFiltered: number;
+  @Input() isItemGrey: (item: T) => boolean = () => false;
   @Output('gridChange') changeEmitter = new EventEmitter<IGridValue>();
   @Output('itemSelect') itemSelectEmitter = new EventEmitter<T>();
 
