@@ -16,7 +16,12 @@ import { FormControl } from '@angular/forms';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { OrderStatusEnum } from '../../shared/enums/order-status.enum';
 import { ShipmentStatusEnum } from '../../shared/enums/shipment-status.enum';
-import { DEFAULT_LANG, MANAGER_SELECT_OPTIONS, TRANSLATIONS_MAP } from '../../shared/constants/constants';
+import {
+  DEFAULT_LANG,
+  MANAGER_SELECT_OPTIONS,
+  TRANSLATIONS_MAP,
+  UPLOADED_HOST
+} from '../../shared/constants/constants';
 import { PaymentMethodEnum } from '../../shared/enums/payment-method.enum';
 import { OrderPricesDto } from '../../shared/dtos/order-prices.dto';
 import { copyToClipboard } from '../../shared/helpers/copy-to-clipboard.function';
@@ -29,6 +34,7 @@ import { ContactInfoDto } from '../../shared/dtos/contact-info.dto';
 import { OrderNotesDto } from '../../shared/dtos/order-notes.dto';
 import { OrderPaymentInfoDto } from '../../shared/dtos/order-payment-info.dto';
 import { ShipmentSenderService } from '../../shared/services/shipment-sender.service';
+import { MediaDto } from '../../shared/dtos/media.dto';
 
 @Component({
   selector: 'order-list',
@@ -142,6 +148,7 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
           order.paymentInfo.methodAdminName[DEFAULT_LANG],
           `${order.isCallbackNeeded ? 'Да' : 'Нет'}`,
           order.notes.fromCustomer,
+          `${order.medias.length} фото`,
           `${order.shipment.sender.contactInfo.firstName} ${order.shipment.sender.contactInfo.lastName}`,
           order.manager.name,
           `${order.source === 'client' ? 'Клиент' : 'Менеджер'}`,
@@ -157,6 +164,10 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
 
   isOrderGrey(order: OrderDto): boolean {
     return order.status === OrderStatusEnum.CANCELED;
+  }
+
+  getOrderMediaUrl(media: MediaDto): string {
+    return UPLOADED_HOST + media.variantsUrls.small;
   }
 
   private handleStatusControl() {
@@ -330,6 +341,13 @@ const orderGridCells: IGridCell[] = [
     isImage: false,
     isSortable: true,
     fieldName: `${getPropertyOf<OrderDto>('notes')}.${getPropertyOf<OrderNotesDto>('fromCustomer')}`
+  },
+  {
+    label: 'Фото',
+    initialWidth: 50,
+    align: 'left',
+    isImage: true,
+    fieldName: `${getPropertyOf<OrderDto>('medias')}`
   },
   {
     label: senderLabel,

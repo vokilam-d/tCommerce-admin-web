@@ -75,6 +75,12 @@
     <ng-template #cellContent let-order="item">{{ order.isCallbackNeeded ? 'Да' : 'Нет' }}</ng-template>
     <ng-template #cellContent let-order="item">{{ order.notes.fromCustomer }}</ng-template>
     <ng-template #cellContent let-order="item">
+      <img class="order__media"
+           *ngFor="let media of order.medias"
+           [src]="getOrderMediaUrl(media)"
+      >
+    </ng-template>
+    <ng-template #cellContent let-order="item">
       {{ order.shipment.sender.contactInfo.firstName }} <ng-container *ngIf="order.shipment.sender.contactInfo.lastName as lastName">{{ lastName.slice(0, 1) }}.</ng-container>
     </ng-template>
     <ng-template #cellContent let-order="item">{{ order.manager.name }}</ng-template>
