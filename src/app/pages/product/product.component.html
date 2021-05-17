@@ -218,7 +218,7 @@
                 </span>
               </div>
 
-              <div class="product__field field"
+              <div class="product__field field field--required"
                    *ngIf="variantForm.get('purchasePrice') as purchasePrice"
                    [class.field--invalid]="isControlInvalid(purchasePrice)"
               >
@@ -240,8 +240,9 @@
                 </span>
               </div>
 
-              <div class="product__field field"
+              <div class="product__field field field--required"
                    *ngIf="variantForm.get('qtyInStock') as qtyInStock"
+                   [class.field--invalid]="isControlInvalid(qtyInStock)"
               >
                 <label class="field__label" [for]="'qtyInStock-' + i">
                   Количество всего на складе

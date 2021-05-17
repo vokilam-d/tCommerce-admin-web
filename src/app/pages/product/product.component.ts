@@ -124,7 +124,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
         price: [variant.price, Validators.required],
         oldPrice: [variant.oldPrice],
         currency: [variant.currency],
-        purchasePrice: [variant.purchasePrice],
+        purchasePrice: [variant.purchasePrice, Validators.required],
         purchaseCurrency: [variant.purchaseCurrency],
         vendorCode: [variant.vendorCode],
         gtin: [variant.gtin],
