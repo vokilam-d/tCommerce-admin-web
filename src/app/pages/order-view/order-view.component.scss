@@ -113,6 +113,10 @@
     display: flex;
     justify-content: flex-end;
   }
+
+  &__sender {
+    margin: 10px 0 0;
+  }
 }
 
 .info-table {
