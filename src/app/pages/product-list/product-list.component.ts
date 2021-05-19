@@ -290,11 +290,12 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
           {
             isSearchable: false,
             label: 'Статус',
-            initialWidth: 45,
+            initialWidth: 60,
             align: 'left',
             isImage: false,
             isSortable: true,
-            fieldName: getPropertyOf<ProductListItemDto>('isEnabled')
+            fieldName: getPropertyOf<ProductListItemDto>('isEnabled'),
+            filterFields: [{ data: true, view: 'On' }, { data: false, view: 'Off' }]
           },
           {
             isSearchable: false,
