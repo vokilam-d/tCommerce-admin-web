@@ -15,12 +15,6 @@
   }
 }
 
-@mixin respond-to($value) {
-  @media (min-width: #{$value}) {
-    @content;
-  }
-}
-
 @mixin respond-to-less-than($value) {
   @media (max-width: calc(#{$value} - 1px)) {
     @content;

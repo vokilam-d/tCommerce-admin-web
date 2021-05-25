@@ -13,6 +13,7 @@ import { ConfirmPackItemModalComponent } from './confirm-pack-item-modal/confirm
 import { MediaAssetModule } from '../../media-asset/media-asset.module';
 import { ContactInfoModalComponent } from './contact-info-modal/contact-info-modal.component';
 import { ContactInfoModule } from '../../contact-info/contact-info.module';
+import { MediaUploaderModule } from '../../media-uploader/media-uploader.module';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ContactInfoModule } from '../../contact-info/contact-info.module';
     PreloaderModule,
     ReactiveFormsModule,
     MediaAssetModule,
-    ContactInfoModule
+    ContactInfoModule,
+    MediaUploaderModule
   ]
 })
 export class OrderViewModule { }

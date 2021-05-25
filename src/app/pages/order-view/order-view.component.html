@@ -256,7 +256,7 @@
       <div class="order-view__subtitle">
         Товары в заказе
       </div>
-      <div class="order-view__content order-view__content--wide">
+      <div class="order-view__content order-view__content--overflow">
         <table class="items-table">
           <thead>
             <tr class="items-table__row items-table__row--head">
@@ -350,7 +350,12 @@
       <div class="order-view__subtitle">
         Фото
       </div>
-      <div class="order-view__content order-view__content--wide media">
+      <div class="order-view__content media">
+        <media-uploader class="media__asset"
+                        [uploadUrl]="getMediaUploadUrl()"
+                        (uploaded)="onMediaUploaded($event)"
+        ></media-uploader>
+
         <media-asset class="media__asset"
                      *ngFor="let media of order.medias"
                      [media]="media"

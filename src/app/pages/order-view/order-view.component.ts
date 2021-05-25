@@ -8,6 +8,7 @@ import { NotyService } from '../../noty/noty.service';
 import { AddressFormComponent } from '../../address-form/address-form.component';
 import { saveFileFromUrl } from '../../shared/helpers/save-file.function';
 import {
+  API_HOST,
   DEFAULT_ERROR_TEXT,
   DEFAULT_LANG,
   MANAGER_SELECT_OPTIONS,
@@ -31,6 +32,7 @@ import { ConfirmPackItemModalComponent } from './confirm-pack-item-modal/confirm
 import { CreateInternetDocumentDto } from '../../shared/dtos/create-internet-document.dto';
 import { ContactInfoDto } from '../../shared/dtos/contact-info.dto';
 import { ContactInfoModalComponent } from './contact-info-modal/contact-info-modal.component';
+import { ResponseDto } from '../../shared/dtos/response.dto';
 
 @Component({
   selector: 'order-view',
@@ -469,5 +471,14 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
           this.contactInfoModalCmp.closeModal();
         }
       );
+  }
+
+  getMediaUploadUrl() {
+    return `${API_HOST}/api/v1/admin/order/${this.order?.id}/media`;
+  }
+
+  onMediaUploaded($event: ResponseDto<OrderDto>) {
+    this.order.medias = $event.data.medias;
+    this.order.logs = $event.data.logs;
   }
 }

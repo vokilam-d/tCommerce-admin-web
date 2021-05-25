@@ -7,22 +7,18 @@
 
   @include respond-to-less-than($media_large) {
     display: block;
+    text-align: right;
   }
 
   &__title {
     @include respond-to-less-than($media_large) {
       margin-bottom: 5px;
-      text-align: right;
     }
   }
 
   &__toolbar {
     margin: 0 0 0 auto;
     flex-shrink: 0;
-
-    @include respond-to-less-than($media_large) {
-      text-align: right;
-    }
   }
 
   &__btn {

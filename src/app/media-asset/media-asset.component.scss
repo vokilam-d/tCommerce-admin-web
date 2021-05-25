@@ -1,4 +1,5 @@
 @import "variables";
+@import "mixins";
 
 .media {
   $media: &;
@@ -97,6 +98,12 @@
   animation: popupSlideIn 0.2s $cubicBezier;
   z-index: 4;
 
+  @include respond-to-less-than($media_large) {
+    width: 90%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
   &__header {
     display: flex;
     justify-content: space-between;
@@ -123,16 +130,28 @@
   &__container {
     margin: 20px 0 0;
     display: flex;
+
+    @include respond-to-less-than($media_large) {
+      display: block;
+    }
   }
 
   &__img-container {
     width: 60%;
     text-align: center;
+
+    @include respond-to-less-than($media_large) {
+      width: 100%;
+    }
   }
 
   &__info {
     width: 40%;
     padding: 0 0 0 20px;
+
+    @include respond-to-less-than($media_large) {
+      width: 100%;
+    }
   }
 
   &__row {

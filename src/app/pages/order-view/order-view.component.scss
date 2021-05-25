@@ -8,6 +8,11 @@
   flex-wrap: wrap;
   justify-content: space-between;
 
+  @include respond-to-less-than($media_large) {
+    display: block;
+    margin-top: 0;
+  }
+
   &__manager-container {
     display: flex;
     justify-content: flex-end;
@@ -18,17 +23,24 @@
   }
 
   &__block {
-    width: 100%;
+    width: 48%;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 2px;
+    box-shadow: 0 0 4px 0 #c8c8c8;
 
-    @include respond-to($media_max-content-width) {
-      width: 48%;
-      margin: 10px 0;
-      padding: 15px;
-      border-radius: 2px;
-      box-shadow: 0 0 4px 0 #c8c8c8;
+    @include respond-to-less-than($media_large) {
+      width: 100%;
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
 
-      &:hover {
-        box-shadow: 0 0 4px 0 #a7a7a7;
+    &:hover {
+      box-shadow: 0 0 4px 0 #a7a7a7;
+
+      @include respond-to-less-than($media_large) {
+        box-shadow: none;
       }
     }
 
@@ -46,16 +58,15 @@
   }
 
   &__subtitle {
-    margin: 30px 0 0;
+    margin: 5px 0 0;
     padding: 0 10px 5px;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     border-bottom: 1px solid $borderColor;
     font-size: 18px;
 
-    @include respond-to($media_max-content-width) {
-      align-items: flex-end;
-      margin-top: 5px;
+    @include respond-to-less-than($media_large) {
+      margin-top: 20px;
     }
   }
 
@@ -67,14 +78,20 @@
     font-size: 20px;
     font-weight: 500;
     color: #fff;
+
+    @include respond-to-less-than($media_large) {
+      display: inline-block;
+      margin-left: 0;
+      margin-right: 0;
+      font-size: 18px;
+    }
   }
 
   &__content {
-    width: 50%;
     margin: 10px 0 0;
 
-    @include respond-to($media_max-content-width) {
-      width: 100%;
+    @include respond-to-less-than($media_large) {
+      overflow: auto;
     }
 
     &--wide {
@@ -181,6 +198,11 @@
 
     &--name {
       width: 40%;
+
+      @include respond-to-less-than($media_large) {
+        width: auto;
+        min-width: 200px;
+      }
     }
 
     &--packed {
@@ -198,6 +220,10 @@
 
   &__link {
     border-bottom: 1px dashed;
+
+    @include respond-to-less-than($media_large) {
+      border-bottom: none;
+    }
   }
 
   &__img {
@@ -212,6 +238,10 @@
 .address-form {
   &__modal {
     left: 30vw;
+
+    @include respond-to-less-than($media_large) {
+      left: 10vw;
+    }
   }
 
   &__form {
@@ -302,6 +332,10 @@
 
 .log {
   margin: 5px 0 0;
+
+  @include respond-to-less-than($media_large) {
+    word-break: break-word;
+  }
 }
 
 .tooltip {
@@ -312,6 +346,7 @@
   bottom: calc(100% + 10px);
   transform: translateX(-50%);
   min-width: 150px;
+  max-width: 100%;
   padding: 10px 16px;
   background: #fff;
   border: 1px solid #bbb;
@@ -323,6 +358,10 @@
   box-sizing: border-box;
 
   @include appear('tooltip', $translateX: -50%, $translateToX: -50%);
+
+  @include respond-to-less-than($media_large) {
+    flex-wrap: wrap;
+  }
 
   :hover > &:not(&--no-hover) {
     display: block;
