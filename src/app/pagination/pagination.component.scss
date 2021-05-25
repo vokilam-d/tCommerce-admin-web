@@ -1,4 +1,5 @@
 @import "variables";
+@import "mixins";
 
 .pagination {
   display: flex;
@@ -12,6 +13,10 @@
 
   &__limit {
     width: 100px;
+
+    @include respond-to-less-than($media_large) {
+      width: 80px;
+    }
   }
 
   &__limit-label {
@@ -22,6 +27,10 @@
     margin: 0 0 0 40px;
     display: flex;
     align-items: center;
+
+    @include respond-to-less-than($media_large) {
+      margin-left: 20px;
+    }
   }
 
   &__page-control {
@@ -29,6 +38,10 @@
     background: $controlBg;
     border: 1px solid $borderColor;
     transition: all 0.2s ease;
+
+    @include respond-to-less-than($media_large) {
+      padding: 7px;
+    }
 
     &[disabled] {
       opacity: 0.5;
@@ -46,5 +59,10 @@
 
   &__text {
     margin: 0 20px;
+
+    @include respond-to-less-than($media_large) {
+      margin-left: 8px;
+      margin-right: 8px;
+    }
   }
 }

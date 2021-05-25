@@ -1,4 +1,5 @@
 @import "variables";
+@import "mixins";
 
 :host {
   position: relative;
@@ -13,6 +14,10 @@
   font-size: 14px;
   box-sizing: border-box;
 
+  @include respond-to-less-than($media_large) {
+    font-size: 13px;
+  }
+
   &[disabled] {
     opacity: 0.5;
   }
@@ -23,16 +28,28 @@
 
   &--size-default {
     padding: 9px 14px;
+
+    @include respond-to-less-than($media_large) {
+      padding: 6px 10px 7px;
+    }
   }
 
   &--size-small {
     padding: 6px 11px;
     font-size: 13px;
+
+    @include respond-to-less-than($media_large) {
+      padding: 3px 8px;
+    }
   }
 
   &--size-big {
     padding: 11px 18px 12px;
     font-size: 16px;
+
+    @include respond-to-less-than($media_large) {
+      padding: 6px 13px 7px;
+    }
   }
 
   &--color-default {

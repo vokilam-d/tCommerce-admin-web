@@ -1,21 +1,19 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ContentChildren,
-  ElementRef,
   EventEmitter,
   Input,
   OnInit,
   Output,
   QueryList,
   TemplateRef,
-  ViewChild, ViewChildren
+  ViewChild,
+  ViewChildren
 } from '@angular/core';
 import { IGridCell, IGridFilter, IGridValue } from './grid.interface';
 import { PaginationComponent } from '../pagination/pagination.component';
-import { fromEvent, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { NgUnsubscribe } from '../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { animate, state, style, transition, trigger } from '@angular/animations';

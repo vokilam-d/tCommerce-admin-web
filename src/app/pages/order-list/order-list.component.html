@@ -10,7 +10,7 @@
 
     <div class="header__toolbar">
       <app-button (click)="copyOrdersToClipboard()">Скопировать в буфер</app-button>
-      <button class="header__btn toolbar-main-btn" (click)="add()">Добавить заказ</button>
+      <app-button class="header__btn" (click)="add()" btnStyle="primary" >Добавить заказ</app-button>
     </div>
   </header>
 
