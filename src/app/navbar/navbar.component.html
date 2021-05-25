@@ -1,4 +1,12 @@
-<ul class="navbar" (clickOutside)="closeSubItems()">
+<button class="navbar-toggle" (click)="openMenu()">
+  <span class="navbar-toggle__line"></span>
+  <span class="navbar-toggle__line"></span>
+  <span class="navbar-toggle__line"></span>
+</button>
+
+<div class="navbar-overlay" *ngIf="isMenuOpened" (click)="closeMenu()"></div>
+
+<ul class="navbar" [class.navbar--opened]="isMenuOpened" (clickOutside)="closeSubMenu()">
   <li>
     <a class="navbar__link navbar__link--logo"
        routerLink="/"
@@ -12,8 +20,8 @@
     <li class="navbar__item">
       <a class="navbar__link"
          routerLinkActive="navbar__link--active"
-         [class.navbar__link--active]="pinnedItem.isSelected"
          [routerLink]="pinnedItem.link"
+         (click)="closeMenu()"
       >
         <i [ngClass]="pinnedItem.icon"></i>
         {{ pinnedItem.name }}
@@ -30,17 +38,14 @@
          routerLinkActive="navbar__link--active"
          [class.navbar__link--active]="isChildActive(item)"
          [routerLink]="item.link"
-         (click)="showSubItems(item);"
+         (click)="showSubItems(item)"
       >
         <i [ngClass]="item.icon"></i>
         {{ item.name }}
       </a>
 
       <ng-template #emptyLink>
-        <span class="navbar__link"
-           [class.navbar__link--active]="item.isSelected"
-           (click)="showSubItems(item);"
-        >
+        <span class="navbar__link" (click)="showSubItems(item)">
           <i [ngClass]="item.icon"></i>
           {{ item.name }}
         </span>
@@ -49,6 +54,10 @@
 
     <ng-container *ngIf="item.isChildrenVisible">
       <ul class="sub-navbar">
+        <li class="sub-navbar__item" (click)="closeSubMenu()">
+          <i class="ai ai-arrow-left sub-navbar__link sub-navbar__back"></i>
+        </li>
+
         <li class="sub-navbar__item" *ngFor="let subItem of item.subItems">
           <a
             class="sub-navbar__link"

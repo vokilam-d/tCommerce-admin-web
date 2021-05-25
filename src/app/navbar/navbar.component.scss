@@ -1,10 +1,67 @@
+@import "mixins";
 @import "variables";
+
+$sidebarWidth: 60vw;
+
+.navbar-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  padding: 10px;
+  background: rgba($dark, 0.9);
+  border-radius: 5px;
+  box-shadow: 2px 2px 0 0 rgba($dark, 0.2);
+  z-index: 9;
+
+  &__line {
+    display: block;
+    width: 19px;
+    height: 3px;
+    margin: 4px 0 0;
+    border-radius: 2px;
+    background: #fff;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}
+
+.navbar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($dark, 0.4);
+  animation: fadeIn 0.2s ease;
+  cursor: pointer;
+  z-index: 10;
+}
 
 .navbar {
   position: relative;
   height: 100%;
   padding: 0 0 20vh;
   background: #373330;
+
+  @include respond-to-less-than($media_large) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: $sidebarWidth;
+    height: auto;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    z-index: 11;
+  }
+
+  &--opened {
+    @include respond-to-less-than($media_large) {
+      transform: translateX(0);
+    }
+  }
 
   &__item {
     position: relative;
@@ -18,6 +75,11 @@
     color: #aaa6a0;
     font-size: 10px;
     text-transform: uppercase;
+
+    @include respond-to-less-than($media_large) {
+      display: flex;
+      align-items: center;
+    }
 
     &:not(&--logo):hover {
       background: #4a4542;
@@ -57,6 +119,11 @@
     display: block;
     margin: 0 auto 3px;
     font-size: 22px;
+
+    @include respond-to-less-than($media_large) {
+      width: 50px;
+      margin: 0;
+    }
   }
 
   &__pin-icon {
@@ -79,6 +146,16 @@
   padding: 88px 15px;
   background-color: rgba(55, 51, 48, 0.95);
   z-index: 3;
+
+  @include respond-to-less-than($media_large) {
+    left: 0;
+    min-width: auto;
+    width: $sidebarWidth;
+    padding: 20px 0;
+    z-index: 12;
+
+    @include appear($translateY: 0, $translateX: -60px);
+  }
 
   &__item {
     margin-bottom: 10px;
@@ -112,5 +189,9 @@
     &--visible {
       display: block;
     }
+  }
+
+  &__back {
+    font-size: 18px;
   }
 }

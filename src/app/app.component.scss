@@ -1,10 +1,21 @@
+@import "mixins";
+@import "variables";
+
 .app {
   min-height: 100vh;
   display: flex;
 
+  @include respond-to-less-than($media_large) {
+    display: block;
+  }
+
   &__navbar {
     width: 88px;
     flex-shrink: 0;
+
+    @include respond-to-less-than($media_large) {
+      width: auto;
+    }
   }
 
   &__page {

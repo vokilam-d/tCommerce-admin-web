@@ -20,6 +20,7 @@ export interface INavBarItem {
 export class NavbarComponent implements OnInit {
 
   public navBarMenu: INavBarItem[] = navBarMenu;
+  public isMenuOpened: boolean = false;
   private storagePinnedStateKey = 'navbar-pinned-links';
 
   constructor(private location: Location) { }
@@ -29,11 +30,7 @@ export class NavbarComponent implements OnInit {
   }
 
   private getItemsWithChildren(): INavBarItem[] {
-    return this.navBarMenu.filter(item => {
-      if (item.hasOwnProperty('isChildrenVisible')) {
-        return item;
-      }
-    });
+    return this.navBarMenu.filter(item => item.subItems?.length);
   }
 
   public isChildActive(item: INavBarItem): boolean {
@@ -51,13 +48,18 @@ export class NavbarComponent implements OnInit {
         item.isChildrenVisible = false;
       }
     });
+
+    if (!clickedItem.subItems?.length) {
+      this.closeMenu();
+    }
   }
 
   public onSubItemClickHandler(clickedMenuItem: INavBarItem) {
     clickedMenuItem.isChildrenVisible = false;
+    this.closeMenu();
   }
 
-  public closeSubItems() {
+  public closeSubMenu() {
     const itemsWithChildren = this.getItemsWithChildren();
     itemsWithChildren.forEach(item => {
       item.isChildrenVisible = false;
@@ -94,6 +96,15 @@ export class NavbarComponent implements OnInit {
     };
 
     this.navBarMenu.forEach(setState);
+  }
+
+  public openMenu(): void {
+    this.isMenuOpened = true;
+  }
+
+  public closeMenu() {
+    this.isMenuOpened = false;
+    this.closeSubMenu();
   }
 }
 
