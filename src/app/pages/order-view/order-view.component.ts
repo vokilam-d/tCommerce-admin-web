@@ -474,7 +474,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   }
 
   getMediaUploadUrl() {
-    return `${API_HOST}/api/v1/admin/order/${this.order?.id}/media`;
+    return `${API_HOST}/api/v1/admin/orders/${this.order?.id}/media`;
   }
 
   onMediaUploaded($event: ResponseDto<OrderDto>) {
