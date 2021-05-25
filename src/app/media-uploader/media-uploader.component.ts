@@ -12,6 +12,7 @@ import { NotyService } from '../noty/noty.service';
 })
 export class MediaUploaderComponent implements OnInit {
 
+  isLoading: boolean = false;
   acceptTypes: string = INPUT_MEDIA_ACCEPT_TYPES;
 
   @Input() uploadUrl: string;
@@ -40,8 +41,15 @@ export class MediaUploaderComponent implements OnInit {
     const payload = new FormData();
     payload.append('file', file, file.name);
 
+    this.isLoading = true;
     this.http.post<MediaDto>(this.uploadUrl, payload)
-      .pipe( finalize(() => this.inputRef.nativeElement.value = ''), this.notyService.attachNoty() )
+      .pipe(
+        finalize(() => {
+          this.inputRef.nativeElement.value = '';
+          this.isLoading = false;
+        }),
+        this.notyService.attachNoty()
+      )
       .subscribe(
         media => {
           this.uploadedEmitter.emit(media);

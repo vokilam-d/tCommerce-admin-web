@@ -41,3 +41,10 @@
     display: none;
   }
 }
+
+.preloader {
+  top: initial;
+  bottom: 15vh;
+  position: fixed;
+  z-index: 21;
+}
