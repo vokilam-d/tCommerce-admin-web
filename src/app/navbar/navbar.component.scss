@@ -197,6 +197,11 @@ $sidebarWidth: 60vw;
   }
 
   &__back {
+    display: none;
     font-size: 18px;
+
+    @include respond-to-less-than($media_large) {
+      display: block;
+    }
   }
 }
