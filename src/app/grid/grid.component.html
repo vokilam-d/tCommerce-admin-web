@@ -67,7 +67,7 @@
                     [isSizeSmall]="true"
                     [isMultiSelect]="true"
                     [initialValue]="filtersMap.get(cell.fieldName) || []"
-                    (select)="onFilterSelect(cell, $event)"
+                    (selectValue)="onFilterSelect(cell, $event)"
         ></app-select>
       </div>
     </div>

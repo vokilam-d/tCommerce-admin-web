@@ -36,7 +36,7 @@
     <div class="field__control address-form__control">
       <select-autocomplete type="settlement"
                            [activeOptionLabel]="settlementControl.value"
-                           (select)="onSettlementSelect($event)"
+                           (selectValue)="onSettlementSelect($event)"
       ></select-autocomplete>
 
       <span class="field__error" *ngIf="isControlInvalid(settlementControl)">
@@ -59,7 +59,7 @@
                                [settlementId]="settlementIdControl.value"
                                [isDisabled]="!settlementIdControl.value"
                                [activeOptionLabel]="addressControl.value"
-                               (select)="onWarehouseSelect($event)"
+                               (selectValue)="onWarehouseSelect($event)"
           ></select-autocomplete>
 
           <span class="field__error" *ngIf="isControlInvalid(addressControl)">
@@ -82,7 +82,7 @@
                                [settlementId]="settlementIdControl.value"
                                [isDisabled]="!settlementIdControl.value"
                                [activeOptionLabel]="addressControl.value"
-                               (select)="onStreetSelect($event)"
+                               (selectValue)="onStreetSelect($event)"
           ></select-autocomplete>
 
           <span class="field__error" *ngIf="isControlInvalid(addressControl)">

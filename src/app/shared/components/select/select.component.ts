@@ -24,7 +24,7 @@ import { NgUnsubscribe } from '../../directives/ng-unsubscribe/ng-unsubscribe.di
   }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectComponent extends NgUnsubscribe implements OnInit, OnChanges, ControlValueAccessor {
+export class SelectComponent<T = any, K = any> extends NgUnsubscribe implements OnInit, OnChanges, ControlValueAccessor {
 
   isVisible: boolean = false;
 
@@ -32,11 +32,12 @@ export class SelectComponent extends NgUnsubscribe implements OnInit, OnChanges,
 
   @Input() isDisabled: boolean = false;
   @Input() hasEmpty: boolean = false;
-  @Input() options: ISelectOption[] = [];
+  @Input() options: ISelectOption<T, K>[] = [];
   @Input() isMultiSelect: boolean = false;
   @Input() isSizeSmall: boolean = false;
   @Input() initialValue: any | any[];
-  @Output() select: EventEmitter<any> = new EventEmitter();
+  @Output() selectValue: EventEmitter<T> = new EventEmitter();
+  @Output() selectData: EventEmitter<K> = new EventEmitter();
 
   get activeOptionLabel(): string | null {
     const selectedOptions = this.options.filter(option => option.isSelected);
@@ -88,15 +89,12 @@ export class SelectComponent extends NgUnsubscribe implements OnInit, OnChanges,
     this.isDisabled = isDisabled;
   }
 
-  writeValue(value: any, emit: boolean = true): void {
+  writeValue(value: T): void {
     this.value = value;
     this.onChange(value);
-    if (emit) {
-      this.select.emit(value);
-    }
   }
 
-  selectOption(option: ISelectOption) {
+  selectOption(option: ISelectOption<T, K>) {
     let newValue;
     if (this.isMultiSelect) {
       newValue = (this.value as any[]).slice(); // copy array
@@ -116,6 +114,9 @@ export class SelectComponent extends NgUnsubscribe implements OnInit, OnChanges,
 
     this.writeValue(newValue);
     this.onTouched();
+
+    this.selectValue.emit(newValue);
+    this.selectData.emit(option.data);
   }
 
   selectEmptyOption() {
@@ -130,7 +131,7 @@ export class SelectComponent extends NgUnsubscribe implements OnInit, OnChanges,
     this.isVisible = isVisible;
   }
 
-  private getEmptyOption(): ISelectOption {
+  private getEmptyOption(): ISelectOption<T, K> {
     return {
       value: null
     };

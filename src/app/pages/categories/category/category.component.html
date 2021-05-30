@@ -42,7 +42,9 @@
   <div class="category__field field" *ngIf="isClone">
     <div class="field__label">Категория-источник</div>
     <div class="field__control">
-      <canonical-category-select [formControl]="canonicalCategoryId"></canonical-category-select>
+      <canonical-category-select [formControl]="canonicalCategoryId"
+                                 (selectData)="onCanonicalSelectData($event)"
+      ></canonical-category-select>
     </div>
   </div>
 

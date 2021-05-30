@@ -29,7 +29,7 @@
     <div class="announcement__field field">
       <div class="field__label">Шаблон</div>
       <div class="field__control">
-        <app-select [options]="announcementOptions" (select)="setAnnouncementValue($event)"></app-select>
+        <app-select [options]="announcementOptions" (selectValue)="setAnnouncementValue($event)"></app-select>
       </div>
     </div>
 

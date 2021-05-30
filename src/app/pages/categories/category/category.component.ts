@@ -16,6 +16,7 @@ import { EReorderPosition } from '../../../shared/enums/reorder-position.enum';
 import { ISelectOption } from '../../../shared/components/select/select-option.interface';
 import { EProductsSort } from '../../../shared/enums/product-sort.enum';
 import { CustomValidators } from '../../../shared/classes/validators';
+import { MultilingualTextDto } from '../../../shared/dtos/multilingual-text.dto';
 
 @Component({
   selector: 'category',
@@ -226,5 +227,12 @@ export class CategoryComponent implements OnInit {
       .forEach(sort => {
         this.sortOptions.push({ value: sort, view: TRANSLATIONS_MAP[sort] });
       });
+  }
+
+  onCanonicalSelectData(evt: CategoryDto) {
+    const nameValue = this.name.value as MultilingualTextDto
+    if (!nameValue[DEFAULT_LANG].trim() || confirm(`Перезаписать имя на "${evt.name[DEFAULT_LANG]}"?`)) {
+      this.name.setValue(evt.name);
+    }
   }
 }

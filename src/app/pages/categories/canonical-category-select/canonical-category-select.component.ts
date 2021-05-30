@@ -17,14 +17,14 @@ import { DEFAULT_LANG } from '../../../shared/constants/constants';
   }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CanonicalCategorySelectComponent extends SelectComponent implements OnInit {
+export class CanonicalCategorySelectComponent extends SelectComponent<number, CategoryDto> implements OnInit {
 
   isLoading: boolean = false;
   private categories: CategoryDto[] = [];
 
   get activeOptionLabel(): string {
     const category = this.categories.find(category => category.id === this.value);
-    return category ? `${category.name[DEFAULT_LANG]} (id ${category.id})` : '';
+    return this.buildLabel(category);
   }
 
   constructor(
@@ -61,6 +61,23 @@ export class CanonicalCategorySelectComponent extends SelectComponent implements
   }
 
   private setOptions(categories: CategoryDto[]) {
-    this.options = categories.map(category => ({ value: category.id, view: `${category.name[DEFAULT_LANG]} (id ${category.id})` }));
+    this.options = categories.map(category => ({
+      value: category.id,
+      view: this.buildLabel(category),
+      data: category
+    }));
+  }
+
+  private buildLabel(category: CategoryDto): string {
+    if (!category) {
+      return '';
+    }
+
+    let label = `${category.name[DEFAULT_LANG]}`;
+    if (category.canonicalCategoryId) {
+      label += ` (Клон)`;
+    }
+
+    return `${label} (id ${category.id})`;
   }
 }
