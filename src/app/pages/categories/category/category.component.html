@@ -25,7 +25,7 @@
 </header>
 
 <form class="category" *ngIf="form; else preloaderTmpl">
-  <div class="category__field field" *ngIf="!isClone">
+  <div class="category__field field">
     <label class="field__label">Включить категорию</label>
     <div class="field__control">
       <toggle [formControl]="isEnabled"></toggle>
