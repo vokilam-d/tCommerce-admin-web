@@ -249,7 +249,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             isImage: false,
             isSortable: false,
             fieldName: manufacturerAttribute?.id,
-            filterFields: manufacturerAttribute?.values.map(value => ({ data: value.id, view: value.label[DEFAULT_LANG] }))
+            filterFields: manufacturerAttribute?.values.map(value => ({ value: value.id, view: value.label[DEFAULT_LANG] }))
           },
           {
             isSearchable: true,
@@ -295,7 +295,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             isImage: false,
             isSortable: true,
             fieldName: getPropertyOf<ProductListItemDto>('isEnabled'),
-            filterFields: [{ data: true, view: 'On' }, { data: false, view: 'Off' }]
+            filterFields: [{ value: true, view: 'On' }, { value: false, view: 'Off' }]
           },
           {
             isSearchable: false,
@@ -311,7 +311,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             initialWidth: 70,
             align: 'left',
             fieldName: getPropertyOf<ProductListItemDto>('isIncludedInShoppingFeed'),
-            filterFields: [{ data: true, view: 'Да' }, { data: false, view: 'Нет' }]
+            filterFields: [{ value: true, view: 'Да' }, { value: false, view: 'Нет' }]
           },
           {
             isSearchable: false,

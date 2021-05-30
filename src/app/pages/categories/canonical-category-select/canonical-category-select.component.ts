@@ -61,6 +61,6 @@ export class CanonicalCategorySelectComponent extends SelectComponent implements
   }
 
   private setOptions(categories: CategoryDto[]) {
-    this.options = categories.map(category => ({ data: category.id, view: `${category.name[DEFAULT_LANG]} (id ${category.id})` }));
+    this.options = categories.map(category => ({ value: category.id, view: `${category.name[DEFAULT_LANG]} (id ${category.id})` }));
   }
 }

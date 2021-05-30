@@ -28,9 +28,9 @@ import { CustomValidators } from '../../shared/classes/validators';
 type PostAction = 'duplicate' | 'exit' | 'none';
 
 const PRODUCT_LABEL_OPTIONS: ISelectOption[] = [
-  { data: ProductLabelTypeEnum.Empty, view: 'Не выбрано' },
-  { data: ProductLabelTypeEnum.New, view: 'Новинка' },
-  { data: ProductLabelTypeEnum.Top, view: 'Топ продаж' }
+  { value: ProductLabelTypeEnum.Empty, view: 'Не выбрано' },
+  { value: ProductLabelTypeEnum.New, view: 'Новинка' },
+  { value: ProductLabelTypeEnum.Top, view: 'Топ продаж' }
 ];
 
 @Component({

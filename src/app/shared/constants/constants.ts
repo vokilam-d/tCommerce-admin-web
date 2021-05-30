@@ -61,6 +61,6 @@ export const TRANSLATIONS_MAP = {
   [Role.Manager]: 'Менеджер'
 };
 export const MANAGER_SELECT_OPTIONS: ISelectOption[] = [
-  { data: '5ef9c63aae2fd882393081c3', view: 'Елена' },
-  { data: '5fff628d7db0790020149858', view: 'Кристина' }
+  { value: '5ef9c63aae2fd882393081c3', view: 'Елена' },
+  { value: '5fff628d7db0790020149858', view: 'Кристина' }
 ];

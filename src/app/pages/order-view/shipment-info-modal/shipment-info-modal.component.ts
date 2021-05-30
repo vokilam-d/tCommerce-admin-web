@@ -29,12 +29,12 @@ export class ShipmentInfoModalComponent implements OnInit {
   @Output('infoSubmit') infoSubmitEmitter = new EventEmitter<ShipmentDto>();
   @Output('trackingId') trackingIdEmitter = new EventEmitter<string>();
 
-  payerTypeOptions: ISelectOption[] = [{ view: 'Клиент', data: ShipmentPayerEnum.RECIPIENT }, { view: 'Мы', data: ShipmentPayerEnum.SENDER }];
+  payerTypeOptions: ISelectOption[] = [{ view: 'Клиент', value: ShipmentPayerEnum.RECIPIENT }, { view: 'Мы', value: ShipmentPayerEnum.SENDER }];
   get payerTypeForCost(): ShipmentPayerEnum {
     const isToWarehouse = this.shipment.recipient.address.type === AddressTypeEnum.WAREHOUSE;
     return isToWarehouse && this.cost >= 1000 ? ShipmentPayerEnum.SENDER : ShipmentPayerEnum.RECIPIENT;
   }
-  get payerTypeNameForCost(): string { return this.payerTypeOptions.find(o => o.data === this.payerTypeForCost).view; }
+  get payerTypeNameForCost(): string { return this.payerTypeOptions.find(o => o.value === this.payerTypeForCost).view; }
 
   constructor(
     private shipmentSenderService: ShipmentSenderService,
@@ -107,7 +107,7 @@ export class ShipmentInfoModalComponent implements OnInit {
         this.defaultSenderId = sender.id;
       }
       return {
-        data: sender.id,
+        value: sender.id,
         view: `${sender.firstName} ${sender.lastName}, ${sender.phone}, ${sender.address}`
       };
     });

@@ -59,7 +59,7 @@
           <i class="ai ai-checkmark select__checkmark" *ngIf="option.isSelected"></i>
         </span>
 
-        {{ option.view || option.data }}
+        {{ option.view || option.value }}
       </div>
 
       <div class="select__option" *ngIf="!filteredOptions.length && searchControl.value && !isAddValueControlVisible">Ничего не найдено</div>

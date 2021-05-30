@@ -13,7 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class PaginationComponent implements OnInit, OnDestroy {
 
-  limitOptions: ISelectOption[] = [{ data: 25 }, { data: 50 }, { data: 100 }, { data: 200 }, { data: 1000 }];
+  limitOptions: ISelectOption[] = [{ value: 25 }, { value: 50 }, { value: 100 }, { value: 200 }, { value: 1000 }];
 
   private form: FormGroup;
   private ngUnsubscribe = new Subject();

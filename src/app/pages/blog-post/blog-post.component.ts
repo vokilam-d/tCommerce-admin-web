@@ -246,7 +246,7 @@ export class BlogPostComponent extends NgUnsubscribe implements OnInit {
 
       this.categoriesOptions = response.data.map(category => {
         return {
-          data: category.id,
+          value: category.id,
           view: category.name[DEFAULT_LANG]
         }
       });

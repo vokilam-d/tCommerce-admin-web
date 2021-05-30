@@ -25,7 +25,7 @@ export class AttributeComponent implements OnInit {
   attribute: AttributeDto;
   form: FormGroup;
   isLoading: boolean = false;
-  typeOptions: ISelectOption[] = [{ data: EAttributeType.Select }, { data: EAttributeType.MultiSelect }];
+  typeOptions: ISelectOption[] = [{ value: EAttributeType.Select }, { value: EAttributeType.MultiSelect }];
 
   get hasColorControl() { return this.form.get('hasColor'); }
   get values(): TransformedAttributeValue[] { return this.form.get('values').value; }

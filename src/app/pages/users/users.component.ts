@@ -146,6 +146,6 @@ export class UsersComponent implements OnInit {
   private setRolesOptions() {
     this.rolesOptions = Object.values(Role)
       .filter((role: Role) => role >= 0)
-      .map((role: Role) => ({ view: this.getTranslation(role), data: role }));
+      .map((role: Role) => ({ view: this.getTranslation(role), value: role }));
   }
 }

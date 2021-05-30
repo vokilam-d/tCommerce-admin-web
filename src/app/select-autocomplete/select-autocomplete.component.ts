@@ -118,11 +118,11 @@ export class SelectAutocompleteComponent extends SelectComponent implements Afte
   private transformResponse({ data }: ResponseDto<any[]>): ISelectOption[] {
     switch (this.type) {
       case 'settlement':
-        return (data as SettlementDto[]).map(settlement => ({ data: settlement, view: settlement.fullName }));
+        return (data as SettlementDto[]).map(settlement => ({ value: settlement, view: settlement.fullName }));
       case 'warehouse':
-        return (data as WarehouseDto[]).map(warehouse => ({ data: warehouse, view: warehouse.description }));
+        return (data as WarehouseDto[]).map(warehouse => ({ value: warehouse, view: warehouse.description }));
       case 'street':
-        return (data as StreetDto[]).map(street => ({ data: street, view: street.name }));
+        return (data as StreetDto[]).map(street => ({ value: street, view: street.name }));
     }
   }
 }

@@ -153,7 +153,7 @@ const orderGridCells: IGridCell[] = [
     fieldName: getPropertyOf<OrderDto>('status'),
     filterFields: Object
       .values(OrderStatusEnum)
-      .map(value => ({data: value, view: TRANSLATIONS_MAP[value]}))
+      .map(value => ({value: value, view: TRANSLATIONS_MAP[value]}))
   },
   {
     isSearchable: false,
@@ -165,7 +165,7 @@ const orderGridCells: IGridCell[] = [
     fieldName: `${shipmentProp}.${getPropertyOf<ShipmentDto>('status')}`,
     filterFields: Object
       .values(ShipmentStatusEnum)
-      .map(value => ({data: value, view: TRANSLATIONS_MAP[value]}))
+      .map(value => ({value: value, view: TRANSLATIONS_MAP[value]}))
   },
   {
     isSearchable: true,

@@ -42,7 +42,7 @@ export class SelectComponent extends NgUnsubscribe implements OnInit, OnChanges,
     const selectedOptions = this.options.filter(option => option.isSelected);
 
     if (selectedOptions.length) {
-      return selectedOptions.map(option => option.view || option.data).join(', ');
+      return selectedOptions.map(option => option.view || option.value).join(', ');
     } else {
       return null;
     }
@@ -100,15 +100,15 @@ export class SelectComponent extends NgUnsubscribe implements OnInit, OnChanges,
     let newValue;
     if (this.isMultiSelect) {
       newValue = (this.value as any[]).slice(); // copy array
-      const idxInValue = newValue.indexOf(option.data);
+      const idxInValue = newValue.indexOf(option.value);
       if (idxInValue === -1) {
-        newValue.push(option.data);
+        newValue.push(option.value);
       } else {
         newValue.splice(idxInValue, 1);
       }
     } else {
       this.options.forEach(option => option.isSelected = false);
-      newValue = option.data;
+      newValue = option.value;
       this.toggleVisibility(false);
     }
 
@@ -132,16 +132,16 @@ export class SelectComponent extends NgUnsubscribe implements OnInit, OnChanges,
 
   private getEmptyOption(): ISelectOption {
     return {
-      data: null
+      value: null
     };
   }
 
   protected markSelectedOptions() {
     for (const option of this.options) {
       if (Array.isArray(this.value)) {
-        option.isSelected = this.value.includes(option.data);
+        option.isSelected = this.value.includes(option.value);
       } else {
-        option.isSelected = option.data === this.value;
+        option.isSelected = option.value === this.value;
       }
     }
   }

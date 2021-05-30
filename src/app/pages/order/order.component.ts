@@ -289,7 +289,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
 
   private handleAddressForm() {
     this.addressSelectOptions = [
-      { data: this.newAddress, view: 'Создать новый адрес' },
+      { value: this.newAddress, view: 'Создать новый адрес' },
       ...this.customer.addresses.map(address => {
         let view = `${address.settlementNameFull || address.settlementName}, ${address.addressNameFull || address.addressName}`;
         if (address.buildingNumber) {
@@ -297,7 +297,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
         }
 
         return {
-          data: address,
+          value: address,
           view
         };
       })

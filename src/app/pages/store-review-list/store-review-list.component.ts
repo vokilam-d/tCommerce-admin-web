@@ -136,11 +136,11 @@ const storeReviewsGridCells: IGridCell[] = [
     isSortable: true,
     fieldName: getPropertyOf<StoreReviewDto>('source'),
     filterFields: [
-      { data: ReviewSource.Manager, view: 'Менеджер' },
-      { data: ReviewSource.Website, view: 'Сайт' },
-      { data: ReviewSource.Email, view: 'Письмо' },
-      { data: ReviewSource.LinkFromEmail, view: 'Ссылка из письма' },
-      { data: ReviewSource.Sms, view: 'Sms' },
+      { value: ReviewSource.Manager, view: 'Менеджер' },
+      { value: ReviewSource.Website, view: 'Сайт' },
+      { value: ReviewSource.Email, view: 'Письмо' },
+      { value: ReviewSource.LinkFromEmail, view: 'Ссылка из письма' },
+      { value: ReviewSource.Sms, view: 'Sms' },
     ]
   }
 ];

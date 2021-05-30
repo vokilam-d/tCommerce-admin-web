@@ -224,7 +224,7 @@ export class CategoryComponent implements OnInit {
   private buildSortOptions() {
     [EProductsSort.Popularity, EProductsSort.New, EProductsSort.Cheap, EProductsSort.Expensive]
       .forEach(sort => {
-        this.sortOptions.push({ data: sort, view: TRANSLATIONS_MAP[sort] });
+        this.sortOptions.push({ value: sort, view: TRANSLATIONS_MAP[sort] });
       });
   }
 }

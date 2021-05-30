@@ -1,5 +1,5 @@
 export interface ISelectOption<T = any> {
-  data: T;
+  value: T;
   view?: string;
   isSelected?: boolean;
 }

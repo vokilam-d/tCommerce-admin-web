@@ -35,7 +35,7 @@ export class AdditionalServiceSelectComponent extends SelectComponent implements
       .subscribe(response => {
         this.additionalServices = response.data;
 
-        this.options = this.additionalServices.map(service => ({ data: service.id, view: service.name[DEFAULT_LANG] }));
+        this.options = this.additionalServices.map(service => ({ value: service.id, view: service.name[DEFAULT_LANG] }));
 
         this.markSelectedOptions();
         this.cdr.markForCheck();
