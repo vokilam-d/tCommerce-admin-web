@@ -9,7 +9,6 @@ export class ProductCategoryDto {
   id: number;
   name?: MultilingualTextDto = new MultilingualTextDto();
   slug?: string;
-  sortOrder?: number;
   reversedSortOrder?: number;
   isSortOrderFixed?: boolean;
 }

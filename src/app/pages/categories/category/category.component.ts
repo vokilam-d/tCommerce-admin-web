@@ -1,14 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CategoriesService } from '../categories.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { EPageAction } from '../../../shared/enums/category-page-action.enum';
 import { AddOrUpdateCategoryDto, CategoryDto } from '../../../shared/dtos/category.dto';
 import { NotyService } from '../../../noty/noty.service';
 import { CategoryProductItemSorterModalComponent } from '../category-product-item-sorter-modal/category-product-item-sorter-modal.component';
 import { HeadService } from '../../../shared/services/head.service';
-import { QuillModules } from 'ngx-quill';
-import { QuillHelperService } from '../../../shared/services/quill-helper.service';
 import { API_HOST, DEFAULT_LANG, TRANSLATIONS_MAP } from '../../../shared/constants/constants';
 import { MediaDto } from '../../../shared/dtos/media.dto';
 import { IDraggedEvent } from '../../../shared/directives/draggable-item/draggable-item.directive';
@@ -17,6 +15,7 @@ import { ISelectOption } from '../../../shared/components/select/select-option.i
 import { EProductsSort } from '../../../shared/enums/product-sort.enum';
 import { CustomValidators } from '../../../shared/classes/validators';
 import { MultilingualTextDto } from '../../../shared/dtos/multilingual-text.dto';
+import { getClientLinkPrefix } from '../../../shared/helpers/get-client-link-prefix.function';
 
 @Component({
   selector: 'category',
@@ -234,5 +233,9 @@ export class CategoryComponent implements OnInit {
     if (!nameValue[DEFAULT_LANG].trim() || confirm(`Перезаписать имя на "${evt.name[DEFAULT_LANG]}"?`)) {
       this.name.setValue(evt.name);
     }
+  }
+
+  getClientCategoryLink() {
+    return getClientLinkPrefix() + this.category.slug;
   }
 }
