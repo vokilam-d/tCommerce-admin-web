@@ -11,6 +11,7 @@ import { ReorderDto } from '../../shared/dtos/reorder.dto';
 export class CategoriesService {
 
   categoryUpdated$ = new Subject();
+  currentSelectedCategory: CategoryDto = null;
 
   constructor(private http: HttpClient) {
   }

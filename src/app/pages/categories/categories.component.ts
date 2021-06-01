@@ -73,4 +73,8 @@ export class CategoriesComponent extends NgUnsubscribe implements OnInit {
         error => console.warn(error)
       );
   }
+
+  isSelectedCategoryClone(): boolean {
+    return !!this.categoriesService.currentSelectedCategory?.canonicalCategoryId;
+  }
 }

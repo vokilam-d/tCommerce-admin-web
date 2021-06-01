@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CategoriesService } from '../categories.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -16,13 +16,14 @@ import { EProductsSort } from '../../../shared/enums/product-sort.enum';
 import { CustomValidators } from '../../../shared/classes/validators';
 import { MultilingualTextDto } from '../../../shared/dtos/multilingual-text.dto';
 import { getClientLinkPrefix } from '../../../shared/helpers/get-client-link-prefix.function';
+import { NgUnsubscribe } from '../../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 
 @Component({
   selector: 'category',
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss']
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent extends NgUnsubscribe implements OnInit, OnDestroy {
 
   category: CategoryDto;
   form: FormGroup;
@@ -52,13 +53,22 @@ export class CategoryComponent implements OnInit {
     private headService: HeadService,
     private notyService: NotyService,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.buildSortOptions();
-    this.route.params.subscribe(_ => {
-      this.init();
-    });
+    this.route.params
+      .pipe( this.takeUntilDestroy() )
+      .subscribe(_ => {
+        this.init();
+      });
+  }
+
+  ngOnDestroy() {
+    this.categoriesService.currentSelectedCategory = null;
+    super.ngOnDestroy();
   }
 
   init() {
@@ -83,8 +93,8 @@ export class CategoryComponent implements OnInit {
           this.buildForm(this.category);
           this.headService.setTitle(this.category.name[DEFAULT_LANG]);
           this.isClone = Boolean(this.category.canonicalCategoryId);
-        },
-        error => console.warn(error)
+          this.categoriesService.currentSelectedCategory = this.category;
+        }
       );
   }
 

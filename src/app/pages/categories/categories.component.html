@@ -2,18 +2,12 @@
   <div class="categories__sidebar">
 
     <div class="categories__toolbar">
-      <button class="categories__add"
-              (click)="addRootCategory()"
-              type="button"
-      >
+      <app-button class="categories__add" (click)="addRootCategory()">
         Добавить корневую категорию
-      </button>
-      <button class="categories__add"
-              (click)="addSubCategory()"
-              type="button"
-      >
+      </app-button>
+      <app-button class="categories__add" (click)="addSubCategory()" [disabled]="isSelectedCategoryClone()">
         Добавить подкатегорию
-      </button>
+      </app-button>
     </div>
 
     <div class="categories__list-title">Категории:</div>
