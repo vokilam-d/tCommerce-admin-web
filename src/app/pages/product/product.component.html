@@ -263,7 +263,7 @@
                   <div class="sellable-qty">
                     Количество, доступное для продажи: <span class="sellable-qty__count">{{ product.variants[i].sellableQty }}</span>
                     <button class="product__reserved"
-                            *ngIf="product.variants[i].qtyInStock !== product.variants[i].sellableQty"
+                            *ngIf="!isNewProduct && !isNewProductBasedOn && product.variants[i].qtyInStock !== product.variants[i].sellableQty"
                             (click)="showReservedOrders(i)"
                     >
                       Показать заказы
