@@ -533,6 +533,17 @@
       </div>
     </div>
 
+    <div class="block__item block__item--wide" *ngIf="!isNewProduct && product">
+      <div class="block__title">
+        Логи
+      </div>
+      <div class="block__content">
+        <div class="log" *ngFor="let log of product.logs">
+          <div>{{ log.time | date: 'dd.MM.y HH:mm:ss' }} - {{ log.text }}</div>
+        </div>
+      </div>
+    </div>
+
   </form>
 </div>
 

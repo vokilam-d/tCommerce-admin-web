@@ -4,6 +4,7 @@ import { ECurrencyCode } from '../enums/currency.enum';
 import { MultilingualTextDto } from './multilingual-text.dto';
 import { ProductLabelTypeEnum } from '../enums/product-label-type.enum';
 import { BreadcrumbsVariantDto } from './breadcrumbs-variant.dto';
+import { LogDto } from './log.dto';
 
 export class ProductCategoryDto {
   id: number;
@@ -35,6 +36,7 @@ export class ProductDto extends AddOrUpdateProductDto {
   createdAt: Date;
   updatedAt: Date;
   variants: ProductVariantDto[] = [new ProductVariantDto()];
+  logs: LogDto[] = [];
 }
 
 export class ProductVariantListItemDto {

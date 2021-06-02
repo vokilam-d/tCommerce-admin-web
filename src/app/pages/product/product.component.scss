@@ -210,3 +210,11 @@
     width: 50%;
   }
 }
+
+.log {
+  margin: 5px 0 0;
+
+  @include respond-to-less-than($media_large) {
+    word-break: break-word;
+  }
+}
