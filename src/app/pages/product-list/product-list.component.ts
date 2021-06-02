@@ -1,7 +1,12 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../../shared/services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductCategoryDto, ProductListItemDto, ProductVariantListItemDto } from '../../shared/dtos/product.dto';
+import {
+  ProductCategoryDto,
+  ProductListItemCategoryDto,
+  ProductListItemDto,
+  ProductVariantListItemDto
+} from '../../shared/dtos/product.dto';
 import { NotyService } from '../../noty/noty.service';
 import { saveFileFromUrl } from '../../shared/helpers/save-file.function';
 import { IGridCell, IGridValue } from '../../grid/grid.interface';
@@ -221,7 +226,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             align: 'left',
             isImage: false,
             isSortable: true,
-            fieldName: `${getPropertyOf<ProductListItemDto>('categories')}.${getPropertyOf<ProductCategoryDto>('name')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
+            fieldName: `${getPropertyOf<ProductListItemDto>('categories')}.${getPropertyOf<ProductListItemCategoryDto>('name')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
           },
           {
             isSearchable: true,

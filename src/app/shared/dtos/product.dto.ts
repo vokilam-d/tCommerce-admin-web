@@ -12,6 +12,11 @@ export class ProductCategoryDto {
   isSortOrderFixed?: boolean;
 }
 
+export class ProductListItemCategoryDto extends ProductCategoryDto {
+  name: string;
+  slug: string;
+}
+
 export class AddOrUpdateProductDto {
   isEnabled: boolean = true;
   name: MultilingualTextDto = new MultilingualTextDto();
@@ -54,7 +59,7 @@ export class ProductVariantListItemDto {
 
 export class ProductListItemDto {
   id: number;
-  categories: ProductCategoryDto[];
+  categories: ProductListItemCategoryDto[];
   attributes: ProductSelectedAttributeDto[];
   mediaUrl: string;
   label: ProductLabelTypeEnum;
