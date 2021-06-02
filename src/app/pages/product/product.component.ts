@@ -42,6 +42,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
 
   isNewProduct: boolean;
   isNewProductBasedOn: boolean;
+
   product: ProductDto;
   form: FormGroup;
   currencies = ECurrencyCode;
@@ -434,7 +435,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
     this.product = new ProductDto();
     this.product.isEnabled = productDto.isEnabled;
     this.product.name = productDto.name;
-    this.product.breadcrumbs = productDto.breadcrumbs;
+    this.product.breadcrumbsVariants = productDto.breadcrumbsVariants;
     this.product.categories = productDto.categories;
     this.product.attributes = productDto.attributes;
     this.product.additionalServiceIds = productDto.additionalServiceIds;

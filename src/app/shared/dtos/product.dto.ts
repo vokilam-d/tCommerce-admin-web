@@ -1,15 +1,14 @@
 import { AddOrUpdateProductVariantDto, ProductVariantDto } from './product-variant.dto';
 import { ProductSelectedAttributeDto } from './selected-attribute.dto';
-import { BreadcrumbDto } from './breadcrumb.dto';
 import { ECurrencyCode } from '../enums/currency.enum';
 import { MultilingualTextDto } from './multilingual-text.dto';
 import { ProductLabelTypeEnum } from '../enums/product-label-type.enum';
+import { BreadcrumbsVariantDto } from './breadcrumbs-variant.dto';
 
 export class ProductCategoryDto {
   id: number;
-  name?: MultilingualTextDto = new MultilingualTextDto();
-  slug?: string;
   reversedSortOrder?: number;
+  reversedSortOrderBeforeFix?: number;
   isSortOrderFixed?: boolean;
 }
 
@@ -18,7 +17,7 @@ export class AddOrUpdateProductDto {
   name: MultilingualTextDto = new MultilingualTextDto();
   categories: ProductCategoryDto[] = [];
   additionalServiceIds: number[] = [];
-  breadcrumbs: BreadcrumbDto[] = [];
+  breadcrumbsVariants: BreadcrumbsVariantDto[] = [];
   attributes: ProductSelectedAttributeDto[] = [];
   variants: AddOrUpdateProductVariantDto[] = [new AddOrUpdateProductVariantDto()];
   reviewsCount: number;

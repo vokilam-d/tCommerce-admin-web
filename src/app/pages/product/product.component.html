@@ -89,6 +89,16 @@
           </span>
         </div>
 
+        <div class="product__field field" *ngIf="!isNewProduct && !isNewProductBasedOn">
+          <label class="field__label">
+            Хлебные крошки
+          </label>
+          <span class="field__control">
+            <breadcrumbs-variant-selector [breadcrumbsVariants]="product.breadcrumbsVariants"
+            ></breadcrumbs-variant-selector>
+          </span>
+        </div>
+
         <div class="product__field field" *ngIf="form.get('additionalServiceIds') as additionalServiceIds">
           <label class="field__label">
             Доп. услуги

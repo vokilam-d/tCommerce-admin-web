@@ -1,20 +1,20 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, EventEmitter,
+  Component,
+  EventEmitter,
   forwardRef,
   Input,
   OnInit,
   Output
 } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {CategoryTreeItem} from '../shared/dtos/category.dto';
-import {ResponseDto} from '../shared/dtos/response.dto';
-import {API_HOST, DEFAULT_LANG} from '../shared/constants/constants';
-import {ProductCategoryDto} from '../shared/dtos/product.dto';
-import {NotyService} from '../noty/noty.service';
-import {toHttpParams} from '../shared/helpers/to-http-params.function';
+import { HttpClient } from '@angular/common/http';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CategoryDto, CategoryTreeItem } from '../shared/dtos/category.dto';
+import { DEFAULT_LANG } from '../shared/constants/constants';
+import { ProductCategoryDto } from '../shared/dtos/product.dto';
+import { NotyService } from '../noty/noty.service';
+import { CategoriesService } from '../pages/categories/categories.service';
 
 type CategorySelectOption = CategoryTreeItem & {
   isSelected: boolean;
@@ -44,6 +44,8 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
   searchValue: string;
   isSearchTermFound: boolean;
 
+  private allCategories: CategoryDto[] = [];
+
   private _value: ProductCategoryDto[];
 
   get value(): ProductCategoryDto[] {
@@ -72,7 +74,8 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
   constructor(
     private http: HttpClient,
     private notyService: NotyService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private categoriesService: CategoriesService
   ) { }
 
   ngOnInit() {
@@ -80,16 +83,18 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
   }
 
   private init() {
-    const params = toHttpParams({ noClones: true });
-    this.http.get<ResponseDto<CategoryTreeItem[]>>(`${API_HOST}/api/v1/admin/categories/tree`, { params })
+    this.categoriesService.fetchCategoriesTree({ noClones: true })
       .pipe( this.notyService.attachNoty() )
-      .subscribe(
-        response => {
-          this.options = this.buildOptions(response.data);
-          this.cdr.markForCheck();
-        },
-        error => console.warn(error)
-      );
+      .subscribe(response => {
+        this.options = this.buildOptions(response.data);
+        this.cdr.markForCheck();
+      });
+
+    this.categoriesService.fetchCategories()
+      .subscribe(response => {
+        this.allCategories = response.data;
+        this.cdr.markForCheck();
+      });
   }
 
   onChange = (_: any) => {};
@@ -212,5 +217,9 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
     });
 
     return isCategoryFiltered;
+  }
+
+  getCategoryName(productCategory: ProductCategoryDto): string {
+    return this.allCategories.find(category => category.id === productCategory.id)?.name[DEFAULT_LANG];
   }
 }

@@ -19,10 +19,11 @@ import { GridModule } from '../../grid/grid.module';
 import { RedirectControlModule } from '../../redirect-control/redirect-control.module';
 import { LinkedProductsModule } from '../../linked-products/linked-products.module';
 import { MultilingualControlModule } from '../../multilingual-control/multilingual-control.module';
+import { BreadcrumbsVariantSelectorComponent } from './breadcrumbs-variant-selector/breadcrumbs-variant-selector.component';
 
 
 @NgModule({
-  declarations: [ProductComponent, AttributesEditorComponent, ReviewsViewerComponent, OrderListViewerModalComponent],
+  declarations: [ProductComponent, AttributesEditorComponent, ReviewsViewerComponent, OrderListViewerModalComponent, BreadcrumbsVariantSelectorComponent],
   imports: [
     CommonModule,
     ProductRoutingModule,

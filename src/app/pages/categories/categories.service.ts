@@ -6,8 +6,9 @@ import { ResponseDto } from '../../shared/dtos/response.dto';
 import { API_HOST } from '../../shared/constants/constants';
 import { EReorderPosition } from '../../shared/enums/reorder-position.enum';
 import { ReorderDto } from '../../shared/dtos/reorder.dto';
+import { toHttpParams } from '../../shared/helpers/to-http-params.function';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CategoriesService {
 
   categoryUpdated$ = new Subject();
@@ -20,8 +21,9 @@ export class CategoriesService {
     return this.http.get<ResponseDto<CategoryDto[]>>(`${API_HOST}/api/v1/admin/categories`);
   }
 
-  fetchCategoriesTree() {
-    return this.http.get<ResponseDto<CategoryTreeItem[]>>(`${API_HOST}/api/v1/admin/categories/tree`);
+  fetchCategoriesTree(options: { noClones?: true } = {}) {
+    const params = toHttpParams(options);
+    return this.http.get<ResponseDto<CategoryTreeItem[]>>(`${API_HOST}/api/v1/admin/categories/tree`, { params });
   }
 
   reorderCategory(category: CategoryTreeItem, target: CategoryTreeItem, position: EReorderPosition) {

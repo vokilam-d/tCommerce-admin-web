@@ -58,7 +58,7 @@ export class SelectComponent<T = any, K = any> extends NgUnsubscribe implements 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.options) {
-      if (changes.options.firstChange && this.initialValue) {
+      if (changes.options.firstChange && this.initialValue !== null && this.initialValue !== undefined) {
         this.value = this.initialValue;
       }
 

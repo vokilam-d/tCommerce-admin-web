@@ -32,7 +32,9 @@ export class CategoriesComponent extends NgUnsubscribe implements OnInit {
 
   ngOnInit() {
     this.fetchCategoriesTree();
-    this.categoriesService.categoryUpdated$.subscribe(_ => this.fetchCategoriesTree());
+    this.categoriesService.categoryUpdated$
+      .pipe( this.takeUntilDestroy() )
+      .subscribe(_ => this.fetchCategoriesTree());
     this.headService.setTitle('Категории');
   }
 

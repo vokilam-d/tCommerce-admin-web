@@ -39,8 +39,6 @@ import { MultilingualControlModule } from '../../multilingual-control/multilingu
     RedirectControlModule,
     MultilingualControlModule
   ],
-  providers: [
-    CategoriesService
-  ]
+  providers: []
 })
 export class CategoriesModule { }
