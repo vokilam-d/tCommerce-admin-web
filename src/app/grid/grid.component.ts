@@ -220,7 +220,7 @@ export class GridComponent<T extends { isOpened?: boolean } = any> extends NgUns
 
   clearAllFilters() {
     this.filtersMap.clear();
-    this.selectCmpsList.forEach(selectCmp => selectCmp.writeValue([], false));
+    this.selectCmpsList.forEach(selectCmp => selectCmp.writeValue([]));
     this.emitChange();
   }
 }

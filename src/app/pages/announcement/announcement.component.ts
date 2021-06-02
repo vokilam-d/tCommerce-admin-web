@@ -13,16 +13,14 @@ import { NotyService } from '../../noty/noty.service';
 })
 export class AnnouncementComponent implements OnInit {
 
-  private announcementList = [
-    {
-      data: 'Наши самые прекрасные покупатели! 31.12.2020 и 01.01.2021 интернет-магазин "Клондайк" не принимает заказы. Приносим наши извинения за предоставленные неудобства. С наступающим Новым годом! :)'
-    }
-  ];
-
   public form: FormGroup;
   public isLoading: boolean = false;
   public announcement: AnnouncementDto;
-  public announcementOptions: ISelectOption[] = this.announcementList;
+  public announcementOptions: ISelectOption[] = [
+    {
+      value: 'Наши самые прекрасные покупатели! 31.12.2020 и 01.01.2021 интернет-магазин "Клондайк" не принимает заказы. Приносим наши извинения за предоставленные неудобства. С наступающим Новым годом! :)'
+    }
+  ];
 
   constructor(
     private formBuilder: FormBuilder,
