@@ -35,7 +35,7 @@
     "socket.io": "^3.1.1",
     "socket.io-client": "^3.1.1",
     "tslib": "^1.10.0",
-    "ws": "^7.4.3",
+    "ws": "^7.4.6",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
