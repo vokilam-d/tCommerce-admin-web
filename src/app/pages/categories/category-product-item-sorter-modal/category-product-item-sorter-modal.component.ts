@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ProductService } from '../../../shared/services/product.service';
 import { NotyService } from '../../../noty/noty.service';
 import { finalize } from 'rxjs/operators';
-import { ProductCategoryDto, ProductListItemDto } from '../../../shared/dtos/product.dto';
+import { ProductListItemCategoryDto, ProductListItemDto } from '../../../shared/dtos/product.dto';
 import { IDraggedEvent } from '../../../shared/directives/draggable-item/draggable-item.directive';
 import { ProductItemWithSortOrder } from '../../../product-item-sorter/product-item-with-sort-order';
 
@@ -84,7 +84,7 @@ export class CategoryProductItemSorterModalComponent implements OnInit {
 
   private getFetchProductsParams() {
     const categoriesProp: keyof ProductListItemDto = 'categories';
-    const sortOrderProp: keyof ProductCategoryDto = 'reversedSortOrder';
+    const sortOrderProp: keyof ProductListItemCategoryDto = 'reversedSortOrder';
     return {
       filters: [{ fieldName: `${categoriesProp}.id`, value: `${this.categoryId}` }],
       sort: `${categoriesProp}.${sortOrderProp}`,

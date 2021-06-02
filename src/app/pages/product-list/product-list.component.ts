@@ -2,7 +2,6 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '
 import { ProductService } from '../../shared/services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  ProductCategoryDto,
   ProductListItemCategoryDto,
   ProductListItemDto,
   ProductVariantListItemDto
