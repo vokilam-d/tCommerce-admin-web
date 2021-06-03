@@ -524,7 +524,7 @@
       <ng-container *ngTemplateOutlet="reviewsTmpl"></ng-container>
     </ng-container>
 
-    <div class="block__item block__item--wide" *ngIf="!isNewProduct && product">
+    <div class="block__item block__item--wide" *ngIf="product && !isNewProduct && !isNewProductBasedOn">
       <div class="block__title">
         Заказы
       </div>
@@ -533,7 +533,7 @@
       </div>
     </div>
 
-    <div class="block__item block__item--wide" *ngIf="!isNewProduct && product">
+    <div class="block__item block__item--wide" *ngIf="product && !isNewProduct && !isNewProductBasedOn">
       <div class="block__title">
         Логи
       </div>
