@@ -8,7 +8,7 @@ import { AddOrUpdateProductDto, ProductDto } from '../../shared/dtos/product.dto
 import { NotyService } from '../../noty/noty.service';
 import { DEFAULT_CURRENCY_CODE, ECurrencyCode } from '../../shared/enums/currency.enum';
 import { API_HOST, DEFAULT_LANG } from '../../shared/constants/constants';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { finalize, map, switchMap, takeUntil } from 'rxjs/operators';
 import { AddOrUpdateProductVariantDto, ProductVariantDto } from '../../shared/dtos/product-variant.dto';
 import { LinkedProductDto } from '../../shared/dtos/linked-product.dto';
 import { HeadService } from '../../shared/services/head.service';
@@ -24,6 +24,8 @@ import { Language } from '../../shared/enums/language.enum';
 import { ISelectOption } from '../../shared/components/select/select-option.interface';
 import { ProductLabelTypeEnum } from '../../shared/enums/product-label-type.enum';
 import { CustomValidators } from '../../shared/classes/validators';
+import { concat, Observable } from 'rxjs';
+import { ResponseDto } from '../../shared/dtos/response.dto';
 
 type PostAction = 'duplicate' | 'exit' | 'none';
 
@@ -172,6 +174,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
           this.setProduct(response.data as ProductDto)
           this.buildForm();
           this.headService.setTitle(this.product.name[DEFAULT_LANG]);
+          this.handleDuplicateMedias();
         },
         error => console.warn(error)
       );
@@ -453,6 +456,29 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
         mediasControl.value.forEach(media => {
           media.altText = name;
         });
+      });
+  }
+
+  private handleDuplicateMedias() {
+    if (!this.isNewProductBasedOn) {
+      return;
+    }
+
+    const requests: Observable<{ response: ResponseDto<MediaDto[]>, index: number }>[] = [];
+    this.variantsFormArray.controls.forEach((variantFormGroup: FormGroup, index) => {
+      const medias = variantFormGroup.get('medias').value;
+
+      const request = this.productsService.duplicateMedias(medias)
+        .pipe(map(response => ({response, index})));
+      requests.push(request);
+    });
+
+    this.isLoading = true;
+    concat(...requests)
+      .pipe( this.notyService.attachNoty(), finalize(() => this.isLoading = false) )
+      .subscribe(({ response, index }) => {
+        const variantFormGroup: FormGroup = this.variantsFormArray.at(index) as FormGroup;
+        variantFormGroup.get('medias').setValue(response.data);
       });
   }
 }
