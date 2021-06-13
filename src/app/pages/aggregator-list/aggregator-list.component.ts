@@ -102,5 +102,13 @@ const aggregatorGridCells: IGridCell[] = [
     isImage: false,
     isSortable: true,
     fieldName: `${getPropertyOf<AggregatorDto>('clientName')}.${getPropertyOf<MultilingualTextDto>(DEFAULT_LANG)}`
+  },
+  {
+    label: 'Важный?',
+    initialWidth: 50,
+    align: 'left',
+    isSortable: true,
+    fieldName: getPropertyOf<AggregatorDto>('isInPriority'),
+    filterFields: [{ view: 'Да', value: true }, { view: 'Нет', value: false }]
   }
 ];

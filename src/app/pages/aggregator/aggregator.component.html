@@ -40,11 +40,19 @@
 
     <div class="aggregator__field field"
          *ngIf="form.get('isVisibleOnProductPage') as isVisibleOnProductPage"
-         [class.field--invalid]="isControlInvalid(isVisibleOnProductPage)"
     >
       <label class="field__label">Показывать таблицу на странице товара?</label>
       <div class="field__control">
         <toggle [formControl]="isVisibleOnProductPage"></toggle>
+      </div>
+    </div>
+
+    <div class="aggregator__field field"
+         *ngIf="form.get('isInPriority') as isInPriority"
+    >
+      <label class="field__label">Важный агрегатор</label>
+      <div class="field__control">
+        <toggle [formControl]="isInPriority"></toggle>
       </div>
     </div>
 

@@ -99,6 +99,7 @@ export class AggregatorComponent extends NgUnsubscribe implements OnInit {
       name: [this.aggregator.name],
       clientName: [this.aggregator.clientName, Validators.required],
       isVisibleOnProductPage: [this.aggregator.isVisibleOnProductPage],
+      isInPriority: [this.aggregator.isInPriority],
       productIds: [this.aggregator.productIds]
     };
 
@@ -214,4 +215,3 @@ export class AggregatorComponent extends NgUnsubscribe implements OnInit {
     this.productIdsControl.setValue(productIds);
   }
 }
-
