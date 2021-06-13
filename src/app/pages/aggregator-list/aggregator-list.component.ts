@@ -105,7 +105,7 @@ const aggregatorGridCells: IGridCell[] = [
   },
   {
     label: 'Важный?',
-    initialWidth: 50,
+    initialWidth: 70,
     align: 'left',
     isSortable: true,
     fieldName: getPropertyOf<AggregatorDto>('isInPriority'),

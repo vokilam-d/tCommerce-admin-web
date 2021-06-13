@@ -25,6 +25,6 @@
     <ng-template #cellContent let-aggregator="item">{{ aggregator.id }}</ng-template>
     <ng-template #cellContent let-aggregator="item">{{ aggregator.name[lang] }}</ng-template>
     <ng-template #cellContent let-aggregator="item">{{ aggregator.clientName[lang] }}</ng-template>
-    <ng-template #cellContent let-aggregator="item">{{ aggregator.isInPriority }}</ng-template>
+    <ng-template #cellContent let-aggregator="item">{{ aggregator.isInPriority ? 'Да' : 'Нет' }}</ng-template>
   </grid>
 </div>
