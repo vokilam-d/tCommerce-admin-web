@@ -76,6 +76,13 @@
     animation: scaleIn 0.2s ease;
   }
 
+  &__name {
+    &--disabled {
+      color: rgba($dark, 0.4);
+      text-decoration: line-through;
+    }
+  }
+
   &__suboptions {
     position: relative;
     padding: 0 0 0 25px;

@@ -19,7 +19,9 @@
 
     <ng-template #selectedTmpl>
       <span class="select__chip" *ngFor="let category of value">
-        {{ getCategoryName(category) }}
+        <span class="select__name" [class.select__name--disabled]="!isProductCategoryEnabled(category)">
+          {{ getCategoryName(category) }}
+        </span>
 
         <i class="ai ai-multiply select__remove" (click)="unselectOption($event, category)"></i>
       </span>
@@ -43,7 +45,9 @@
         <i class="ai ai-checkmark select__checkmark" *ngIf="option.isSelected"></i>
       </span>
 
-      {{ option.name[lang] }}
+      <span class="select__name" [class.select__name--disabled]="!option.isEnabled">
+        {{ option.name[lang] }}
+      </span>
     </button>
 
     <ul class="select__suboptions" *ngIf="option.children.length">

@@ -222,4 +222,8 @@ export class ProductCategorySelectComponent implements OnInit, ControlValueAcces
   getCategoryName(productCategory: ProductCategoryDto): string {
     return this.allCategories.find(category => category.id === productCategory.id)?.name[DEFAULT_LANG];
   }
+
+  isProductCategoryEnabled(productCategory: ProductCategoryDto): boolean {
+    return this.allCategories.find(category => category.id === productCategory.id)?.isEnabled;
+  }
 }

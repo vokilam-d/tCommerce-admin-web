@@ -33,8 +33,12 @@ export class BreadcrumbsVariantSelectorComponent implements OnInit {
         this.selectOptions = this.breadcrumbsVariants.map((breadcrumbsVariant, index) => {
           const label = breadcrumbsVariant.categoryIds
             .map(categoryId => {
-              const category = categories.find(category => category.id === categoryId)
-              return category.name[DEFAULT_LANG];
+              const category = categories.find(category => category.id === categoryId);
+              let name = category.name[DEFAULT_LANG];
+              if (!category.isEnabled) {
+                name = `<s>${name}</s>`;
+              }
+              return name;
             })
             .join(' > ');
 
