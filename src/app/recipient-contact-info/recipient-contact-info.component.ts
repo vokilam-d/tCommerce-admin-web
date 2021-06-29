@@ -17,7 +17,8 @@ export class RecipientContactInfoComponent extends NgUnsubscribe implements OnIn
   recipientTypeEnum = RecipientTypeEnum;
   recipientControl: FormControl = new FormControl();
 
-  @Input() contactInfo: ContactInfoDto;
+  contactInfoForCmp: ContactInfoDto;
+  @Input('contactInfo') contactInfoInput: ContactInfoDto;
 
   @ViewChild(ContactInfoComponent) contactInfoCmp: ContactInfoComponent;
 
@@ -30,7 +31,11 @@ export class RecipientContactInfoComponent extends NgUnsubscribe implements OnIn
   }
 
   private setDefaultRecipientOption() {
-    this.recipientControl.setValue(RecipientTypeEnum.CUSTOMER);
+    this.contactInfoForCmp = this.contactInfoInput;
+
+    const controlValue = this.contactInfoInput.lastName ? RecipientTypeEnum.ANOTHER_PERSON : RecipientTypeEnum.CUSTOMER;
+    this.recipientControl.setValue(controlValue);
+
     this.handleRecipientControl();
   }
 
@@ -38,7 +43,7 @@ export class RecipientContactInfoComponent extends NgUnsubscribe implements OnIn
     this.recipientControl.valueChanges
       .pipe( takeUntil(this.ngUnsubscribe) )
       .subscribe(value => {
-        this.contactInfo = value === RecipientTypeEnum.CUSTOMER ? null : new ContactInfoDto();
+        this.contactInfoForCmp = value === RecipientTypeEnum.CUSTOMER ? null : this.contactInfoInput;
       });
   }
 

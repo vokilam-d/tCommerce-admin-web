@@ -2,8 +2,6 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { IS_EMAIL_REGEX } from '../shared/constants/constants';
 import { ContactInfoComponent } from '../contact-info/contact-info.component';
-import { CustomerDto } from '../shared/dtos/customer.dto';
-import { ContactInfoDto } from '../shared/dtos/contact-info.dto';
 import { NgUnsubscribe } from '../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
 import { CustomerContactInfoDto } from '../shared/dtos/customer-contact-info.dto';
 
@@ -16,9 +14,7 @@ export class CustomerContactInfoComponent extends NgUnsubscribe implements OnIni
 
   emailControl: FormControl = new FormControl('', [Validators.pattern(IS_EMAIL_REGEX)]);
 
-  contactInfo: ContactInfoDto;
-
-  @Input() customer: CustomerDto;
+  @Input() customerContactInfo: CustomerContactInfoDto;
 
   @ViewChild(ContactInfoComponent) contactInfoCmp: ContactInfoComponent;
 
@@ -28,13 +24,11 @@ export class CustomerContactInfoComponent extends NgUnsubscribe implements OnIni
   }
 
   ngOnInit(): void {
-    this.contactInfo = this.customer.contactInfo;
-
     this.setCustomerEmail();
   }
 
   private setCustomerEmail() {
-    this.emailControl.setValue(this.customer.contactInfo.email);
+    this.emailControl.setValue(this.customerContactInfo.email);
   }
 
   public checkValidity(): boolean {

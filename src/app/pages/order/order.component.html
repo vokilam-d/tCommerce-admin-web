@@ -59,7 +59,7 @@
           </div>
 
           <div class="order__block">
-            <customer-contact-info [customer]="customer"></customer-contact-info>
+            <customer-contact-info [customerContactInfo]="order.customerContactInfo"></customer-contact-info>
 
 
             <div class="customer-contact-info">
@@ -84,7 +84,7 @@
           </div>
 
           <div class="order__block">
-            <recipient-contact-info [contactInfo]="customer.contactInfo"></recipient-contact-info>
+            <recipient-contact-info [contactInfo]="order.recipientContactInfo"></recipient-contact-info>
           </div>
         </div>
 
