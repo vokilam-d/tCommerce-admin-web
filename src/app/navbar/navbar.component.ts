@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { DeviceService } from '../shared/services/device-detector/device.service';
 
 
 export interface INavBarItem {
@@ -23,7 +24,10 @@ export class NavbarComponent implements OnInit {
   public isMenuOpened: boolean = false;
   private storagePinnedStateKey = 'navbar-pinned-links';
 
-  constructor(private location: Location) { }
+  constructor(
+    private location: Location,
+    private deviceService: DeviceService
+  ) { }
 
   ngOnInit() {
     this.setPinnedState();
@@ -87,6 +91,10 @@ export class NavbarComponent implements OnInit {
   }
 
   private setPinnedState() {
+    if (this.deviceService.isPlatformServer()) {
+      return;
+    }
+
     const pinnedItemLinks: string[] = JSON.parse(localStorage.getItem(this.storagePinnedStateKey)) || [];
     const setState = (item: INavBarItem) => {
       if (pinnedItemLinks.includes(item.link)) {
