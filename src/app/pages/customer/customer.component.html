@@ -27,7 +27,7 @@
     <ng-template #tabContent>
       <form class="customer-form" *ngIf="infoForm" [formGroup]="infoForm">
 
-        <customer-contact-info [customer]="customer"></customer-contact-info>
+        <customer-contact-info [customerContactInfo]="customer.contactInfo"></customer-contact-info>
 
         <div class="customer-form__fields">
           <div class="customer-form__field"
