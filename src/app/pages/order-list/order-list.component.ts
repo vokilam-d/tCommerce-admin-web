@@ -14,7 +14,7 @@ import { HeadService } from '../../shared/services/head.service';
 import { ShipmentDto } from '../../shared/dtos/shipment.dto';
 import { FormControl } from '@angular/forms';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
-import { OrderStatusEnum } from '../../shared/enums/order-status.enum';
+import { FinalOrderStatuses, OrderStatusEnum } from '../../shared/enums/order-status.enum';
 import { ShipmentStatusEnum } from '../../shared/enums/shipment-status.enum';
 import {
   DEFAULT_LANG,
@@ -198,6 +198,18 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
           this.gridCells = orderGridCells;
         }
       );
+  }
+
+  isPaidStorageSoon(order: OrderDto) {
+    if (!order.shipment.paidStorageStartDate || FinalOrderStatuses.includes(order.status)) {
+      return;
+    }
+
+    const paidStorageStartDate = new Date(order.shipment.paidStorageStartDate);
+
+    const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + 3);
+    return paidStorageStartDate <= dueDate;
   }
 }
 
