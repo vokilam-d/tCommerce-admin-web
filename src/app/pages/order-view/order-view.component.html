@@ -244,7 +244,11 @@
               <span (click)="copyToClipboard(order.shipment.trackingNumber)">{{ order.shipment.trackingNumber }}. {{ order.shipment.statusDescription }}</span><span *ngIf="isDeliveryDateVisible && order.shipment.estimatedDeliveryDate as date">. Ориентировочная дата прибытия: <b>{{ date }}</b></span>
 
               <div class="order-view__sender" *ngIf="order.shipment.sender.contactInfo as sender">
-                Отправитель: {{ sender.firstName }} {{ sender.lastName }}
+                Отправитель: {{ sender.firstName }} {{ sender.lastName }}, {{ sender.phoneNumber }}
+              </div>
+
+              <div class="order-view__storage" *ngIf="order.shipment.paidStorageStartDate as paidStorageStartDate">
+                Платное хранение с: {{ paidStorageStartDate | date:'dd.MM.y' }}
               </div>
             </ng-template>
           </ng-template>

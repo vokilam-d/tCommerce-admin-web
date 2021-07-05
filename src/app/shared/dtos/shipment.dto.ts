@@ -19,4 +19,5 @@ export class ShipmentDto {
   backwardMoneyDelivery: string = '';
   cost: string = '';
   description: string = '';
+  paidStorageStartDate: string = '';
 }

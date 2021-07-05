@@ -1,11 +1,10 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ResponseDto } from '../dtos/response.dto';
 import { API_HOST } from '../constants/constants';
 import { AddOrUpdateUserDto, UserDto } from '../dtos/user.dto';
 import { tap } from 'rxjs/operators';
 import { LoginDto } from '../dtos/login.dto';
-import { REQUEST } from '@nguniversal/express-engine/tokens';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +14,7 @@ export class UserService {
   user: UserDto = null;
 
   constructor(
-    private http: HttpClient,
-    @Optional() @Inject(REQUEST) private req: any
+    private http: HttpClient
   ) { }
 
   login(loginDto: LoginDto) {

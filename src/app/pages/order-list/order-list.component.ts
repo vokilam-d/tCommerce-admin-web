@@ -144,6 +144,7 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
           order.shipment.statusDescription,
           `${this.datePipe.transform(order.shippedAt, 'dd.MM.y')} ${this.datePipe.transform(order.shippedAt, 'HH:mm:ss')}`,
           order.shipment.trackingNumber,
+          `${this.datePipe.transform(order.shipment.paidStorageStartDate, 'dd.MM.y')}`,
           `${order.isOrderPaid ? 'Да' : 'Нет'}`,
           order.paymentInfo.methodAdminName[DEFAULT_LANG],
           `${order.isCallbackNeeded ? 'Да' : 'Нет'}`,
@@ -305,6 +306,15 @@ const orderGridCells: IGridCell[] = [
     isImage: false,
     isSortable: false,
     fieldName: `${shipmentProp}.${getPropertyOf<ShipmentDto>('trackingNumber')}`
+  },
+  {
+    isSearchable: false,
+    label: 'Платное хранение с',
+    initialWidth: 90,
+    align: 'left',
+    fieldName: `${shipmentProp}.${getPropertyOf<ShipmentDto>('paidStorageStartDate')}`,
+    hasDateFromFilter: true,
+    hasDateToFilter: true,
   },
   {
     isSearchable: false,

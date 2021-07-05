@@ -63,6 +63,7 @@
       <span class="order__time">{{ order.shippedAt | date:'HH:mm:ss' }}</span>
     </ng-template>
     <ng-template #cellContent let-order="item">{{ order.shipment.trackingNumber }}</ng-template>
+    <ng-template #cellContent let-order="item">{{ order.shipment.paidStorageStartDate | date:'dd.MM.y' }}</ng-template>
     <ng-template #cellContent let-order="item">
       <div class="order__is-paid"
            *ngIf="order.paymentInfo.type !== paymentTypes.CASH_ON_DELIVERY"
