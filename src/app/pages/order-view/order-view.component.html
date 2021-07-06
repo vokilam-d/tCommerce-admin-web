@@ -57,9 +57,13 @@
             Отказаться от возврата
           </app-button>
           <app-button class="header__btn" (click)="changeStatus(orderStatuses.RETURNING)" btnStyle="primary" type="button">
-            Вернуть посылку
+            Сделать возврат
           </app-button>
         </ng-container>
+
+        <app-button class="header__btn" (click)="changeStatus(orderStatuses.RETURNED)" btnStyle="primary" type="button">
+          Посылка вернулась
+        </app-button>
 
         <app-button class="header__btn"
                     *ngIf="nextOrderStatus as nextStatus"
