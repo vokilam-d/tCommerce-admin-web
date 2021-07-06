@@ -62,7 +62,12 @@
           </app-button>
         </ng-container>
 
-        <app-button class="header__btn" (click)="changeStatus(orderStatuses.RETURNED)" btnStyle="primary" type="button">
+        <app-button class="header__btn"
+                    *ngIf="order.status === orderStatuses.RETURNING"
+                    (click)="changeStatus(orderStatuses.RETURNED)"
+                    btnStyle="primary"
+                    type="button"
+        >
           Посылка вернулась
         </app-button>
 
