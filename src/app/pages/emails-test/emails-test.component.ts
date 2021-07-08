@@ -88,6 +88,15 @@ export class EmailsTestComponent implements OnInit {
       .subscribe();
   }
 
+  sendReceiptEmail() {
+    if (!this.checkEmail() || !this.id) { return; }
+
+    const apiUrl = `${API_HOST}/api/v1/${this.apiPrefix}/tax-receipt/${this.id}`;
+    this.http.post(apiUrl, { email: this.email })
+      .pipe(this.notyService.attachNoty({ successText: 'Письмо успешно отправлено' }))
+      .subscribe();
+  }
+
   private checkEmail(): boolean {
     if (this.email) {
       return true;
