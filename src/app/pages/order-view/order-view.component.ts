@@ -33,6 +33,8 @@ import { CreateInternetDocumentDto } from '../../shared/dtos/create-internet-doc
 import { ContactInfoDto } from '../../shared/dtos/contact-info.dto';
 import { ContactInfoModalComponent } from './contact-info-modal/contact-info-modal.component';
 import { ResponseDto } from '../../shared/dtos/response.dto';
+import { TaxReceiptRepresentationType } from '../../shared/enums/tax/tax-receipt-representation-type.enum';
+import { TaxService } from '../../shared/services/tax.service';
 
 @Component({
   selector: 'order-view',
@@ -89,7 +91,8 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
     private notyService: NotyService,
     private headService: HeadService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private taxService: TaxService
   ) {
     super();
   }
@@ -480,5 +483,36 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   onMediaUploaded($event: ResponseDto<OrderDto>) {
     this.order.medias = $event.data.medias;
     this.order.logs = $event.data.logs;
+  }
+
+  createReceipt() {
+    if (!confirm(`Чек будет отправлен в налоговую и клиенту на почту. Продолжить?`)) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.taxService.createReceipt(this.order.id)
+      .pipe(
+        this.notyService.attachNoty({ successText: 'Чек создан и отправлен' }),
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe(
+        response => {
+          this.order.receiptId = response.data.id;
+        }
+      );
+  }
+
+  viewReceipt() {
+    this.isLoading = true;
+    this.taxService.getReceiptRepresentationUrl(this.order.receiptId, TaxReceiptRepresentationType.Pdf)
+      .pipe(
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe(
+        response => {
+          window.open(response.data, '_blank');
+        }
+      );
   }
 }

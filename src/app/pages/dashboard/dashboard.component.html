@@ -1,5 +1,33 @@
+<div class="header dashboard-header">
+  <h1 class="header__title">
+    Привет, {{ user.name }}!
+  </h1>
+
+  <div class="header__toolbar dashboard-header__toolbar">
+    <app-button class="header__btn"
+                *ngIf="!currentShift"
+                (click)="openShift()"
+                [disabled]="isLoading"
+    >
+      Открыть смену
+    </app-button>
+
+    <app-button class="header__btn"
+                *ngIf="currentShift"
+                (click)="closeShift()"
+                [disabled]="isLoading"
+    >
+      Закрыть смену
+    </app-button>
+
+    <div class="dashboard-header__shift-description" *ngIf="currentShift">
+      Смена открыта. Длительность: <ng-container *ngIf="openedShiftTime.hours as hours">{{ hours }} ч. </ng-container>{{ openedShiftTime.minutes }} мин.
+    </div>
+  </div>
+</div>
+
 <div class="chart">
-  <h2 class="chart__title">Заказы</h2>
+  <h2 class="chart__title">Статистика по заказам</h2>
   <div class="chart__chart"
        *ngIf="isBrowser"
        echarts
@@ -8,3 +36,5 @@
        (chartInit)="onChartInit($event, isOrdersLoading)"
   ></div>
 </div>
+
+<preloader class="preloader" *ngIf="isLoading" [hasMargins]="false"></preloader>

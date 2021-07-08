@@ -1,8 +1,21 @@
 @import "mixins";
 @import "variables";
 
+.dashboard-header {
+  padding: 30px 60px;
+
+  &__toolbar {
+    text-align: right;
+  }
+
+  &__shift-description {
+    margin: 8px 0 0;
+    color: $green;
+  }
+}
+
 .chart {
-  margin: 40px 0 0;
+  margin: 20px 0 0;
   width: 50%;
 
   @include respond-to-less-than($media_large) {
@@ -16,4 +29,11 @@
   &__chart {
     height: 300px;
   }
+}
+
+.preloader {
+  top: initial;
+  bottom: 15vh;
+  position: fixed;
+  z-index: 10;
 }

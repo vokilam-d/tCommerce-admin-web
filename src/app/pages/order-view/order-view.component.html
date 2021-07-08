@@ -10,6 +10,20 @@
       </button>
 
       <ng-container *ngIf="order">
+        <app-button class="header__btn"
+                    *ngIf="!order.receiptId"
+                    (click)="createReceipt()"
+        >
+          Фискализировать
+        </app-button>
+
+        <app-button class="header__btn"
+                    *ngIf="order.receiptId"
+                    (click)="viewReceipt()"
+        >
+          Просмотреть чек
+        </app-button>
+
         <app-button class="header__btn tooltip-btn"
                     (click)="isOperationsButtonsVisible = !isOperationsButtonsVisible"
                     (clickOutside)="isOperationsButtonsVisible = false"

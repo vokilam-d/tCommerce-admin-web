@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { SharedModule } from '../../shared/shared.module';
+import { PreloaderModule } from '../../preloader/preloader.module';
 
 
 @NgModule({
@@ -13,7 +15,9 @@ import { NgxEchartsModule } from 'ngx-echarts';
     DashboardRoutingModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
-    })
+    }),
+    SharedModule,
+    PreloaderModule
   ]
 })
 export class DashboardModule { }
