@@ -112,10 +112,17 @@ export class NotyService {
     const errors: string[] = [];
 
     if (typeof response.message === 'string') {
-      errors.push(`${response.error}: ${response.message}`);
+      let strErrorText = ``;
+      if (response.error) {
+        strErrorText += `${response.error}: `;
+      }
+      strErrorText += response.message;
+      errors.push(strErrorText);
 
     } else if (Array.isArray(response.message) && response.message.length > 0) {
-      errors.push(response.error + ':');
+      if (response.error) {
+        errors.push(response.error + ':');
+      }
       errors.push(...this.getErrorsFromValidationErrors(response.message));
     }
 
