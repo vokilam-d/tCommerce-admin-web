@@ -73,7 +73,7 @@ export class DashboardComponent extends NgUnsubscribe implements OnInit {
       });
   }
 
-  private openShift() {
+  openShift() {
     this.isLoading = true;
     this.taxService.openShift()
       .pipe(
@@ -86,7 +86,7 @@ export class DashboardComponent extends NgUnsubscribe implements OnInit {
       });
   }
 
-  private closeShift() {
+  closeShift() {
     this.isLoading = true;
     this.taxService.closeShift()
       .pipe(
