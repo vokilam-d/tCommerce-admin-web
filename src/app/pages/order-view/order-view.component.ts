@@ -486,7 +486,8 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   }
 
   createReceipt() {
-    if (!confirm(`Чек будет отправлен в налоговую и клиенту на почту. Продолжить?`)) {
+    // if (!confirm(`Чек будет отправлен в налоговую и клиенту на почту. Продолжить?`)) {
+    if (!confirm(`Чек будет тестовый и отправлен на info@klondike.com.ua и больше никому. Продолжить?`)) {
       return;
     }
 
