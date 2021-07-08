@@ -9,6 +9,7 @@ import { OrderStatusEnum } from '../enums/order-status.enum';
 import { OrderPricesDto } from './order-prices.dto';
 import { OrderNotesDto } from './order-notes.dto';
 import { OrderPaymentInfoDto } from './order-payment-info.dto';
+import { Language } from '../enums/language.enum';
 
 
 export class OrderDto {
@@ -32,6 +33,8 @@ export class OrderDto {
   createdAt: Date;
   updatedAt: Date;
   shippedAt: Date;
+  receiptId: string;
+  language: Language;
 }
 
 export class UpdateOrderAdminNote {
