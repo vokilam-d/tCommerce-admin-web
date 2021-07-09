@@ -13,6 +13,7 @@
         <app-button class="header__btn"
                     *ngIf="!order.receiptId"
                     (click)="createReceipt()"
+                    [disabled]="isLoading"
         >
           Выдать чек
         </app-button>
