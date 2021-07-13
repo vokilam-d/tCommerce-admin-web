@@ -243,7 +243,7 @@ const orderGridCells: IGridCell[] = [
     isSearchable: true,
     label: 'Получатель',
     placeholder: 'Фамилия или телефон',
-    initialWidth: 150,
+    initialWidth: 130,
     align: 'left',
     isImage: false,
     isSortable: false,
@@ -252,7 +252,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: true,
     label: 'Город',
-    initialWidth: 80,
+    initialWidth: 60,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -261,7 +261,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: true,
     label: 'Сумма',
-    initialWidth: 75,
+    initialWidth: 55,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -279,7 +279,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: false,
     label: 'Статус',
-    initialWidth: 130,
+    initialWidth: 100,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -291,7 +291,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: false,
     label: 'Статус посылки',
-    initialWidth: 140,
+    initialWidth: 120,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -331,7 +331,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: false,
     label: 'Оплачено?',
-    initialWidth: 75,
+    initialWidth: 45,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -340,7 +340,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: true,
     label: 'Способ оплаты',
-    initialWidth: 140,
+    initialWidth: 100,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -349,7 +349,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: false,
     label: 'Перезванивать?',
-    initialWidth: 75,
+    initialWidth: 45,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -358,7 +358,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: true,
     label: 'Комментарий клиента к заказу',
-    initialWidth: 120,
+    initialWidth: 110,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -382,7 +382,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: false,
     label: 'Менеджер',
-    initialWidth: 105,
+    initialWidth: 90,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -392,7 +392,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: false,
     label: 'Оформил',
-    initialWidth: 105,
+    initialWidth: 85,
     align: 'left',
     isImage: false,
     isSortable: true,

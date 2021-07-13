@@ -156,7 +156,7 @@ $fieldBorderColorFocus: $blue;
     }
 
     #{$select}--small & {
-      padding: 6px 5px;
+      padding: 6px 4px;
     }
   }
 
@@ -169,6 +169,10 @@ $fieldBorderColorFocus: $blue;
     height: 16px;
     margin: 0 10px 0 0;
     border: 1px solid $borderColor;
+
+    #{$select}--small & {
+      margin-right: 4px;
+    }
   }
 
   &__checkmark {
