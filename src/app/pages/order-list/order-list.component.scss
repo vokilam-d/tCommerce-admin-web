@@ -1,13 +1,25 @@
 @import "variables";
 
-.page {
-  padding-left: 5px;
-  padding-right: 5px;
-}
+.orders-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px 5px 34px;
 
-.header {
-  padding-left: 10px;
-  padding-right: 10px;
+  &__header {
+    flex-shrink: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  &__grid {
+    flex-grow: 2;
+    /* autoprefixer: ignore next */
+    max-height: -moz-available; /* WebKit-based browsers will ignore this. */
+    /* autoprefixer: ignore next */
+    max-height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+    max-height: fill-available;
+  }
 }
 
 .order {

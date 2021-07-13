@@ -47,7 +47,7 @@ $sidebarWidth: 60vw;
 .navbar {
   position: relative;
   height: 100%;
-  padding: 0 0 20vh;
+  padding: 0 0 10px;
   background: #373330;
 
   @include respond-to-less-than($media_large) {
