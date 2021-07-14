@@ -18,6 +18,7 @@ import { DEFAULT_LANG } from '../../constants/constants';
 import { NotyService } from '../../../noty/noty.service';
 import { ISelectOption } from '../select/select-option.interface';
 import { MultilingualTextDto } from '../../dtos/multilingual-text.dto';
+import { Language } from '../../enums/language.enum';
 
 @Component({
   selector: 'attribute-select',
@@ -80,7 +81,8 @@ export class AttributeSelectComponent extends SelectComponent implements OnInit,
 
   public toggleValueControlVisibility(isAddValueControlVisible: boolean = !this.isAddValueControlVisible) {
     const multiLingualTextDto = new MultilingualTextDto();
-    multiLingualTextDto[DEFAULT_LANG] = this.searchControl.value;
+    multiLingualTextDto[Language.RU] = this.searchControl.value;
+    multiLingualTextDto[Language.UK] = this.searchControl.value;
     this.labelControl.setValue(multiLingualTextDto);
 
     this.isAddValueControlVisible = isAddValueControlVisible;
@@ -95,10 +97,16 @@ export class AttributeSelectComponent extends SelectComponent implements OnInit,
 
     this.attributeService.addAttributeValue(attributeId, attributeValueDto)
       .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.isLoading = false))
-      .subscribe(attribute => {
+      .subscribe(response => {
+        const attribute = response.data;
+        const createdValue = attribute.values.find(value => value.label[DEFAULT_LANG] ===  this.labelControl.value[DEFAULT_LANG]);
+        const selectedOption = { value: createdValue.id, view: createdValue.label[DEFAULT_LANG] };
+
+        this.selectOption(selectedOption);
         this.isSuccessfullyAdded = true;
 
         setTimeout(() => {
+          this.toggleVisibility(false);
           this.searchControl.setValue('');
           this.labelControl.setValue(new MultilingualTextDto());
           this.isAddValueControlVisible = false;
