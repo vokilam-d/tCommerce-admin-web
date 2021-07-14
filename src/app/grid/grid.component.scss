@@ -89,8 +89,9 @@
       flex-wrap: wrap;
     }
 
-    &--grey {
+    &--removed {
       color: rgba($dark, 0.4);
+      text-decoration: line-through;
     }
   }
 
@@ -120,7 +121,7 @@
   &__block {
     flex-shrink: 0;
     position: relative;
-    padding: 5px 10px;
+    padding: 5px 8px;
     box-sizing: content-box;
     display: flex;
     flex-direction: column;

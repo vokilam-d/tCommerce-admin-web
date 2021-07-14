@@ -51,7 +51,6 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
   isGridLoading: boolean = false;
   gridLinkUrl: string = 'view';
   gridCells: IGridCell[] = [];
-  defaultCurrency = DEFAULT_CURRENCY_CODE;
   lang = DEFAULT_LANG;
   statusControl = new FormControl();
 
@@ -137,8 +136,8 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
           order.id,
           `${this.datePipe.transform(order.createdAt, 'dd.MM.y')} ${this.datePipe.transform(order.createdAt, 'HH:mm:ss')}`,
           `${order.shipment.recipient.contactInfo.firstName} ${order.shipment.recipient.contactInfo.lastName} ${order.shipment.recipient.contactInfo.phoneNumber}`,
-          order.shipment.recipient.address.addressName,
-          `${order.prices.totalCost} ${this.readableCurrencyPipe.transform(this.defaultCurrency)}`,
+          order.notes.aboutCustomer,
+          `${order.prices.totalCost} ${this.readableCurrencyPipe.transform(DEFAULT_CURRENCY_CODE)}`,
           order.notes.fromAdmin,
           order.statusDescription[DEFAULT_LANG],
           order.shipment.statusDescription,
@@ -153,7 +152,7 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
           `${order.shipment.sender.contactInfo.firstName} ${order.shipment.sender.contactInfo.lastName}`,
           order.manager.name,
           `${order.source === 'client' ? 'Клиент' : 'Менеджер'}`,
-          order.notes.aboutCustomer
+          order.shipment.recipient.address.addressName
         ];
         return fields.join('\t');
       });
@@ -163,7 +162,7 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
     this.notyService.showSuccessNoty(`Скопировано "${ordersStrArray.length}" заказов`);
   }
 
-  isOrderGrey(order: OrderDto): boolean {
+  isOrderRemoved(order: OrderDto): boolean {
     return order.status === OrderStatusEnum.CANCELED;
   }
 
@@ -251,17 +250,17 @@ const orderGridCells: IGridCell[] = [
   },
   {
     isSearchable: true,
-    label: 'Город',
-    initialWidth: 60,
+    label: 'Коммент о клиенте',
+    initialWidth: 65,
     align: 'left',
     isImage: false,
-    isSortable: true,
-    fieldName: `${shipmentProp}.${recipientProp}.${counterPartyAddressProp}.${getPropertyOf<ShipmentAddressDto>('settlementName')}|${shipmentProp}.${recipientProp}.${counterPartyAddressProp}.${getPropertyOf<ShipmentAddressDto>('settlementNameFull')}`
+    isSortable: false,
+    fieldName: `${getPropertyOf<OrderDto>('notes')}.${getPropertyOf<OrderNotesDto>('aboutCustomer')}`
   },
   {
     isSearchable: true,
-    label: 'Сумма',
-    initialWidth: 55,
+    label: `Сумма, грн`,
+    initialWidth: 47,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -270,7 +269,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: true,
     label: 'Комментарий админа о заказе',
-    initialWidth: 150,
+    initialWidth: 110,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -279,7 +278,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: false,
     label: 'Статус',
-    initialWidth: 100,
+    initialWidth: 130,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -358,7 +357,7 @@ const orderGridCells: IGridCell[] = [
   {
     isSearchable: true,
     label: 'Комментарий клиента к заказу',
-    initialWidth: 110,
+    initialWidth: 100,
     align: 'left',
     isImage: false,
     isSortable: true,
@@ -404,11 +403,11 @@ const orderGridCells: IGridCell[] = [
   },
   {
     isSearchable: true,
-    label: 'Коммент о клиенте',
-    initialWidth: 65,
+    label: 'Город',
+    initialWidth: 60,
     align: 'left',
     isImage: false,
-    isSortable: false,
-    fieldName: `${getPropertyOf<OrderDto>('notes')}.${getPropertyOf<OrderNotesDto>('aboutCustomer')}`
-  },
+    isSortable: true,
+    fieldName: `${shipmentProp}.${recipientProp}.${counterPartyAddressProp}.${getPropertyOf<ShipmentAddressDto>('settlementName')}|${shipmentProp}.${recipientProp}.${counterPartyAddressProp}.${getPropertyOf<ShipmentAddressDto>('settlementNameFull')}`
+  }
 ];

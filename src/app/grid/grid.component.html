@@ -85,7 +85,7 @@
       <a class="grid__row"
          *ngFor="let item of itemsArray; trackBy: trackBy"
          [class.grid__row--has-sub]="subItemsFieldName"
-         [class.grid__row--grey]="isItemGrey(item)"
+         [class.grid__row--removed]="isItemRemoved(item)"
          [routerLink]="getRouterLinkUrl(item)"
          [target]="linkTarget"
          (click)="onItemSelect(item)"

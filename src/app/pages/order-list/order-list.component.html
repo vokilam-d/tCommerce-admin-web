@@ -21,7 +21,7 @@
         [linkUrlSuffix]="gridLinkUrl"
         [pagesTotal]="pagesTotal"
         [isLoading]="isGridLoading"
-        [isItemGrey]="isOrderGrey"
+        [isItemRemoved]="isOrderRemoved"
         (gridChange)="fetchOrders($event)"
         trackByFieldName="id"
         linkFieldName="id"
@@ -48,9 +48,9 @@
       </div>
     </ng-template>
     <ng-template #cellContent let-order="item">
-      <span class="small">{{ order.shipment.recipient.address.settlementName || order.shipment.recipient.address.settlementNameFull }}</span>
+      <span class="small">{{ order.notes.aboutCustomer }}</span>
     </ng-template>
-    <ng-template #cellContent let-order="item">{{ order.prices.totalCost }} {{ defaultCurrency | readableCurrency }}</ng-template>
+    <ng-template #cellContent let-order="item">{{ order.prices.totalCost }}</ng-template>
     <ng-template #cellContent let-order="item">{{ order.notes.fromAdmin }}</ng-template>
     <ng-template #cellContent let-order="item">{{ order.statusDescription[lang] }}</ng-template>
     <ng-template #cellContent let-order="item">
@@ -98,7 +98,7 @@
       </ng-container>
     </ng-template>
     <ng-template #cellContent let-order="item">
-      <span class="small">{{ order.notes.aboutCustomer }}</span>
+      <span class="small">{{ order.shipment.recipient.address.settlementName || order.shipment.recipient.address.settlementNameFull }}</span>
     </ng-template>
   </grid>
 
