@@ -25,7 +25,7 @@ import { ISelectOption } from '../../shared/components/select/select-option.inte
 import { ProductLabelTypeEnum } from '../../shared/enums/product-label-type.enum';
 import { CustomValidators } from '../../shared/classes/validators';
 
-type PostAction = 'duplicate' | 'exit' | 'none';
+type PostAction = 'exit' | 'none';
 
 const PRODUCT_LABEL_OPTIONS: ISelectOption[] = [
   { value: ProductLabelTypeEnum.Empty, view: 'Не выбрано' },
@@ -195,9 +195,6 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
     const dto = this.mergeProducts(this.product, this.form.value);
 
     let successText: string = 'Товар успешно добавлен';
-    if (postAction === 'duplicate') {
-      successText = successText + '. Вы перенаправлены на страницу создания нового товара';
-    }
 
     this.isLoading = true;
     this.productsService.addNewProduct(dto)
@@ -206,9 +203,6 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
         response => {
           let successUrlCommands: any[] = [];
           switch (postAction) {
-            case 'duplicate':
-              successUrlCommands = ['add', response.data.id];
-              break;
             case 'none':
               successUrlCommands = ['edit', response.data.id];
               break;
@@ -229,9 +223,6 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
       .subscribe(
         response => {
           switch (postAction) {
-            case 'duplicate':
-              this.router.navigate(['admin', 'product', 'add', response.data.id]);
-              break;
             case 'exit':
               this.router.navigate(['admin', 'product']);
               break;
@@ -399,6 +390,11 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
 
   getClientProductLink(): string {
     return getClientLinkPrefix() + this.product.variants[0].slug;
+  }
+
+  duplicate(): void {
+    this.notyService.showSuccessNoty(`Вы перенаправлены на страницу создания нового товара`);
+    this.router.navigate(['admin', 'product', 'add', this.product.id]);
   }
 
   private setProduct(productDto: ProductDto) {

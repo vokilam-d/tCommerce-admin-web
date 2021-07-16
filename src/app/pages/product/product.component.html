@@ -35,8 +35,8 @@
           Посмотреть на сайте
         </app-button>
 
-        <app-button class="header__btn" (click)="save('duplicate')">
-          Сохранить и дублировать
+        <app-button class="header__btn" *ngIf="!isNewProduct && !isNewProductBasedOn" (click)="duplicate()">
+          Дублировать
         </app-button>
 
         <app-button class="header__btn" (click)="save()" type="button">
