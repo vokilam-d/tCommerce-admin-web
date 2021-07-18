@@ -1,0 +1,42 @@
+<div class="page">
+  <div class="header">
+    <h1 class="header__title" [ngSwitch]="isNewSupplier">
+      <ng-container *ngSwitchCase="true">
+        Новый поставщик
+      </ng-container>
+
+      <ng-container *ngSwitchCase="false">
+        Поставщик {{ supplier?.name }}
+      </ng-container>
+    </h1>
+
+    <div class="header__toolbar">
+      <button class="header__btn toolbar-btn" (click)="goBack()" type="button">
+        <i class="ai ai-arrow-left"></i> назад
+      </button>
+      <button class="header__btn toolbar-btn" *ngIf="!isNewSupplier" (click)="delete()" type="button">
+        Удалить
+      </button>
+      <button class="header__btn toolbar-main-btn" (click)="save()" type="button">Сохранить</button>
+    </div>
+  </div>
+
+  <form class="supplier" *ngIf="supplierForm; else preloaderTmpl" [formGroup]="supplierForm">
+
+    <div class="supplier__field field field--required"
+         *ngIf="supplierForm.get('name') as name"
+         [class.field--invalid]="isControlInvalid(name)"
+    >
+      <label for="name" class="field__label">Название</label>
+      <span class="field__control">
+        <input class="field__input" [formControl]="name" type="text" id="name">
+      </span>
+    </div>
+
+  </form>
+
+  <ng-template #preloaderTmpl>
+    <preloader class="preloader"></preloader>
+  </ng-template>
+
+</div>

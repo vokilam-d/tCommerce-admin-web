@@ -1,0 +1,30 @@
+<div class="page">
+  <header class="header page__header">
+    <h1 class="header__title">
+      Поставщики
+    </h1>
+
+    <div class="header__toolbar">
+      <button class="header__btn toolbar-main-btn" (click)="add()">Добавить поставщика</button>
+    </div>
+  </header>
+
+  <grid class="page__grid"
+        [cells]="gridCells"
+        [itemsArray]="suppliers"
+        [itemsFiltered]="itemsFiltered"
+        [pagesTotal]="pagesTotal"
+        [isLoading]="isGridLoading"
+        (gridChange)="fetchSuppliers($event)"
+        [linkFieldName]="idFieldName"
+        linkUrlSuffix="edit"
+        trackByFieldName="id"
+        gridName="supplier-list"
+  >
+    <span grid-total-items>Всего поставщиков: {{ itemsTotal }}</span>
+    <span grid-no-items>Поставщики не найдены</span>
+
+    <ng-template #cellContent let-supplier="item">{{ supplier.id }}</ng-template>
+    <ng-template #cellContent let-supplier="item">{{ supplier.name }}</ng-template>
+  </grid>
+</div>

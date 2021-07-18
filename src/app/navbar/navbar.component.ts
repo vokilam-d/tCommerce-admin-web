@@ -171,6 +171,11 @@ const navBarMenu = [
         link: '/admin/aggregator',
         icon: 'navbar__icon ai ai-catalog'
       },
+      {
+        name: 'Поставщики',
+        link: '/admin/supplier',
+        icon: 'navbar__icon ai ai-catalog'
+      }
     ]
   },
   {

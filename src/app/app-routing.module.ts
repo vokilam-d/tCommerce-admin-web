@@ -233,6 +233,24 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'supplier',
+        children: [
+          {
+            path: '', loadChildren: () => import('./pages/supplier-list/supplier-list.module').then(m => m.SupplierListModule)
+          },
+          {
+            path: 'add',
+            loadChildren: () => import('./pages/supplier/supplier.module').then(m => m.SupplierModule),
+            data: { action: EPageAction.Add }
+          },
+          {
+            path: 'edit/:id',
+            loadChildren: () => import('./pages/supplier/supplier.module').then(m => m.SupplierModule),
+            data: { action: EPageAction.Edit }
+          }
+        ]
+      },
+      {
         path: 'announcement',
         loadChildren: () => import('./pages/announcement/announcement.module').then(m => m.AnnouncementModule)
       },
