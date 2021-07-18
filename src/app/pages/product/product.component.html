@@ -119,6 +119,15 @@
             <textarea class="field__textarea product__note" [formControl]="note" id="product-note" type="text"></textarea>
           </span>
         </div>
+
+        <div class="product__field field" *ngIf="form.get('supplierId') as supplierId">
+          <label class="field__label">
+            Поставщик
+          </label>
+          <span class="field__control">
+            <supplier-select [formControl]="supplierId" [hasEmpty]="true"></supplier-select>
+          </span>
+        </div>
       </div>
     </div>
 

@@ -20,10 +20,11 @@ import { RedirectControlModule } from '../../redirect-control/redirect-control.m
 import { LinkedProductsModule } from '../../linked-products/linked-products.module';
 import { MultilingualControlModule } from '../../multilingual-control/multilingual-control.module';
 import { BreadcrumbsVariantSelectorComponent } from './breadcrumbs-variant-selector/breadcrumbs-variant-selector.component';
+import { SupplierSelectComponent } from './supplier-select/supplier-select.component';
 
 
 @NgModule({
-  declarations: [ProductComponent, AttributesEditorComponent, ReviewsViewerComponent, OrderListViewerModalComponent, BreadcrumbsVariantSelectorComponent],
+  declarations: [ProductComponent, AttributesEditorComponent, ReviewsViewerComponent, OrderListViewerModalComponent, BreadcrumbsVariantSelectorComponent, SupplierSelectComponent],
   imports: [
     CommonModule,
     ProductRoutingModule,

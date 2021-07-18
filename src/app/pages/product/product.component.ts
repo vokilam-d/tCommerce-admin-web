@@ -150,7 +150,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
       variantsFormArray.push(variantFormGroup);
     });
 
-    const productControls: Record<keyof Pick<AddOrUpdateProductDto, 'isEnabled' | 'name' | 'categories' | 'additionalServiceIds' | 'attributes' | 'variants' | 'note'>, any> = {
+    const productControls: Record<keyof Pick<AddOrUpdateProductDto, 'isEnabled' | 'name' | 'categories' | 'additionalServiceIds' | 'attributes' | 'variants' | 'note' | 'supplierId'>, any> = {
       isEnabled: this.product.isEnabled,
       name: [this.product.name, Validators.required],
       categories: [this.product.categories],
@@ -158,6 +158,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
       attributes: [this.product.attributes],
       variants: variantsFormArray,
       note: [this.product.note],
+      supplierId: [this.product.supplierId],
     };
 
     this.form = this.formBuilder.group(productControls);
@@ -437,6 +438,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
     this.product.additionalServiceIds = productDto.additionalServiceIds;
     this.product.variants = productDto.variants.map(variantToCopy);
     this.product.note = productDto.note;
+    this.product.supplierId = productDto.supplierId;
   }
 
   private setAltTextOnNameChange(form: FormGroup) {

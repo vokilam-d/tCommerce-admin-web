@@ -29,6 +29,7 @@ export class AddOrUpdateProductDto {
   reviewsCount: number;
   reviewsAvgRating: number;
   note: string = '';
+  supplierId: number;
 }
 
 export class ProductDto extends AddOrUpdateProductDto {
