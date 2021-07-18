@@ -173,6 +173,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
           product.quantitiesInStock,
           product.sellableQuantities,
           product.note,
+          this.getSupplier(product),
           `${product.isEnabled ? 'On' : 'Off'}`,
           product.salesCount,
           `${product.isIncludedInShoppingFeed ? 'Да' : 'Нет'}`,
@@ -307,16 +308,6 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
           },
           {
             isSearchable: false,
-            label: 'Статус',
-            initialWidth: 60,
-            align: 'left',
-            isImage: false,
-            isSortable: true,
-            fieldName: getPropertyOf<ProductListItemDto>('isEnabled'),
-            filterFields: [{ value: true, view: 'On' }, { value: false, view: 'Off' }]
-          },
-          {
-            isSearchable: false,
             label: 'Поставщик',
             initialWidth: 80,
             align: 'left',
@@ -324,6 +315,16 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             isSortable: true,
             fieldName: getPropertyOf<ProductListItemDto>('supplierId'),
             filterFields: suppliersResponse.data.map(supplier => ({ value: supplier.id, view: supplier.name }))
+          },
+          {
+            isSearchable: false,
+            label: 'Статус',
+            initialWidth: 60,
+            align: 'left',
+            isImage: false,
+            isSortable: true,
+            fieldName: getPropertyOf<ProductListItemDto>('isEnabled'),
+            filterFields: [{ value: true, view: 'On' }, { value: false, view: 'Off' }]
           },
           {
             isSearchable: false,
