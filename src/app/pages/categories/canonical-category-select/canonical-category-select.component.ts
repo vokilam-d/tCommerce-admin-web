@@ -64,7 +64,7 @@ export class CanonicalCategorySelectComponent extends SelectComponent<number, Ca
     this.options = categories.map(category => ({
       value: category.id,
       view: this.buildLabel(category),
-      data: category
+      additionalData: category
     }));
   }
 

@@ -116,7 +116,7 @@ export class SelectComponent<T = any, K = any> extends NgUnsubscribe implements 
     this.onTouched();
 
     this.selectValue.emit(newValue);
-    this.selectData.emit(option.data);
+    this.selectData.emit(option.additionalData);
   }
 
   selectEmptyOption() {

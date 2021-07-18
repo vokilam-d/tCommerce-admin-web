@@ -239,7 +239,7 @@ export class CategoryComponent extends NgUnsubscribe implements OnInit, OnDestro
   }
 
   onCanonicalSelectData(evt: CategoryDto) {
-    const nameValue = this.name.value as MultilingualTextDto
+    const nameValue = this.name.value as MultilingualTextDto;
     if (!nameValue[DEFAULT_LANG].trim() || confirm(`Перезаписать имя на "${evt.name[DEFAULT_LANG]}"?`)) {
       this.name.setValue(evt.name);
     }
