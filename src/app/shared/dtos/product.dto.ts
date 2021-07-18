@@ -81,4 +81,5 @@ export class ProductListItemDto {
   updatedAt: Date;
   note: string;
   isIncludedInShoppingFeed: boolean;
+  supplierId: number;
 }

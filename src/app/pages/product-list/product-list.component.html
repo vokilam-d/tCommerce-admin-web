@@ -72,6 +72,9 @@
         <span class="product-disabled" *ngSwitchCase="false">Off</span>
       </ng-container>
     </ng-template>
+    <ng-template #cellContent let-product="item">
+      {{ getSupplier(product) }}
+    </ng-template>
     <ng-template #cellContent let-product="item">{{ product.salesCount }}</ng-template>
     <ng-template #cellContent let-product="item">
       <ng-container [ngSwitch]="product.isIncludedInShoppingFeed">

@@ -10,8 +10,8 @@ import { NotyService } from '../../noty/noty.service';
 import { saveFileFromUrl } from '../../shared/helpers/save-file.function';
 import { IGridCell, IGridValue } from '../../grid/grid.interface';
 import { GridComponent } from '../../grid/grid.component';
-import { Subscription } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { combineLatest, forkJoin, Subscription } from 'rxjs';
+import { finalize, takeUntil, tap } from 'rxjs/operators';
 import { getPropertyOf } from '../../shared/helpers/get-property-of.function';
 import { DEFAULT_LANG, UPLOADED_HOST } from '../../shared/constants/constants';
 import { HeadService } from '../../shared/services/head.service';
@@ -23,6 +23,8 @@ import { DEFAULT_CURRENCY_CODE } from '../../shared/enums/currency.enum';
 import { ReadableCurrencyPipe } from '../../shared/pipes/readable-currency.pipe';
 import { DatePipe } from '@angular/common';
 import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
+import { SupplierService } from '../../shared/services/supplier.service';
+import { SupplierDto } from '../../shared/dtos/supplier.dto';
 
 @Component({
   selector: 'product-list',
@@ -32,6 +34,7 @@ import { MultilingualTextDto } from '../../shared/dtos/multilingual-text.dto';
 export class ProductListComponent extends NgUnsubscribe implements OnInit, AfterViewInit {
 
   products: ProductListItemDto[];
+  suppliers: SupplierDto[] = [];
 
   defaultCurrency = DEFAULT_CURRENCY_CODE;
   isOrderedFiltersVisible: boolean = false;
@@ -59,7 +62,8 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
     private notyService: NotyService,
     private router: Router,
     private readableCurrencyPipe: ReadableCurrencyPipe,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private supplierService: SupplierService
   ) {
     super();
   }
@@ -184,10 +188,20 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
     this.notyService.showSuccessNoty(`Скопировано "${productsStrArray.length}" товаров`);
   }
 
+  getSupplier(product: ProductListItemDto): string {
+    return this.suppliers.find(supplier => product.supplierId === supplier.id)?.name;
+  }
+
   private setGridCells() {
-    this.attributeService.attributes$
-      .pipe( takeUntil(this.ngUnsubscribe) )
-      .subscribe(attributes => {
+    combineLatest([
+      this.attributeService.attributes$,
+      this.supplierService.fetchAllSuppliers({ limit: 10000 }).pipe( tap(response => this.suppliers = response.data) )
+    ])
+      .pipe(
+        this.notyService.attachNoty(),
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe(([attributes, suppliersResponse]) => {
         const manufacturerAttribute = attributes.find(attribute => attribute.id === 'manufacturer');
 
         this.gridCells = [
@@ -300,6 +314,16 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             isSortable: true,
             fieldName: getPropertyOf<ProductListItemDto>('isEnabled'),
             filterFields: [{ value: true, view: 'On' }, { value: false, view: 'Off' }]
+          },
+          {
+            isSearchable: false,
+            label: 'Поставщик',
+            initialWidth: 80,
+            align: 'left',
+            isImage: false,
+            isSortable: true,
+            fieldName: getPropertyOf<ProductListItemDto>('supplierId'),
+            filterFields: suppliersResponse.data.map(supplier => ({ value: supplier.id, view: supplier.name }))
           },
           {
             isSearchable: false,
