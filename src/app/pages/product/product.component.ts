@@ -425,7 +425,7 @@ export class ProductComponent extends NgUnsubscribe implements OnInit {
       newVariant.googleAdsProductTitle = variant.googleAdsProductTitle;
       newVariant.isDiscountApplicable = variant.isDiscountApplicable;
       newVariant.isIncludedInShoppingFeed = variant.isIncludedInShoppingFeed;
-      // newVariant.medias = variant.medias;
+      newVariant.medias = variant.medias;
       newVariant.metaTags = variant.metaTags;
       newVariant.isEnabled = variant.isEnabled;
       newVariant.name = variant.name;
