@@ -309,7 +309,7 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
           {
             isSearchable: false,
             label: 'Поставщик',
-            initialWidth: 80,
+            initialWidth: 110,
             align: 'left',
             isImage: false,
             isSortable: true,
