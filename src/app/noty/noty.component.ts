@@ -14,7 +14,7 @@ export class NotyComponent extends NgUnsubscribe implements OnInit {
   noties: INoty[] = [];
   private counter: number = 0;
   private timeToAutoHide: number = 5000;
-  private timeToErrorAutoHide: number = 15000;
+  private timeToErrorAutoHide: number = 30000;
   private autoHideTimeout: any;
 
   constructor(private notyService: NotyService) {
