@@ -9,6 +9,8 @@ import { API_HOST } from '../constants/constants';
 import { EReorderPosition } from '../enums/reorder-position.enum';
 import { ProductReorderDto } from '../dtos/reorder.dto';
 import { UnfixProductOrderDto } from '../dtos/unfix-product-order.dto';
+import { MediaDto } from '../dtos/media.dto';
+import { DuplicateMediasDto } from '../dtos/duplicate-medias.dto';
 
 interface IFetchProductsParams extends IGridValue {
   orderedDates?: [string, string];
@@ -86,5 +88,14 @@ export class ProductService {
 
   getGoogleReviewsFeedUrl(): string {
     return `${API_HOST}/api/v1/feed/reviews`;
+  }
+
+  duplicateMedias(medias: MediaDto[]): Observable<ResponseDto<MediaDto[]>> {
+    const apiUrl = `${API_HOST}/api/v1/admin/products/duplicate-medias`;
+    const dto: DuplicateMediasDto = {
+      medias
+    };
+
+    return this.http.post<ResponseDto<MediaDto[]>>(apiUrl, dto);
   }
 }
