@@ -44,6 +44,8 @@
   flex-grow: 2;
   margin: 20px 0 0;
   overflow: auto;
+  min-height: 400px;
+  max-height: 90vh;
 
   @include respond-to-less-than($media_large) {
     margin-top: 10px;
