@@ -122,9 +122,14 @@ export class ShipmentInfoModalComponent extends NgUnsubscribe implements OnInit 
       if (sender.isDefault) {
         this.defaultSenderId = sender.id;
       }
+
+      let view = `${sender.firstName} ${sender.lastName}, ${sender.phone}, ${sender.address}`;
+      if (sender.isFop) {
+        view = `ФОП ${view}`;
+      }
       return {
         value: sender.id,
-        view: `${sender.firstName} ${sender.lastName}, ${sender.phone}, ${sender.address}`,
+        view,
         additionalData: sender
       };
     });
