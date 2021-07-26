@@ -379,7 +379,7 @@ const orderGridCells: IGridCell[] = [
   },
   {
     label: senderLabel,
-    initialWidth: 85,
+    initialWidth: 115,
     align: 'left',
     isSortable: true,
     fieldName: `${shipmentProp}.${senderProp}.${getPropertyOf<ShipmentCounterpartyDto>('id')}`,
