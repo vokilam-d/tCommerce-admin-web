@@ -225,14 +225,9 @@
     font-size: 18px;
     font-weight: 500;
 
-    @include respond-to-less-than($media_large) {
-      font-size: 24px;
-    }
-
     &--warning {
-      display: inline-block;
-      border-bottom: 1px solid;
-      color: darken($red, 15%);
+      background: darken($red, 25%);
+      color: #fff;
     }
   }
 
@@ -298,6 +293,17 @@
 
   &__img {
     height: 50px;
+  }
+
+  &__qty {
+    font-size: 24px;
+    font-weight: 500;
+
+    &--warning {
+      display: inline-block;
+      border-bottom: 1px solid;
+      color: darken($red, 15%);
+    }
   }
 
   &__pack {
