@@ -298,6 +298,8 @@
               <td class="items-table__block items-table__block--price">Цена</td>
               <td class="items-table__block items-table__block--qty">Кол-во</td>
               <td class="items-table__block items-table__block--cost">Стоимость</td>
+              <td class="items-table__block">Кол-во на складе</td>
+              <td class="items-table__block">Кол-во доступно к продаже</td>
             </tr>
           </thead>
           <tbody>
@@ -347,6 +349,12 @@
               </td>
               <td class="items-table__block items-table__block--cost">
                 {{ item.cost }} грн
+              </td>
+              <td class="items-table__block">
+                <div class="items-table__qty">{{ itemsInventories[item.sku]?.qtyInStock }}</div>
+              </td>
+              <td class="items-table__block">
+                <div class="items-table__qty">{{ itemsInventories[item.sku]?.sellableQty }}</div>
               </td>
             </tr>
           </tbody>
