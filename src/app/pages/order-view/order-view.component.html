@@ -351,10 +351,10 @@
                 {{ item.cost }} грн
               </td>
               <td class="items-table__block">
-                <div class="items-table__qty">{{ itemsInventories[item.sku]?.qtyInStock }}</div>
+                {{ itemsInventories[item.sku]?.qtyInStock }}
               </td>
               <td class="items-table__block">
-                <div class="items-table__qty">{{ itemsInventories[item.sku]?.sellableQty }}</div>
+                {{ itemsInventories[item.sku]?.sellableQty }}
               </td>
             </tr>
           </tbody>
