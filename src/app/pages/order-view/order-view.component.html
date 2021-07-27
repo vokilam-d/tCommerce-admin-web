@@ -360,6 +360,90 @@
           </tbody>
         </table>
 
+        <div class="items-list">
+          <div class="items-list__item" *ngFor="let item of order.items">
+            <div class="items-list__row">
+              <div class="items-list__title">Фото</div>
+              <div class="items-list__value">
+                <img class="items-list__img" [src]="getItemThumbnail(item)">
+              </div>
+            </div>
+            <div class="items-list__row">
+              <div class="items-list__title">Название</div>
+              <div class="items-list__value">
+                <a [routerLink]="['/', 'admin', 'product', 'edit', item.productId]" target="_blank">
+                  {{ item.name[lang] }}
+                </a>
+              </div>
+            </div>
+            <div class="items-list__row">
+              <div class="items-list__title">Код</div>
+              <div class="items-list__value">
+                {{ item.sku }}
+              </div>
+            </div>
+            <div class="items-list__row">
+              <div class="items-list__title">Артикул</div>
+              <div class="items-list__value">
+                {{ item.vendorCode }}
+              </div>
+            </div>
+            <div class="items-list__row">
+              <div class="items-list__title">Доп. услуги</div>
+              <div class="items-list__value">
+                <div *ngFor="let service of item.additionalServices">
+                  {{ service.name[lang] }} (+{{ service.price }}грн)
+                </div>
+              </div>
+            </div>
+            <div class="items-list__row">
+              <div class="items-list__title">Цена</div>
+              <div class="items-list__value">
+                {{ item.price }} грн
+              </div>
+            </div>
+            <div class="items-list__row">
+              <div class="items-list__title">Кол-во</div>
+              <div class="items-list__value">
+                <div class="items-table__qty" [class.items-table__qty--warning]="item.qty > 1">{{ item.qty }}</div>
+              </div>
+            </div>
+            <div class="items-list__row">
+              <div class="items-list__title">Стоимость</div>
+              <div class="items-list__value">
+                {{ item.cost }} грн
+              </div>
+            </div>
+            <div class="items-list__row">
+              <div class="items-list__title">Кол-во на складе</div>
+              <div class="items-list__value">
+                {{ itemsInventories[item.sku]?.qtyInStock }}
+              </div>
+            </div>
+            <div class="items-list__row">
+              <div class="items-list__title">Кол-во доступно к продаже</div>
+              <div class="items-list__value">
+                {{ itemsInventories[item.sku]?.sellableQty }}
+              </div>
+            </div>
+
+            <div class="items-list__pack">
+              <app-button *ngIf="!item.isPacked; else packedTextTmpl"
+                          (click)="onPackOrderItemClick(item)"
+                          btnSize="big"
+              >
+                Упаковать
+              </app-button>
+
+              <ng-template #packedTextTmpl>
+                <span class="items-list__packed">
+                  <i class="ai ai-checkmark"></i> Упаковано
+                </span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
         <div class="order-view__summary-block">
           <div class="order-view__summary summary">
             <div class="summary__row">
