@@ -220,6 +220,11 @@
   &__qty {
     font-size: 18px;
     font-weight: 500;
+
+    &--warning {
+      color: darken($red, 15%);
+      text-transform: underline;
+    }
   }
 
   &__link {

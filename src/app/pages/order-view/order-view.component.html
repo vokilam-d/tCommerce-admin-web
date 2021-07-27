@@ -345,7 +345,7 @@
                 {{ item.price }} грн
               </td>
               <td class="items-table__block items-table__block--qty">
-                <div class="items-table__qty">{{ item.qty }}</div>
+                <div class="items-table__qty" [class.items-table__qty--warning]="item.qty > 1">{{ item.qty }}</div>
               </td>
               <td class="items-table__block items-table__block--cost">
                 {{ item.cost }} грн
