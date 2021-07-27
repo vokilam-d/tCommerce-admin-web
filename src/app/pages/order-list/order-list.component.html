@@ -89,7 +89,7 @@
     </ng-template>
     <ng-template #cellContent let-order="item">
       <ng-container *ngIf="order.shipment.sender.contactInfo as contactInfo">
-        <ng-container *ngIf="contactInfo.prefix as prefix">{{ prefix }} </ng-container>{{ contactInfo.firstName }} {{ contactInfo.lastName?.slice(0, 1) }}.
+        {{ contactInfo.prefix }} {{ contactInfo.firstName }}<ng-container *ngIf="contactInfo.lastName as lastName"> {{ lastName.slice(0, 1) }}.</ng-container>
       </ng-container>
     </ng-template>
     <ng-template #cellContent let-order="item">{{ order.manager.name }}</ng-template>
