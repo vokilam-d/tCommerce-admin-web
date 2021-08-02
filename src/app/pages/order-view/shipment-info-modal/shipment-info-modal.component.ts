@@ -156,12 +156,11 @@ export class ShipmentInfoModalComponent extends NgUnsubscribe implements OnInit 
     const paymentMethodControl = this.form.get(paymentMethodProp);
 
     combineLatest([
-      senderControl.valueChanges,
-      payerTypeControl.valueChanges,
+      senderControl.valueChanges.pipe(startWith(senderControl.value)),
+      payerTypeControl.valueChanges.pipe(startWith(payerTypeControl.value)),
     ])
       .pipe(
-        this.takeUntilDestroy(),
-        startWith([senderControl.value, payerTypeControl.value])
+        this.takeUntilDestroy()
       )
       .subscribe(values => {
         const senderId = values[0] as number;
