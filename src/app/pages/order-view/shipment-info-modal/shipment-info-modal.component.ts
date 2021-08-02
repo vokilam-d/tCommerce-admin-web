@@ -38,7 +38,7 @@ export class ShipmentInfoModalComponent extends NgUnsubscribe implements OnInit 
 
   paymentMethodOptions: ISelectOption[] = [
     { view: 'Нал', value: ShipmentPaymentMethodEnum.CASH },
-    { view: 'Безнал (Контроль оплаты)', value: ShipmentPaymentMethodEnum.NON_CASH }
+    { view: 'Безнал', value: ShipmentPaymentMethodEnum.NON_CASH }
   ];
 
   @Input() shipment: ShipmentDto;
