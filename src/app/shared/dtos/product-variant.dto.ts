@@ -27,7 +27,7 @@ export class AddOrUpdateProductVariantDto {
   qtyInStock: number = 0;
   isDiscountApplicable: boolean = true;
   isIncludedInShoppingFeed: boolean = true;
-  googleAdsProductTitle: string = '';
+  googleAdsProductTitle: MultilingualTextDto = new MultilingualTextDto();
   relatedProducts: LinkedProductDto[] = [];
   crossSellProducts: LinkedProductDto[] = [];
 }

@@ -20,6 +20,7 @@ import { getPropertyOf } from '../../../shared/helpers/get-property-of.function'
 import { ProductSelectedAttributeDto } from '../../../shared/dtos/selected-attribute.dto';
 import { DEFAULT_LANG } from '../../../shared/constants/constants';
 import { MultilingualTextDto } from '../../../shared/dtos/multilingual-text.dto';
+import { ISelectOption } from '../../../shared/components/select/select-option.interface';
 
 enum ESelectionStep {
   SelectAttributes,
@@ -37,12 +38,15 @@ class SelectedAttribute extends AttributeDto {
 }
 
 interface ITruncatedVariant {
-  existingVariantIndex?: number;
-  variantIndexForSorting?: number;
-  needToCopy?: boolean;
-  attributes: {
-    [attrId: string]: SelectedAttributeValue['id'];
-  };
+  [attrId: string]: SelectedAttributeValue['id'];
+}
+
+interface IVariantToUpdate {
+  oldVariant: ITruncatedVariant;
+  oldVariantIndex: number;
+  newVariant: ITruncatedVariant;
+  newVariantIndex: number;
+  areSame: boolean;
 }
 
 @Component({
@@ -59,8 +63,7 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
   attributes: AttributeDto[] = [];
   selectedAttributes: SelectedAttribute[] = [];
 
-  preGeneratedAttrsForProduct: AttributeDto[] = [];
-  truncVariants: ITruncatedVariant[] = [];
+  attributesForProduct: AttributeDto[] = [];
 
   stepsEnum = ESelectionStep;
   attrTypeEnum = EAttributeType;
@@ -71,29 +74,20 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
   isGridLoading: boolean = false;
   gridCells: IGridCell[] = attributeGridCells;
 
+  toAddVariants: ITruncatedVariant[] = [];
+  toUpdateVariants: IVariantToUpdate[] = [];
+  toDeleteVariantIndices = new Set<number>();
+  toAddVariantsCopyMap: {[toAddVariantIndex: number]: number} = {};
+
   @Input() initialFormValue: AddOrUpdateProductDto;
   @Input() isSelectManufacturerAttr: boolean = false;
   @Output('generated') generatedEmitter = new EventEmitter<AddOrUpdateProductDto>();
 
-  get variantsToCreate(): ITruncatedVariant[] {
-    return this.truncVariants.filter(variant =>
-      variant.existingVariantIndex === -1 || variant.needToCopy
-    );
-  }
-
-  get variantsToRemove(): AddOrUpdateProductVariantDto[] {
-    // if (this.initialFormValue.variants.length === 1) {
-    //   return [];
-    // }
-    return this.initialFormValue.variants.filter((variant, index) =>
-      this.truncVariants.every(truncVariant => truncVariant.existingVariantIndex !== index)
-    );
-  };
-
-  get variantsToLeave(): AddOrUpdateProductVariantDto[] {
-    return this.initialFormValue.variants.filter((variant, index) =>
-      this.truncVariants.find(truncVariant => truncVariant.existingVariantIndex === index && !truncVariant.needToCopy)
-    );
+  get selectOptionsForCopy(): ISelectOption[] {
+    return this.initialFormValue.variants.map((variant, index) => ({
+      value: index,
+      view: variant.name[this.lang]
+    }));
   }
 
   constructor(
@@ -133,8 +127,7 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
   }
 
   private resetPreGenerated() {
-    this.preGeneratedAttrsForProduct = [];
-    this.truncVariants = [];
+    this.attributesForProduct = [];
   }
 
   prevStep() {
@@ -156,7 +149,7 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
     if (this.activeStep === ESelectionStep.Summary) {
       this.preGenerateVariants();
 
-      if (!this.truncVariants.length) {
+      if (this.toUpdateVariants.length === 1 && !this.toAddVariants.length && !this.toDeleteVariantIndices.size) {
         this.nextStep();
       }
     }
@@ -166,138 +159,208 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
     this.resetPreGenerated();
 
     const attributesForVariants: AttributeDto[] = [];
+    const attributeIdsForVariantsWithSingleValue: string[] = [];
     const selectedAttributesWithSelectedValues: SelectedAttribute[] = this.selectedAttributes.map(attr => {
       return { ...attr, values: attr.values.filter(v => v.isSelected) };
     });
 
     selectedAttributesWithSelectedValues.forEach(selectedAttr => {
-      if (selectedAttr.type === EAttributeType.MultiSelect || selectedAttr.values.length === 1) {
-        this.preGeneratedAttrsForProduct.push(selectedAttr);
+      if (selectedAttr.type === EAttributeType.MultiSelect) {
+        this.attributesForProduct.push(selectedAttr);
       } else {
         attributesForVariants.push(selectedAttr);
+
+        if (selectedAttr.values.length === 1) {
+          attributeIdsForVariantsWithSingleValue.push(selectedAttr.id);
+          this.attributesForProduct.push(selectedAttr);
+        }
       }
     });
 
-    this.truncVariants = [];
-    const populateTruncVariants = (variant: ITruncatedVariant = { attributes: {} }, attrIdx = 0, valueIdx = 0) => {
-      const attr = attributesForVariants[attrIdx];
-      if (!attr) { return; }
-      const value = attr.values[valueIdx];
-      if (!value) { return; }
 
-      variant = JSON.parse(JSON.stringify(variant));
-      variant.attributes[attr.id] = value.id;
+    const truncNewVariants: ITruncatedVariant[] = [];
+    const attributeValuesIndices = new Array(attributesForVariants.length).fill(0);
 
-      if (attributesForVariants[attrIdx + 1]) {
-        populateTruncVariants(variant, attrIdx + 1, 0);
-      } else {
-        this.truncVariants.push(variant);
+    const addVariant = () => {
+      const truncNewVariant: { [attr: string]: string } = {};
+      attributeValuesIndices.forEach((valueIndex, attributeIndex) => {
+        const attribute = attributesForVariants[attributeIndex];
+        const value = attribute?.values[valueIndex];
+        if (value) {
+          truncNewVariant[attribute.id] = value.id;
+        }
+      });
+      truncNewVariants.push(truncNewVariant);
+    };
+
+    const incrementIndices = (attributeIndex: number = 0): boolean => {
+      const attribute = attributesForVariants[attributeIndex];
+      if (!attribute) {
+        return false;
       }
 
-      if (attr.values[valueIdx + 1]) {
-        populateTruncVariants(variant, attrIdx, valueIdx + 1);
+      const incrementedValueIndex = attributeValuesIndices[attributeIndex] += 1;
+      const value = attribute.values[incrementedValueIndex];
+      if (!value) {
+        attributeValuesIndices[attributeIndex] = 0;
+        return incrementIndices(attributeIndex + 1);
+      } else {
+        return true;
       }
     };
-    populateTruncVariants();
 
-    const usedExistingIndices = new Set<number>();
-    this.truncVariants = this.truncVariants.map(truncVariant => {
-      const initialAttributeKeys = Object.keys(this.initialFormValue.variants[0].attributes);
-      const attributeKeys = Object.keys(truncVariant.attributes);
-      const filteredAttributeKeys = attributeKeys.filter(key => initialAttributeKeys.includes(key));
+    do {
+      addVariant();
+    } while (incrementIndices());
 
-      const setExistingVariantIndex = (matchEveryAttr: boolean, attrAndValue: boolean) => {
-        truncVariant.existingVariantIndex = this.initialFormValue.variants.findIndex(variant => {
 
-          const hasAttrAndValue = (attribute: ProductSelectedAttributeDto) =>
-            filteredAttributeKeys.find(attrKey =>
-              attribute.attributeId === attrKey && attribute.valueIds.includes(truncVariant.attributes[attrKey])
-            );
-
-          const hasAttr = (attribute: ProductSelectedAttributeDto) =>
-            filteredAttributeKeys.find(attrKey =>
-              attribute.attributeId === attrKey
-            );
-
-          if (this.initialFormValue.variants.length === 1 && matchEveryAttr && attrAndValue) {
-            return this.initialFormValue.attributes.some((attribute: ProductSelectedAttributeDto) =>
-              attributeKeys.find(attrKey =>
-                attribute.attributeId === attrKey && attribute.valueIds.includes(truncVariant.attributes[attrKey])
-              ));
-          }
-
-          if (variant.attributes.length === 0) {
-            return false;
-          }
-
-          if (matchEveryAttr) {
-            if (attrAndValue) {
-              return variant.attributes.every(hasAttrAndValue);
-            } else {
-              return variant.attributes.every(hasAttr) && variant.attributes.some(hasAttrAndValue);
-            }
-          } else {
-            if (attrAndValue) {
-              return variant.attributes.some(hasAttrAndValue);
-            } else {
-              return variant.attributes.some(hasAttr)
-            }
-          }
+    const truncOldVariants: ITruncatedVariant[] = [];
+    const nonMultiSelectProductSelectedAttrs = [];
+    this.initialFormValue.attributes.forEach(selectedAttr => {
+      const attr = this.attributes.find(attribute => attribute.id === selectedAttr.attributeId);
+      if (!attr || attr.type === EAttributeType.MultiSelect) {
+        return;
+      }
+      nonMultiSelectProductSelectedAttrs.push(selectedAttr);
+    });
+    this.initialFormValue.variants.forEach(variant => {
+      const truncOldVariant: { [attr: string]: string } = {};
+      [...nonMultiSelectProductSelectedAttrs, ...variant.attributes].forEach(selectedAttribute => {
+        selectedAttribute.valueIds.forEach(selectedAttrValue => {
+          truncOldVariant[selectedAttribute.attributeId] = selectedAttrValue;
         });
-      };
+      });
 
-      setExistingVariantIndex(true, true);
-      const isFullMatch: boolean = truncVariant.existingVariantIndex > -1;
-
-      if (truncVariant.existingVariantIndex === -1) {
-        setExistingVariantIndex(true, false);
-      }
-
-      if (truncVariant.existingVariantIndex === -1) {
-        setExistingVariantIndex(false, true);
-      }
-
-      if (truncVariant.existingVariantIndex === -1) {
-        setExistingVariantIndex(false, false);
-      }
-
-
-      if (isFullMatch) {
-        truncVariant.needToCopy = usedExistingIndices.has(truncVariant.existingVariantIndex);
-        truncVariant.variantIndexForSorting = truncVariant.needToCopy ? -1 : truncVariant.existingVariantIndex;
-        usedExistingIndices.add(truncVariant.existingVariantIndex);
-      } else {
-        truncVariant.needToCopy = true;
-        truncVariant.variantIndexForSorting = -1;
-      }
-
-      return truncVariant;
+      truncOldVariants.push(truncOldVariant);
     });
 
-    this.truncVariants.sort((a, b) => {
-      if (a.variantIndexForSorting === b.variantIndexForSorting) {
-        return 0;
-      }
-      if (a.variantIndexForSorting === -1) {
-        return 1;
-      }
-      if (b.variantIndexForSorting === -1) {
-        return -1;
+    const toUpdateVariantIndices = new Map<number, number>();
+    const toAddVariantIndices = new Set<number>();
+    this.toDeleteVariantIndices.clear();
+
+    truncOldVariants.forEach((truncOldVariant, oldIndex) => {
+      let willBeIndex = null;
+      for (let newIndex = 0; newIndex < truncNewVariants.length; newIndex++){
+        const isClone = Object.entries(truncOldVariant).every(([attrId, valueId]) => {
+          return truncNewVariants[newIndex][attrId] === valueId;
+        });
+        if (isClone) {
+          willBeIndex = newIndex;
+          break;
+        }
       }
 
-      return a.variantIndexForSorting - b.variantIndexForSorting;
+      if (willBeIndex === null) {
+        this.toDeleteVariantIndices.add(oldIndex);
+      } else {
+        toUpdateVariantIndices.set(oldIndex, willBeIndex);
+      }
+    });
+
+    truncNewVariants.forEach((truncNewVariant, newIndex) => {
+      let wasIndex = null;
+      for (let oldIndex = 0; oldIndex < truncOldVariants.length; oldIndex++){
+        const truncOldVariant = truncOldVariants[oldIndex];
+        const isClone = Object.entries(truncOldVariant).every(([attrId, valueId]) => {
+          return truncNewVariant[attrId] === valueId;
+        });
+        if (isClone) {
+          wasIndex = oldIndex;
+          break;
+        }
+      }
+
+      if (wasIndex === null || toUpdateVariantIndices.get(wasIndex) !== newIndex) {
+        toAddVariantIndices.add(newIndex);
+      } else {
+        toUpdateVariantIndices.set(wasIndex, newIndex);
+      }
+    });
+
+    this.toDeleteVariantIndices.forEach(toDeleteVariantIndex => {
+      if (toAddVariantIndices.size) {
+        const toAddVariantIndex = toAddVariantIndices.values().next().value;
+        toAddVariantIndices.delete(toAddVariantIndex);
+        this.toDeleteVariantIndices.delete(toDeleteVariantIndex);
+
+        toUpdateVariantIndices.set(toDeleteVariantIndex, toAddVariantIndex);
+      }
+    });
+
+    const getTruncVariantWithoutSingleValueAttrs = (truncVariants: ITruncatedVariant[], truncVariantIndex: number): ITruncatedVariant => {
+      const truncVariant = truncVariants[truncVariantIndex];
+      const filteredTruncVariant: ITruncatedVariant = { };
+      Object.keys(truncVariant).forEach(attributeId => {
+        if (attributeIdsForVariantsWithSingleValue.includes(attributeId)) {
+          return;
+        }
+
+        filteredTruncVariant[attributeId] = truncVariant[attributeId];
+      });
+
+      return filteredTruncVariant;
+    };
+
+    this.toAddVariants = [];
+    toAddVariantIndices.forEach(toAddVariantIndex => {
+      if (this.toDeleteVariantIndices.size) {
+        const toDeleteVariantIndex = this.toDeleteVariantIndices.values().next().value;
+        this.toDeleteVariantIndices.delete(toDeleteVariantIndex);
+        toAddVariantIndices.delete(toAddVariantIndex);
+        toUpdateVariantIndices.set(toDeleteVariantIndex, toAddVariantIndex);
+      } else {
+        const filteredTruncVariant = getTruncVariantWithoutSingleValueAttrs(truncNewVariants, toAddVariantIndex);
+
+        this.toAddVariants.push(filteredTruncVariant);
+      }
+    });
+
+    this.toUpdateVariants = [];
+    toUpdateVariantIndices.forEach((newVariantIndex, oldVariantIndex) => {
+      const filteredOldTruncVariant = getTruncVariantWithoutSingleValueAttrs(truncOldVariants, oldVariantIndex);
+      const filteredNewTruncVariant = getTruncVariantWithoutSingleValueAttrs(truncNewVariants, newVariantIndex);
+      let areSame: boolean = false;
+      const oldEntries = Object.entries(filteredOldTruncVariant);
+      const newEntries = Object.entries(filteredNewTruncVariant);
+      if (oldEntries.length === newEntries.length) {
+        areSame = oldEntries.every(([oldAttrId, oldValueId]) => {
+          return newEntries.find(([newAttrId, newValueId]) => {
+            return oldAttrId === newAttrId && oldValueId === newValueId
+          });
+        });
+      }
+
+      this.toUpdateVariants.push({
+        oldVariant: filteredOldTruncVariant,
+        newVariant: filteredNewTruncVariant,
+        oldVariantIndex,
+        newVariantIndex,
+        areSame
+      });
+    });
+
+    console.log({
+      attributesForProduct: this.attributesForProduct,
+      attributesForVariants: attributesForVariants,
+      truncOldVariants: truncOldVariants,
+      truncNewVariants,
+      toAddVariantIndices,
+      toAddVariants: this.toAddVariants,
+      toUpdateVariants: this.toUpdateVariants,
+      toUpdateVariantIndices,
+      toDeleteVariantIndices: this.toDeleteVariantIndices,
     });
   }
 
   private finish() {
-    const getStringCopy = (str: string): string => `КОПИЯ - ${str}`;
+    const getStringCopy = (str: string): string => str?.trim() ? `КОПИЯ - ${str}` : ``;
     const getMultilangTextCopy = (text: MultilingualTextDto): MultilingualTextDto => {
       const copy = new MultilingualTextDto();
       Object.entries(text).forEach(([lang, value]) => copy[lang] = getStringCopy(value));
       return copy;
-    }
-    const getVariantCopy = (idx: number) => {
-      if (idx === -1) {
+    };
+    const getVariantCopy = (idx: number | undefined) => {
+      if (idx === undefined) {
         idx = 0;
       }
 
@@ -309,7 +372,7 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
         qtyInStock: variantClone.qtyInStock,
         isIncludedInShoppingFeed: variantClone.isIncludedInShoppingFeed,
         isEnabled: variantClone.isEnabled,
-        googleAdsProductTitle: getStringCopy(variantClone.googleAdsProductTitle),
+        googleAdsProductTitle: getMultilangTextCopy(variantClone.googleAdsProductTitle),
         isDiscountApplicable: variantClone.isDiscountApplicable,
         vendorCode: getStringCopy(variantClone.vendorCode),
         gtin: getStringCopy(variantClone.gtin),
@@ -327,39 +390,37 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
       } as AddOrUpdateProductVariantDto;
     };
 
-    const variants: AddOrUpdateProductVariantDto[] = this.truncVariants.map(truncVariant => {
-      const idx = truncVariant.existingVariantIndex;
+    const variants: AddOrUpdateProductVariantDto[] = [];
 
-      let variant: AddOrUpdateProductVariantDto;
-      if (idx === -1 || truncVariant.needToCopy) {
-        variant = getVariantCopy(idx);
-      } else {
-        variant = {
-          ...this.initialFormValue.variants[truncVariant.existingVariantIndex],
-          attributes: []
-        };
-      }
+    this.toUpdateVariants.forEach(toUpdateVariant => {
+      const initialVariant = this.initialFormValue.variants[toUpdateVariant.oldVariantIndex];
+      const attributes: ProductSelectedAttributeDto[] = Object.keys(toUpdateVariant.newVariant).map(attributeId => ({
+        attributeId,
+        valueIds: [toUpdateVariant.newVariant[attributeId]]
+      }));
 
-      Object.keys(truncVariant.attributes).forEach(attributeId => {
-        variant.attributes.push({
-          attributeId,
-          valueIds: [truncVariant.attributes[attributeId]]
-        });
+      variants.push({
+        ...initialVariant,
+        attributes
       });
-
-      return variant;
     });
 
-    if (!variants.length) {
+    this.toAddVariants.forEach((toAddVariant, index) => {
+      const initialVariantCopy = getVariantCopy(this.toAddVariantsCopyMap[index]);
+      const attributes: ProductSelectedAttributeDto[] = Object.keys(toAddVariant).map(attributeId => ({
+        attributeId,
+        valueIds: [toAddVariant[attributeId]]
+      }));
+
       variants.push({
-        ...this.initialFormValue.variants[0],
-        attributes: []
+        ...initialVariantCopy,
+        attributes
       });
-    }
+    });
 
     const changedFormValue: AddOrUpdateProductDto = {
       ...this.initialFormValue,
-      attributes: this.preGeneratedAttrsForProduct.map(a => ({
+      attributes: this.attributesForProduct.map(a => ({
         attributeId: a.id,
         valueIds: a.values.map(attrValue => attrValue.id)
       })),
@@ -437,6 +498,10 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
 
   isSelected(attribute: SelectedAttribute): boolean {
     return !!this.selectedAttributes.find(selectedAttribute => selectedAttribute.id === attribute.id);
+  }
+
+  getFirstToDeleteVariantIndex(): number | null {
+    return this.toDeleteVariantIndices.size ? this.toDeleteVariantIndices.values().next().value : null;
   }
 
   private selectManufacturerAttribute() {

@@ -21,7 +21,12 @@
       <!--
       <div class="editor__step" [class.editor__step--active]="activeStep === stepsEnum.Images">Картинки и цены</div>
       -->
-      <div class="editor__step" *ngIf="truncVariants.length" [class.editor__step--active]="activeStep === stepsEnum.Summary">Итог</div>
+      <div class="editor__step"
+           *ngIf="toAddVariants.length || toUpdateVariants.length || toDeleteVariantIndices.size"
+           [class.editor__step--active]="activeStep === stepsEnum.Summary"
+      >
+        Итог
+      </div>
     </div>
 
     <div class="editor__toolbar-buttons">
@@ -116,64 +121,139 @@
 
     <ng-container *ngSwitchCase="stepsEnum.Summary">
 
-      <div class="summary-block" *ngIf="preGeneratedAttrsForProduct.length">
+      <div class="summary-block" *ngIf="attributesForProduct.length">
         <div class="summary-block__title">
-          <ng-container *ngIf="variantsToLeave?.length + variantsToCreate?.length > 1; else noVariantsTitle">Общие атрибуты:</ng-container>
-          <ng-template #noVariantsTitle>Атрибуты:</ng-template>
+          Общие атрибуты:
         </div>
 
         <div class="summary-block__body">
-          <div class="summary-block__attr field" *ngFor="let attribute of preGeneratedAttrsForProduct">
+          <div class="summary-block__attr field" *ngFor="let attribute of attributesForProduct">
             <div class="field__label summary-block__attr-label">{{ attributeService.getAttributeLabel(attribute.id) }}</div>
             <div class="field__control summary-block__attr-value">{{ getPreGeneratedAttrLabel(attribute) }}</div>
           </div>
         </div>
       </div>
 
-      <div class="summary-block" *ngIf="variantsToCreate?.length">
+      <div class="summary-block" *ngIf="toAddVariants?.length">
         <div class="summary-block__title">
           Новые вариации:
         </div>
 
         <div class="summary-block__body">
-          <div class="summary-block__variant" *ngFor="let variant of variantsToCreate, index as i">
-             {{ i + 1}}. <span *ngFor="let keyValue of variant.attributes | keyvalue, last as last">
-              {{ attributeService.getAttributeLabel(keyValue.key) }}: <span class="summary-block__attr-value">{{ attributeService.getValueLabel(keyValue.key, [keyValue.value]) }}</span><ng-container *ngIf="!last">, </ng-container>
-            </span>
-          </div>
+          <table class="variant-table">
+            <thead>
+            <tr>
+              <th class="variant-table__cell variant-table__cell--id"></th>
+              <th class="variant-table__cell" *ngFor="let keyValue of toAddVariants[0] | keyvalue">
+                {{ attributeService.getAttributeLabel(keyValue.key) }}
+              </th>
+              <th class="variant-table__cell variant-table__cell--name">
+                Скопировать данные из:
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let variant of toAddVariants, index as i">
+              <td>
+                {{ i + 1}}
+              </td>
+              <td *ngFor="let keyValue of variant | keyvalue">
+                {{ attributeService.getValueLabel(keyValue.key, [keyValue.value]) }}
+              </td>
+              <td>
+                <app-select [options]="selectOptionsForCopy"
+                            [initialValue]="0"
+                            (selectValue)="toAddVariantsCopyMap[i] = $event"
+                ></app-select>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div class="summary-block" *ngIf="variantsToRemove.length">
+      <div class="summary-block" *ngIf="toUpdateVariants?.length">
+        <div class="summary-block__title">
+          Существующие вариации:
+        </div>
+
+        <div class="summary-block__body variant-tables">
+          <table class="variant-table">
+            <thead>
+            <tr>
+              <th class="variant-table__cell variant-table__cell--id"></th>
+              <th class="variant-table__cell"
+                  *ngFor="let keyValue of toUpdateVariants[0].newVariant | keyvalue"
+              >
+                {{ attributeService.getAttributeLabel(keyValue.key) }}
+                <ng-container *ngIf="!toUpdateVariants[0].oldVariant[keyValue.key]">
+                  <br>
+                  (новый атрибут)
+                </ng-container>
+              </th>
+              <th class="variant-table__cell variant-table__cell--name">
+                Название
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let toUpdateVariant of toUpdateVariants, index as i">
+              <td>
+                {{ i + 1}}
+              </td>
+              <td *ngFor="let keyValue of toUpdateVariant.newVariant | keyvalue">
+                <ng-container *ngIf="toUpdateVariant.oldVariant[keyValue.key] as oldAttrValue">
+                  <ng-container *ngIf="oldAttrValue !== keyValue.value">
+                    Было: {{ attributeService.getValueLabel(keyValue.key, [oldAttrValue]) }}.<br> Стало:
+                  </ng-container>
+                </ng-container>
+
+                {{ attributeService.getValueLabel(keyValue.key, [keyValue.value]) }}
+              </td>
+              <td>
+                {{ initialFormValue.variants[toUpdateVariant.oldVariantIndex].name[lang] }}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="summary-block" *ngIf="toDeleteVariantIndices.size">
         <div class="summary-block__title">
           Вариации для удаления:
         </div>
 
         <div class="summary-block__body">
-          <div class="summary-block__variant" *ngFor="let variant of variantsToRemove, index as i">
-             {{ i + 1}}.
-            <span *ngFor="let attribute of variant.attributes, last as last">
-              {{ attributeService.getAttributeLabel(attribute.attributeId) }}: <span class="summary-block__attr-value">{{ attributeService.getValueLabel(attribute.attributeId, attribute.valueIds) }}</span><ng-container *ngIf="!last">, </ng-container>
-            </span> - {{ variant.name[lang] }}
-          </div>
-        </div>
-      </div>
 
-      <div class="summary-block" *ngIf="variantsToLeave?.length">
-        <div class="summary-block__title">
-          Оставить (изменить):
-        </div>
-
-        <div class="summary-block__body">
-          <div class="summary-block__variant" *ngFor="let variant of variantsToLeave, index as i">
-
-            {{ i + 1}}.
-            <span *ngFor="let attribute of variant.attributes, last as last"> {{ attributeService.getAttributeLabel(attribute.attributeId) }}:
-              <span class="summary-block__attr-value"> {{ attributeService.getValueLabel(attribute.attributeId, attribute.valueIds) }}</span>
-              <ng-container *ngIf="!last">, </ng-container>
-            </span>  - {{ variant.name[lang] }}
-
-          </div>
+          <table class="variant-table">
+            <thead>
+            <tr>
+              <th class="variant-table__cell variant-table__cell--id"></th>
+              <th  class="variant-table__cell"
+                   *ngFor="let attribute of initialFormValue.variants[getFirstToDeleteVariantIndex()].attributes"
+              >
+                {{ attributeService.getAttributeLabel(attribute.attributeId) }}
+              </th>
+              <th class="variant-table__cell variant-table__cell--name">
+                Название
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let toDeleteVariantIndex of toDeleteVariantIndices, index as i">
+              <td>
+                {{ i + 1}}
+              </td>
+              <td *ngFor="let attribute of initialFormValue.variants[toDeleteVariantIndex].attributes">
+                {{ attributeService.getValueLabel(attribute.attributeId, attribute.valueIds) }}
+              </td>
+              <td>
+                {{ initialFormValue.variants[toDeleteVariantIndex].name[lang] }}
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </ng-container>
