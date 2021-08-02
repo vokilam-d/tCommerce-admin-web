@@ -213,6 +213,15 @@
     margin: 0 0 0 7px;
     font-size: 15px;
   }
+
+  &__add-btn {
+    cursor: pointer;
+    margin: 10px 0 0;
+  }
+
+  &__add {
+    margin: 4px 0 0;
+  }
 }
 
 .summary-block {
@@ -246,6 +255,15 @@
   }
 
   &__variant {
+    margin: 10px 0 0;
+  }
+}
+
+.new-value {
+  position: relative;
+  max-width: 400px;
+
+  &__save {
     margin: 10px 0 0;
   }
 }

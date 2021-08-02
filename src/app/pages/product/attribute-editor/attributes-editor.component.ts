@@ -34,6 +34,7 @@ class SelectedAttributeValue extends AttributeValueDto {
 
 class SelectedAttribute extends AttributeDto {
   values: SelectedAttributeValue[];
+  newValueName?: MultilingualTextDto;
 }
 
 interface ITruncatedVariant {
@@ -58,6 +59,7 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
   activeStep: ESelectionStep = ESelectionStep.SelectAttributes;
   attributes: AttributeDto[] = [];
   selectedAttributes: SelectedAttribute[] = [];
+  isLoading: boolean = false;
 
   preGeneratedAttrsForProduct: AttributeDto[] = [];
   truncVariants: ITruncatedVariant[] = [];
@@ -435,6 +437,10 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
     }
   }
 
+  toggleAttributeNewValue(attribute: SelectedAttribute) {
+    attribute.newValueName = !attribute.newValueName ? new MultilingualTextDto() : null;
+  }
+
   isSelected(attribute: SelectedAttribute): boolean {
     return !!this.selectedAttributes.find(selectedAttribute => selectedAttribute.id === attribute.id);
   }
@@ -447,6 +453,32 @@ export class AttributesEditorComponent extends NgUnsubscribe implements OnInit {
     if (manufacturerAttr) {
       this.selectedAttributes.push(manufacturerAttr as SelectedAttribute);
     }
+  }
+
+  addNewAttributeValue(attribute: SelectedAttribute) {
+    attribute.newValueName.ru = attribute.newValueName.ru.trim();
+    if (!attribute.newValueName.ru) {
+      this.notyService.showErrorNoty(`Не заполнено "Рус" поле`);
+      return;
+    }
+
+    attribute.newValueName.uk = attribute.newValueName.uk.trim();
+    if (!attribute.newValueName.uk) {
+      this.notyService.showErrorNoty(`Не заполнено "Укр" поле`);
+      return;
+    }
+
+    const attributeId = attribute.id;
+    const attributeValueDto = new AttributeValueDto();
+    attributeValueDto.label = attribute.newValueName;
+
+    this.isLoading = true;
+
+    this.attributeService.addAttributeValue(attributeId, attributeValueDto)
+      .pipe(this.takeUntilDestroy(), finalize(() => this.isLoading = false))
+      .subscribe(response => {
+        attribute.newValueName = null;
+      });
   }
 }
 
