@@ -95,6 +95,7 @@
         >
           <ng-container *ngSwitchCase="orderStatuses.PROCESSING">Принять в работу</ng-container>
           <ng-container *ngSwitchCase="orderStatuses.READY_TO_PACK">Готово к упаковке</ng-container>
+          <ng-container *ngSwitchCase="orderStatuses.READY_TO_SHIP">Готово к отправке</ng-container>
           <ng-container *ngSwitchCase="orderStatuses.RETURNED">Посылка возвращена</ng-container>
         </app-button>
 

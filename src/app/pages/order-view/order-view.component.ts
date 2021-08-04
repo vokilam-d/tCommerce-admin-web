@@ -77,6 +77,8 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
         return OrderStatusEnum.PROCESSING;
       case OrderStatusEnum.PROCESSING:
         return OrderStatusEnum.READY_TO_PACK;
+      case OrderStatusEnum.PACKED:
+        return OrderStatusEnum.READY_TO_SHIP;
       default:
         return null;
     }
