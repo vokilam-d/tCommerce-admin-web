@@ -35,6 +35,7 @@ import { ContactInfoModalComponent } from './contact-info-modal/contact-info-mod
 import { ResponseDto } from '../../shared/dtos/response.dto';
 import { TaxReceiptRepresentationType } from '../../shared/enums/tax/tax-receipt-representation-type.enum';
 import { TaxService } from '../../shared/services/tax.service';
+import { OrderPricesModalComponent } from '../../order-prices-modal/order-prices-modal.component';
 
 @Component({
   selector: 'order-view',
@@ -66,6 +67,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   @ViewChild(InvoiceModalComponent) invoiceModalCmp: InvoiceModalComponent;
   @ViewChild(ConfirmPackItemModalComponent) confirmPackCmp: ConfirmPackItemModalComponent;
   @ViewChild(ContactInfoModalComponent) contactInfoModalCmp: ContactInfoModalComponent;
+  @ViewChild(OrderPricesModalComponent) orderPricesModalCmp: OrderPricesModalComponent;
 
   get nextOrderStatus(): OrderStatusEnum | null {
     switch (this.order.status) {

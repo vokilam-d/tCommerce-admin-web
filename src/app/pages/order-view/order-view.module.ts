@@ -14,6 +14,7 @@ import { MediaAssetModule } from '../../media-asset/media-asset.module';
 import { ContactInfoModalComponent } from './contact-info-modal/contact-info-modal.component';
 import { ContactInfoModule } from '../../contact-info/contact-info.module';
 import { MediaUploaderModule } from '../../media-uploader/media-uploader.module';
+import { OrderPricesModalModule } from '../../order-prices-modal/order-prices-modal.module';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { MediaUploaderModule } from '../../media-uploader/media-uploader.module'
     ReactiveFormsModule,
     MediaAssetModule,
     ContactInfoModule,
-    MediaUploaderModule
+    MediaUploaderModule,
+    OrderPricesModalModule
   ]
 })
 export class OrderViewModule { }

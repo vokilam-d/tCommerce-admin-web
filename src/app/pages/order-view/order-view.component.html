@@ -357,6 +357,9 @@
             <div class="summary__row">
               <div class="summary__block">
                 Скидка
+                <button class="order-view__edit-btn" (click)="orderPricesModalCmp.openModal()">
+                  изменить
+                </button>
               </div>
               <div class="summary__block">
                 -{{ order.prices.discountValue }} грн
@@ -441,6 +444,11 @@
   <contact-info-modal [contactInfo]="order.shipment.recipient.contactInfo"
                       (contactInfoSubmit)="onRecipientContactInfoSubmit($event)"
   ></contact-info-modal>
+
+  <order-prices-modal [prices]="order.prices"
+                      [orderId]="order.id"
+                      (pricesChanged)="order.prices = $event"
+  ></order-prices-modal>
 </ng-container>
 
 <preloader class="preloader" *ngIf="!customer || isLoading" [hasMargins]="false"></preloader>

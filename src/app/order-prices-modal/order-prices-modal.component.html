@@ -1,0 +1,28 @@
+<ng-container *ngIf="isModalVisible">
+  <div class="modal-overlay" (click)="closeModal()"></div>
+
+  <div class="modal">
+    <div class="modal__header">
+      <div class="modal__title">
+        Изменить стоимость заказа
+      </div>
+      <div class="modal__close" (click)="closeModal()">
+        <i class="ai ai-multiply modal__close-icon"></i>
+      </div>
+    </div>
+
+    <div class="modal__content">
+      <order-prices [prices]="cachedPrices"
+                    (pricesChanged)="onPricesChange($event)"
+      ></order-prices>
+
+      <div class="modal__footer-controls">
+        <app-button (click)="save()" btnStyle="primary" type="button">
+          Сохранить
+        </app-button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<preloader class="preloader" *ngIf="isLoading" [hasMargins]="false" position="page-bottom"></preloader>

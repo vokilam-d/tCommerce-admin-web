@@ -9,6 +9,7 @@ export class PreloaderComponent implements OnInit {
 
   @Input() hasOverlay: boolean = false;
   @Input() hasMargins: boolean = true;
+  @Input() position: 'page-bottom' = null;
 
   constructor() { }
 

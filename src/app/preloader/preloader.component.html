@@ -1,6 +1,9 @@
 <div class="overlay" *ngIf="hasOverlay"></div>
 
-<div class="preloader" [class.preloader--with-margins]="hasMargins">
+<div class="preloader"
+     [class.preloader--with-margins]="hasMargins"
+     [class.preloader--bottom]="position === 'page-bottom'"
+>
   <div></div>
   <div></div>
   <div></div>

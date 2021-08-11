@@ -88,6 +88,10 @@ export class OrderService {
     return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/manager`, payload);
   }
 
+  updateOrderPrices(id: number, orderPrices: OrderPricesDto) {
+    return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/prices`, orderPrices);
+  }
+
   createOrderItem(sku: string, qty: number, omitReserved: boolean) {
     const payload: CreateOrderItemDto = {
       sku,
