@@ -523,7 +523,10 @@
     </div>
 
     <div class="modal__content">
-      <address-form class="address-form__form" [address]="order.shipment.recipient.address" [showIsDefault]="false"></address-form>
+      <address-form class="address-form__form"
+                    [address]="order.shipment.recipient.address"
+                    [showIsDefault]="false"
+      ></address-form>
 
       <div class="address-form__submit-container">
         <app-button class="address-form__submit" (click)="submitAddressForm()" btnStyle="primary">
