@@ -35,6 +35,9 @@ import { ContactInfoModalComponent } from './contact-info-modal/contact-info-mod
 import { ResponseDto } from '../../shared/dtos/response.dto';
 import { TaxReceiptRepresentationType } from '../../shared/enums/tax/tax-receipt-representation-type.enum';
 import { TaxService } from '../../shared/services/tax.service';
+import { InventoryService } from '../../shared/services/inventory.service';
+import { merge } from 'rxjs';
+import { InventoryDto } from '../../shared/dtos/inventory.dto';
 import { OrderPricesModalComponent } from './order-prices-modal/order-prices-modal.component';
 import { OrderPricesDto } from '../../shared/dtos/order-prices.dto';
 import { OrderItemsModalComponent } from './order-items-modal/order-items-modal.component';
@@ -61,6 +64,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   isOperationsButtonsVisible: boolean = false;
   customerAvgStoreReviewsRating: number = 0;
   customerAvgProductReviewsRating: number = 0;
+  itemsInventories: { [sku: string]: InventoryDto } = { };
 
   orderStatuses = OrderStatusEnum;
   managerSelectOptions: ISelectOption[] = MANAGER_SELECT_OPTIONS;
@@ -80,6 +84,8 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
         return OrderStatusEnum.PROCESSING;
       case OrderStatusEnum.PROCESSING:
         return OrderStatusEnum.READY_TO_PACK;
+      case OrderStatusEnum.PACKED:
+        return OrderStatusEnum.READY_TO_SHIP;
       default:
         return null;
     }
@@ -99,7 +105,8 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
     private headService: HeadService,
     private router: Router,
     private route: ActivatedRoute,
-    private taxService: TaxService
+    private taxService: TaxService,
+    private inventoryService: InventoryService
   ) {
     super();
   }
@@ -120,6 +127,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
           this.fetchCustomer(this.order.customerId);
           this.headService.setTitle(`Заказ №${this.order.id}`);
           this.handleManagerControl();
+          this.fetchInventories();
         }
       );
   }
@@ -519,5 +527,14 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   onOrderItemsChanged(evt: { items: OrderItemDto[]; prices: OrderPricesDto }) {
     this.order.items = evt.items;
     this.order.prices = evt.prices;
+  }
+
+  private fetchInventories() {
+    const requests = this.order.items.map(item => this.inventoryService.fetchInventory(item.sku));
+    merge(...requests)
+      .pipe( this.takeUntilDestroy() )
+      .subscribe(response => {
+        this.itemsInventories[response.data.sku] = response.data;
+      });
   }
 }

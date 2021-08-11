@@ -110,6 +110,17 @@
             <span class="attribute__value-label">{{ value.label[lang] }}</span>
           </label>
         </div>
+
+        <div class="attribute__add-btn blue-link" (click)="toggleAttributeNewValue(attribute)">
+          Новая опция
+        </div>
+
+        <div class="attribute__add new-value" *ngIf="attribute.newValueName">
+          <multilingual-control [(ngModel)]="attribute.newValueName"></multilingual-control>
+          <app-button class="new-value__save" (click)="addNewAttributeValue(attribute)">Добавить</app-button>
+
+          <preloader *ngIf="isLoading" [hasOverlay]="true"></preloader>
+        </div>
       </div>
     </ng-container>
 

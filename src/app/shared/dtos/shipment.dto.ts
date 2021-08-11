@@ -2,6 +2,7 @@ import { ShipmentPayerEnum } from '../enums/shipment-payer.enum';
 import { ShipmentStatusEnum } from '../enums/shipment-status.enum';
 import { MultilingualTextDto } from './multilingual-text.dto';
 import { ShipmentCounterpartyDto } from './shipment-counterparty.dto';
+import { ShipmentPaymentMethodEnum } from '../enums/shipment-payment-method.enum';
 
 export class ShipmentDto {
   trackingNumber: string = '';
@@ -20,4 +21,5 @@ export class ShipmentDto {
   cost: string = '';
   description: string = '';
   paidStorageStartDate: string = '';
+  paymentMethod: ShipmentPaymentMethodEnum = undefined;
 }

@@ -16,4 +16,5 @@ export class ShipmentSenderDto {
   buildingNumber?: string;
   flat?: string;
   isDefault?: boolean;
+  isFop?: boolean;
 }

@@ -1,4 +1,5 @@
 import { ShipmentPayerEnum } from '../enums/shipment-payer.enum';
+import { ShipmentPaymentMethodEnum } from '../enums/shipment-payment-method.enum';
 
 export class CreateInternetDocumentDto {
   senderId: number;
@@ -9,6 +10,7 @@ export class CreateInternetDocumentDto {
   height: string;
   length: string;
   payerType: ShipmentPayerEnum;
+  paymentMethod: ShipmentPaymentMethodEnum;
   weight: string;
   width: string;
 }

@@ -1,5 +1,6 @@
 export enum ShipmentPaymentMethodEnum {
 
-  CASH = 'Cash'
+  CASH = 'Cash',
+  NON_CASH = 'NonCash'
 
 }
