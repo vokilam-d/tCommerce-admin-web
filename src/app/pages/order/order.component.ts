@@ -12,13 +12,11 @@ import { AddressFormComponent } from '../../address-form/address-form.component'
 import { ISelectOption } from '../../shared/components/select/select-option.interface';
 import { ShipmentAddressDto } from '../../shared/dtos/shipment-address.dto';
 import { CustomerService } from '../../shared/services/customer.service';
-import { ProductSelectorComponent } from '../../product-selector/product-selector.component';
-import { DEFAULT_LANG, MANAGER_SELECT_OPTIONS, UPLOADED_HOST } from '../../shared/constants/constants';
+import { DEFAULT_LANG, MANAGER_SELECT_OPTIONS } from '../../shared/constants/constants';
 import { HeadService } from '../../shared/services/head.service';
 import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
-import { catchError, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { EMPTY, forkJoin, Observable, of } from 'rxjs';
-import { ResponseDto } from '../../shared/dtos/response.dto';
+import { finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 import { ManagerDto } from '../../shared/dtos/manager.dto';
 import { AddOrUpdateOrderDto } from '../../shared/dtos/add-or-update-order.dto';
 import { CustomerContactInfoComponent } from '../../customer-contact-info/customer-contact-info.component';
@@ -32,7 +30,6 @@ import { RecipientContactInfoComponent } from '../../recipient-contact-info/reci
 export class OrderComponent extends NgUnsubscribe implements OnInit {
 
   lang = DEFAULT_LANG;
-  uploadedHost = UPLOADED_HOST;
   isNewOrder: boolean;
   isReorder: boolean;
   isEditOrder: boolean;
@@ -50,7 +47,6 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
 
   @ViewChild(CustomerContactInfoComponent) customerContactInfoCmp: CustomerContactInfoComponent;
   @ViewChild(RecipientContactInfoComponent) recipientContactInfoCmp: RecipientContactInfoComponent;
-  @ViewChild(ProductSelectorComponent) productSelectorCmp: ProductSelectorComponent;
   @ViewChild(AddressFormComponent) addressFormCmp: AddressFormComponent;
 
   constructor(
@@ -91,7 +87,6 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
         this.notyService.attachNoty(),
         tap(response => this.setOrder(response.data)),
         switchMap(() => this.isReorder || this.isEditOrder ? this.fetchCustomer(this.order.customerId) : EMPTY),
-        switchMap(() => this.isReorder ? this.recreateOrderItems() : EMPTY),
         finalize(() => this.isLoading = false)
       )
       .subscribe();
@@ -224,67 +219,40 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
     this.selectCustomer(new CustomerDto());
   }
 
-  showProductSelector() {
-    this.productSelectorCmp.showSelector();
-  }
-
-  onProductSelect({ variant, qty }) {
-    const found = this.order.items.find(item => item.sku === variant.sku);
-    if (found) {
-      qty += found.qty;
-    }
-
-    this.createOrderItem(variant.sku, qty);
-  }
-
-  onOrderItemQtyBlur(target: any, orderItem: OrderItemDto) {
-    const newValue = parseInt(target.value);
-    if (!newValue) {
-      target.value = orderItem.qty.toString();
-      return;
-    }
-
-    this.createOrderItem(orderItem.sku, newValue);
-  }
-
-  createOrderItem(sku: string, qty: number) {
-    this.isLoading = true;
-    this.orderService.createOrderItem(sku, qty, this.isEditOrder)
-      .pipe(
-        this.notyService.attachNoty(),
-        tap(response => this.addOrderItem(sku, response.data)),
-        switchMap(() => this.calculateOrderPrices()),
-        finalize(() => this.isLoading = false)
-      )
-      .subscribe();
-  }
-
-  recreateOrderItems() {
-    const items = this.order.items.splice(0);
-
-    const getItemRequest = (item: OrderItemDto): Observable<ResponseDto<OrderItemDto> | null> => this.orderService
-      .createOrderItem(item.sku, item.qty, this.isEditOrder)
-      .pipe(
-        this.notyService.attachNoty(),
-        tap((response) => this.addOrderItem(response.data.sku, response.data)),
-        catchError(_ => of(null))
-      );
-
-    return forkJoin( ...items.map(getItemRequest) )
-      .pipe( switchMap(() => this.calculateOrderPrices()) );
-  }
-
-  removeOrderItem(index: number) {
-    this.order.items.splice(index, 1);
-
-    this.isLoading = true;
-    this.calculateOrderPrices()
-      .pipe( finalize(() => this.isLoading = false) )
-      .subscribe();
-  }
-
   onPaymentMethodSelect(paymentMethod: PaymentMethodDto) {
     this.order.paymentMethodId = paymentMethod.id;
+  }
+
+  onDiscountValueChange(target: any) {
+    const discountValue = parseInt(target.value);
+    this.order.prices.totalCost = this.order.prices.itemsCost - discountValue;
+  }
+
+  onOrderItemsChanged(items: OrderItemDto[]) {
+    this.order.items = items;
+    this.calculateOrderPrices();
+  }
+
+  calculateOrderPrices() {
+    this.arePricesValid = false;
+    this.orderService.calculateOrderPrices(this.order.items, this.customer.id)
+      .pipe(
+        this.notyService.attachNoty(),
+      )
+      .subscribe(response => {
+        this.order.prices = response.data;
+        this.arePricesValid = true;
+      });
+  }
+
+  private getReviewsRating() {
+    this.customerService.fetchCustomerReviewsAvgRating(this.customer.id)
+      .subscribe(
+        response => {
+          this.customerAvgStoreReviewsRating = response.data.storeReviews.avgRating;
+          this.customerAvgProductReviewsRating = response.data.productReviews.avgRating;
+        }
+      );
   }
 
   private handleAddressForm() {
@@ -333,41 +301,5 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
       manager: orderDto.manager,
       prices: orderDto.prices
     };
-  }
-
-  private addOrderItem(sku: string, itemArg: OrderItemDto) {
-    const foundIdx = this.order.items.findIndex(item => item.sku === sku);
-    if (foundIdx === -1) {
-      this.order.items.push(itemArg);
-    } else {
-      this.order.items[foundIdx] = itemArg;
-    }
-  }
-
-  onDiscountValueChange(target: any) {
-    const discountValue = parseInt(target.value);
-    this.order.prices.totalCost = this.order.prices.itemsCost - discountValue;
-  }
-
-  private getReviewsRating() {
-    this.customerService.fetchCustomerReviewsAvgRating(this.customer.id)
-      .subscribe(
-        response => {
-          this.customerAvgStoreReviewsRating = response.data.storeReviews.avgRating;
-          this.customerAvgProductReviewsRating = response.data.productReviews.avgRating;
-        }
-      );
-  }
-
-  calculateOrderPrices() {
-    this.arePricesValid = false;
-    return this.orderService.calculateOrderPrices(this.order.items, this.customer.id)
-      .pipe(
-        this.notyService.attachNoty(),
-        tap(response => {
-          this.order.prices = response.data;
-          this.arePricesValid = true;
-        })
-      );
   }
 }

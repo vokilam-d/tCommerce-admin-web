@@ -1,0 +1,90 @@
+<div class="items-header">
+  Товары в заказе
+
+  <app-button class="items-header__button" (click)="showProductSelector()" [btnSize]="'small'">
+    Добавить товары
+  </app-button>
+</div>
+
+<div class="grid">
+  <div class="grid__container">
+    <div class="order-item order-item--head">
+      <div class="grid__block grid__block--head order-item__img-block">
+        Фото
+      </div>
+      <div class="grid__block grid__block--head order-item__name">
+        Название
+      </div>
+      <div class="grid__block grid__block--head order-item__price">
+        Цена
+      </div>
+      <div class="grid__block grid__block--head order-item__qty">
+        Кол-во
+      </div>
+      <div class="grid__block grid__block--head order-item__cost">
+        Стоимость
+      </div>
+      <div class="grid__block grid__block--head order-item__remove">
+      </div>
+    </div>
+
+    <div class="order-item order-item--no-items" *ngIf="!items.length; else itemsTmpl">
+      Выберите товары
+    </div>
+
+    <ng-template #itemsTmpl>
+      <div class="grid__row order-item" *ngFor="let orderItem of items, index as i">
+        <div class="grid__block order-item__img-block">
+          <img class="order-item__img" *ngIf="orderItem.imageUrl" [src]="uploadedHost + orderItem.imageUrl">
+        </div>
+        <div class="grid__block order-item__name">
+          {{ orderItem.name[lang] }}
+          <div class="order-item__sku">
+            SKU: {{ orderItem.sku }}
+          </div>
+        </div>
+        <div class="grid__block order-item__price">
+          {{ orderItem.price }} грн
+        </div>
+        <div class="grid__block order-item__qty">
+          <input class="order-item__number-input"
+                 [value]="orderItem.qty"
+                 (blur)="onOrderItemQtyBlur($event.target, orderItem)"
+                 numberInput
+                 min="1"
+                 type="number"
+          >
+        </div>
+        <div class="grid__block order-item__cost">
+          {{ orderItem.cost }} грн
+        </div>
+        <div class="grid__block order-item__remove">
+          <div class="order-item__remove-btn" (click)="removeOrderItem(i)">
+            Убрать
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="order-item order-item--footer">
+      <div class="grid__block grid__block--footer order-item__img-block">
+      </div>
+      <div class="grid__block grid__block--footer order-item__name">
+        Всего товаров: {{ items.length }}
+      </div>
+      <div class="grid__block grid__block--footer order-item__price">
+      </div>
+      <div class="grid__block grid__block--footer order-item__qty">
+      </div>
+      <div class="grid__block grid__block--footer order-item__cost">
+        {{ itemsCost }} грн
+      </div>
+      <div class="grid__block grid__block--footer order-item__remove">
+      </div>
+    </div>
+  </div>
+</div>
+
+<product-selector [canInputQty]="true" (selected)="onProductSelect($event)"></product-selector>
+
+<preloader class="preloader" *ngIf="isLoading" [hasMargins]="false"></preloader>

@@ -8,8 +8,10 @@ export class OrderItemDto {
   sku: string = '';
   vendorCode: string = '';
   price: number = 0;
+  oldPrice: number = 0;
   qty: number = 0;
   cost: number = 0;
+  oldCost: number = 0;
   imageUrl: string = '';
   additionalServices: OrderItemAdditionalServiceDto[] = [];
   isPacked: boolean;

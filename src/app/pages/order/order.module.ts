@@ -15,6 +15,7 @@ import { PreloaderModule } from '../../preloader/preloader.module';
 import { ContactInfoModule } from '../../contact-info/contact-info.module';
 import { CustomerContactInfoModule } from '../../customer-contact-info/customer-contact-info.module';
 import { RecipientContactInfoModule } from '../../recipient-contact-info/recipient-contact-info.module';
+import { OrderItemsModule } from '../../order-items/order-items.module';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { RecipientContactInfoModule } from '../../recipient-contact-info/recipie
     PreloaderModule,
     ContactInfoModule,
     CustomerContactInfoModule,
-    RecipientContactInfoModule
+    RecipientContactInfoModule,
+    OrderItemsModule
   ]
 })
 export class OrderModule { }
