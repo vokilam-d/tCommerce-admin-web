@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PaymentMethodDto } from '../../../shared/dtos/payment-method.dto';
-import { PaymentMethodService } from '../../../shared/services/payment-method.service';
-import { DEFAULT_LANG } from '../../../shared/constants/constants';
+import { PaymentMethodDto } from '../shared/dtos/payment-method.dto';
+import { PaymentMethodService } from '../shared/services/payment-method.service';
+import { DEFAULT_LANG } from '../shared/constants/constants';
 
 @Component({
   selector: 'payment-method-selector',

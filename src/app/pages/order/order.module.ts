@@ -8,7 +8,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomerSelectorComponent } from './customer-selector/customer-selector.component';
 import { AddressFormModule } from '../../address-form/address-form.module';
 import { ShippingMethodSelectorComponent } from './shipping-method-selector/shipping-method-selector.component';
-import { PaymentMethodSelectorComponent } from './payment-method-selector/payment-method-selector.component';
 import { ProductSelectorModule } from '../../product-selector/product-selector.module';
 import { GridModule } from '../../grid/grid.module';
 import { PreloaderModule } from '../../preloader/preloader.module';
@@ -17,10 +16,11 @@ import { CustomerContactInfoModule } from '../../customer-contact-info/customer-
 import { RecipientContactInfoModule } from '../../recipient-contact-info/recipient-contact-info.module';
 import { OrderItemsModule } from '../../order-items/order-items.module';
 import { OrderPricesModule } from '../../order-prices/order-prices.module';
+import { PaymentMethodSelectorModule } from '../../payment-method-selector/payment-method-selector.module';
 
 
 @NgModule({
-  declarations: [OrderComponent, CustomerSelectorComponent, ShippingMethodSelectorComponent, PaymentMethodSelectorComponent],
+  declarations: [OrderComponent, CustomerSelectorComponent, ShippingMethodSelectorComponent],
   imports: [
     CommonModule,
     OrderRoutingModule,
@@ -35,7 +35,8 @@ import { OrderPricesModule } from '../../order-prices/order-prices.module';
     CustomerContactInfoModule,
     RecipientContactInfoModule,
     OrderItemsModule,
-    OrderPricesModule
+    OrderPricesModule,
+    PaymentMethodSelectorModule
   ]
 })
 export class OrderModule { }
