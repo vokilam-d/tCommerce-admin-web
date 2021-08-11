@@ -18,10 +18,12 @@ import { OrderItemsModule } from '../../order-items/order-items.module';
 import { OrderPricesModule } from '../../order-prices/order-prices.module';
 import { OrderPricesModalComponent } from './order-prices-modal/order-prices-modal.component';
 import { OrderItemsModalComponent } from './order-items-modal/order-items-modal.component';
+import { PaymentSelectorModalComponent } from './payment-selector-modal/payment-selector-modal.component';
+import { PaymentMethodSelectorModule } from '../../payment-method-selector/payment-method-selector.module';
 
 
 @NgModule({
-  declarations: [OrderViewComponent, ShipmentInfoModalComponent, InvoiceModalComponent, ConfirmPackItemModalComponent, ContactInfoModalComponent, OrderPricesModalComponent, OrderItemsModalComponent],
+  declarations: [OrderViewComponent, ShipmentInfoModalComponent, InvoiceModalComponent, ConfirmPackItemModalComponent, ContactInfoModalComponent, OrderPricesModalComponent, OrderItemsModalComponent, PaymentSelectorModalComponent],
   imports: [
     CommonModule,
     OrderViewRoutingModule,
@@ -33,7 +35,8 @@ import { OrderItemsModalComponent } from './order-items-modal/order-items-modal.
     ContactInfoModule,
     MediaUploaderModule,
     OrderPricesModule,
-    OrderItemsModule
+    OrderItemsModule,
+    PaymentMethodSelectorModule
   ]
 })
 export class OrderViewModule { }

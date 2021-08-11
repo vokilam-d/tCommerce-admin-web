@@ -215,8 +215,15 @@
       </div>
       <div class="order-view__content">
         <div class="two-col__col method">
-          <div class="method__title">Способ оплаты</div>
-          <div class="method__name">{{ order.paymentInfo.methodAdminName[lang] }}</div>
+          <div class="method__title">
+            Способ оплаты
+            <button class="order-view__edit-btn" (click)="paymentSelectorModalCmp.openModal()">
+              изменить
+            </button>
+          </div>
+          <div class="method__name">
+            {{ order.paymentInfo.methodAdminName[lang] }}
+          </div>
           <div class="payment-status" *ngIf="isPaymentToggleVisible()">
             Заказ оплачен? <toggle class="payment-status__control" [formControl]="paymentStatusControl"></toggle>
 
@@ -457,6 +464,11 @@
                      [orderId]="order.id"
                      (itemsChanged)="onOrderItemsChanged($event)"
   ></order-items-modal>
+
+  <payment-selector-modal [paymentMethodId]="order.paymentInfo.methodId"
+                          [orderId]="order.id"
+                          (paymentInfoChanged)="order.paymentInfo = $event"
+  ></payment-selector-modal>
 </ng-container>
 
 <preloader class="preloader" *ngIf="!customer || isLoading" [hasMargins]="false"></preloader>

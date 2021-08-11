@@ -48,3 +48,7 @@ export class UpdateOrderAdminManager {
 export class UpdateOrderItems {
   items: OrderItemDto[];
 }
+
+export class UpdatePaymentMethodDto {
+  paymentMethodId: string;
+}

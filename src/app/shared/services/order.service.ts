@@ -2,7 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ResponseDto } from '../dtos/response.dto';
-import { OrderDto, UpdateOrderAdminManager, UpdateOrderAdminNote, UpdateOrderItems } from '../dtos/order.dto';
+import {
+  OrderDto,
+  UpdateOrderAdminManager,
+  UpdateOrderAdminNote,
+  UpdateOrderItems,
+  UpdatePaymentMethodDto
+} from '../dtos/order.dto';
 import { toHttpParams } from '../helpers/to-http-params.function';
 import { OrderItemDto } from '../dtos/order-item.dto';
 import { CreateOrderItemDto } from '../dtos/create-order-item.dto';
@@ -98,6 +104,14 @@ export class OrderService {
     };
 
     return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/items`, payload);
+  }
+
+  updatePaymentMethod(id: number, paymentMethodId: string) {
+    const payload: UpdatePaymentMethodDto = {
+      paymentMethodId
+    };
+
+    return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}/payment-method`, payload);
   }
 
   createOrderItem(sku: string, qty: number, omitReserved: boolean) {

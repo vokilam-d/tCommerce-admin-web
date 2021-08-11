@@ -1,0 +1,29 @@
+<ng-container *ngIf="isModalVisible">
+  <div class="modal-overlay" (click)="closeModal()"></div>
+
+  <div class="modal">
+    <div class="modal__header">
+      <div class="modal__title">
+        Изменить способ оплаты
+      </div>
+      <div class="modal__close" (click)="closeModal()">
+        <i class="ai ai-multiply modal__close-icon"></i>
+      </div>
+    </div>
+
+    <div class="modal__content">
+      <payment-method-selector class="order__method"
+                               [activeId]="cachedPaymentMethodId"
+                               (selected)="onPaymentMethodSelect($event)"
+      ></payment-method-selector>
+
+      <div class="modal__footer-controls">
+        <app-button (click)="save()" btnStyle="primary" type="button">
+          Сохранить
+        </app-button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<preloader *ngIf="isLoading" [hasMargins]="false" position="page-bottom"></preloader>
