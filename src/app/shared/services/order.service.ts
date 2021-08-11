@@ -15,7 +15,7 @@ import { CalculatePricesDto } from '../dtos/calculate-prices.dto';
 import { OrderPricesDto } from '../dtos/order-prices.dto';
 import { PackOrderItemDto } from '../dtos/pack-order-item.dto';
 import { CreateInternetDocumentDto } from '../dtos/create-internet-document.dto';
-import { AddOrUpdateOrderDto } from '../dtos/add-or-update-order.dto';
+import { AddOrderDto } from '../dtos/add-order.dto';
 import { ContactInfoDto } from '../dtos/contact-info.dto';
 
 interface IFetchOrderOptions {
@@ -48,12 +48,8 @@ export class OrderService {
     return this.http.get<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}`);
   }
 
-  addNewOrder(dto: AddOrUpdateOrderDto): Observable<ResponseDto<OrderDto>> {
+  addNewOrder(dto: AddOrderDto): Observable<ResponseDto<OrderDto>> {
     return this.http.post<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders`, dto);
-  }
-
-  editOrder(id: number, dto: AddOrUpdateOrderDto): Observable<ResponseDto<OrderDto>> {
-    return this.http.put<ResponseDto<OrderDto>>(`${API_HOST}/api/v1/admin/orders/${id}`, dto);
   }
 
   deleteOrder(id: number) {

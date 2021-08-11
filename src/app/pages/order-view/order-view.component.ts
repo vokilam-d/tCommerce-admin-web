@@ -175,10 +175,6 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
     saveFileFromUrl(`${url}?${queryString}`);
   }
 
-  editOrder() {
-    this.router.navigate(['admin', 'order', 'edit', this.order.id]);
-  }
-
   deleteOrder() {
     if (!confirm(`Вы уверены, что хотите удалить этот заказ?`)) { return; }
     if (!confirm(`Вы точно уверены?`)) { return; }
@@ -200,10 +196,6 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
 
   isCreateInternetDocumentVisible(): boolean {
     return this.order.status === OrderStatusEnum.READY_TO_PACK;
-  }
-
-  isEditOrderVisible(): boolean {
-    return this.isCancelOrderVisible();
   }
 
   isReturnBtnsVisible(): boolean {

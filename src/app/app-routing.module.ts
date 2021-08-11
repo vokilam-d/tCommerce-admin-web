@@ -124,11 +124,6 @@ const routes: Routes = [
             ]
           },
           {
-            path: 'edit/:id',
-            loadChildren: () => import('./pages/order/order.module').then(m => m.OrderModule),
-            data: { action: EPageAction.Edit }
-          },
-          {
             path: 'view/:id',
             loadChildren: () => import('./pages/order-view/order-view.module').then(m => m.OrderViewModule)
           }

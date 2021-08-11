@@ -1,14 +1,9 @@
 <div class="page">
   <div class="header">
     <h1 class="header__title">
-      <ng-container *ngIf="isEditOrder; else newOrderTitle">
-        Редактирование заказа #{{ order?.id }}
-      </ng-container><ng-container *ngIf="customer"> для <ng-container *ngIf="!isNewCustomer; else newCustomerText">{{ customer.contactInfo.firstName }} {{ customer.contactInfo.lastName }}</ng-container></ng-container>
-
-      <ng-template #newOrderTitle>Новый заказ</ng-template>
+      Новый заказ <ng-container *ngIf="customer">для <ng-container *ngIf="!isNewCustomer; else newCustomerText">{{ customer.contactInfo.firstName }} {{ customer.contactInfo.lastName }}</ng-container></ng-container>
 
       <ng-template #newCustomerText>нового клиента</ng-template>
-
     </h1>
 
     <div class="header__toolbar">
@@ -18,26 +13,24 @@
       <button class="header__btn toolbar-btn" *ngIf="customer" (click)="cancelEdit()" type="button">
         Отменить
       </button>
-      <button class="header__btn toolbar-main-btn" *ngIf="customer" (click)="placeOrder()" type="button">
+      <button class="header__btn toolbar-main-btn" *ngIf="customer" (click)="onPlaceOrder()" type="button">
         Разместить заказ
       </button>
     </div>
   </div>
 
   <ng-template #customerTmpl>
-    <div class="customer">
-      <div class="order__subtitle order__subtitle--customer">
-        Пожалуйста, выберите клиента
+    <div class="order__subtitle order__subtitle--customer">
+      Пожалуйста, выберите клиента
 
-        <app-button class="order__subtitle-button" (click)="createNewCustomer()" [btnSize]="'small'">
-          Создать нового клиента
-        </app-button>
-      </div>
-
-      <customer-selector class="order__customer-selector"
-                         (selected)="selectCustomer($event)"
-      ></customer-selector>
+      <app-button (click)="createNewCustomer()" [btnSize]="'small'">
+        Создать нового клиента
+      </app-button>
     </div>
+
+    <customer-selector class="order__customer-selector"
+                       (selected)="selectCustomer($event)"
+    ></customer-selector>
   </ng-template>
 
   <div class="order" *ngIf="customer; else customerTmpl">
@@ -173,7 +166,7 @@
         </div>
 
         <div class="place-order">
-          <app-button (click)="placeOrder()"
+          <app-button (click)="onPlaceOrder()"
                       btnStyle="primary"
                       btnSize="big"
           >

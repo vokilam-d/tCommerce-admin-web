@@ -5,7 +5,7 @@ import { OrderItemDto } from './order-item.dto';
 import { ManagerDto } from './manager.dto';
 import { OrderPricesDto } from './order-prices.dto';
 
-export class AddOrUpdateOrderDto {
+export class AddOrderDto {
   id?: number;
   customerId: number;
   customerContactInfo: CustomerContactInfoDto = new CustomerContactInfoDto();

@@ -18,7 +18,7 @@ import { NgUnsubscribe } from '../../shared/directives/ng-unsubscribe/ng-unsubsc
 import { finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { ManagerDto } from '../../shared/dtos/manager.dto';
-import { AddOrUpdateOrderDto } from '../../shared/dtos/add-or-update-order.dto';
+import { AddOrderDto } from '../../shared/dtos/add-order.dto';
 import { CustomerContactInfoComponent } from '../../customer-contact-info/customer-contact-info.component';
 import { RecipientContactInfoComponent } from '../../recipient-contact-info/recipient-contact-info.component';
 import { OrderPricesDto } from '../../shared/dtos/order-prices.dto';
@@ -33,10 +33,9 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
   lang = DEFAULT_LANG;
   isNewOrder: boolean;
   isReorder: boolean;
-  isEditOrder: boolean;
   isNewCustomer: boolean = false;
   isLoading: boolean = false;
-  order: AddOrUpdateOrderDto;
+  order: AddOrderDto;
   customer: CustomerDto;
   addressSelectControl: FormControl;
   addressSelectOptions: ISelectOption[] = [];
@@ -69,10 +68,9 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
   private init() {
     this.isNewOrder = this.route.snapshot.data.action === EPageAction.Add;
     this.isReorder = this.route.snapshot.data.action === EPageAction.AddBasedOn;
-    this.isEditOrder = this.route.snapshot.data.action === EPageAction.Edit;
 
     if (this.isNewOrder) {
-      this.order = new AddOrUpdateOrderDto();
+      this.order = new AddOrderDto();
       this.headService.setTitle(`Новый заказ`);
     } else {
       this.fetchOrder();
@@ -87,7 +85,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
       .pipe(
         this.notyService.attachNoty(),
         tap(response => this.setOrder(response.data)),
-        switchMap(() => this.isReorder || this.isEditOrder ? this.fetchCustomer(this.order.customerId) : EMPTY),
+        switchMap(() => this.isReorder ? this.fetchCustomer(this.order.customerId) : EMPTY),
         finalize(() => this.isLoading = false)
       )
       .subscribe();
@@ -114,7 +112,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
 
       this.customer = null;
       this.isNewCustomer = false;
-      this.order = new AddOrUpdateOrderDto();
+      this.order = new AddOrderDto();
 
     } else {
       if (!confirm(`Вы уверены, что хотите отменить редактирование этого заказа?`)) {
@@ -125,7 +123,7 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
     }
   }
 
-  placeOrder() {
+  onPlaceOrder() {
     if (!this.order.items.length) {
       this.notyService.showErrorNoty(`Не выбран ни один товар`);
       return;
@@ -151,22 +149,17 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
       return;
     }
 
-    const dto: AddOrUpdateOrderDto = {
+    const dto: AddOrderDto = {
       ...this.order,
       customerContactInfo: this.customerContactInfoCmp.getValue(),
       recipientContactInfo: this.recipientContactInfoCmp.getValue(),
       address: this.addressFormCmp.getValue()
     };
 
-
-    if (this.isNewOrder || this.isReorder) {
-      this.addNewOrder(dto);
-    } else if (this.isEditOrder) {
-      this.editOrder(dto);
-    }
+    this.addNewOrder(dto);
   }
 
-  private addNewOrder(dto: AddOrUpdateOrderDto) {
+  private addNewOrder(dto: AddOrderDto) {
     this.isLoading = true;
     this.orderService.addNewOrder(dto)
       .pipe(
@@ -178,19 +171,6 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
           this.order.id = response.data.id;
           this.navigateToOrderView();
         },
-        error => console.warn(error)
-      );
-  }
-
-  private editOrder(dto: AddOrUpdateOrderDto) {
-    this.isLoading = true;
-    this.orderService.editOrder(this.order.id, dto)
-      .pipe(
-        this.notyService.attachNoty({ successText: 'Заказ успешно обновлён' }),
-        finalize(() => this.isLoading = false)
-      )
-      .subscribe(
-        _ => this.navigateToOrderView(),
         error => console.warn(error)
       );
   }
