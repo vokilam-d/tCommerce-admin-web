@@ -26,7 +26,7 @@ export class OrderItemsComponent implements OnInit {
   @ViewChild(ProductSelectorComponent) productSelectorCmp: ProductSelectorComponent;
 
   get itemsCost(): number {
-    return this.items.reduce((acc, orderItem) => acc + (orderItem.oldCost ?? orderItem.cost), 0);
+    return this.items.reduce((acc, orderItem) => acc + orderItem.cost, 0);
   }
 
   constructor(

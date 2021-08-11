@@ -4,7 +4,7 @@
   <div class="modal">
     <div class="modal__header">
       <div class="modal__title">
-        Изменить стоимость заказа
+        Изменить товары в заказе
       </div>
       <div class="modal__close" (click)="closeModal()">
         <i class="ai ai-multiply modal__close-icon"></i>
@@ -12,9 +12,10 @@
     </div>
 
     <div class="modal__content">
-      <order-prices [prices]="cachedPrices"
-                    (pricesChanged)="onPricesChange($event)"
-      ></order-prices>
+      <order-items [items]="cachedItems"
+                   [omitReservedOnCreate]="true"
+                   (itemsChanged)="onItemsChange($event)"
+      ></order-items>
 
       <div class="modal__footer-controls">
         <app-button (click)="save()" btnStyle="primary" type="button">
@@ -24,5 +25,4 @@
     </div>
   </div>
 </ng-container>
-
 <preloader *ngIf="isLoading" [hasMargins]="false" position="page-bottom"></preloader>

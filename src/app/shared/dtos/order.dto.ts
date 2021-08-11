@@ -44,3 +44,7 @@ export class UpdateOrderAdminNote {
 export class UpdateOrderAdminManager {
   userId: string;
 }
+
+export class UpdateOrderItems {
+  items: OrderItemDto[];
+}

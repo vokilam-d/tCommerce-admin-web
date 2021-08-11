@@ -87,4 +87,4 @@
 
 <product-selector [canInputQty]="true" (selected)="onProductSelect($event)"></product-selector>
 
-<preloader class="preloader" *ngIf="isLoading" [hasMargins]="false"></preloader>
+<preloader *ngIf="isLoading" [hasMargins]="false" position="page-bottom"></preloader>

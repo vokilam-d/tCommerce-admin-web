@@ -280,6 +280,9 @@
     <div class="order-view__block order-view__block--wide">
       <div class="order-view__subtitle">
         Товары в заказе
+        <button class="order-view__edit-btn" (click)="orderItemsModalCmp.openModal()">
+          изменить
+        </button>
       </div>
       <div class="order-view__content order-view__content--overflow">
         <table class="items-table">
@@ -449,6 +452,11 @@
                       [orderId]="order.id"
                       (pricesChanged)="order.prices = $event"
   ></order-prices-modal>
+
+  <order-items-modal [items]="order.items"
+                     [orderId]="order.id"
+                     (itemsChanged)="onOrderItemsChanged($event)"
+  ></order-items-modal>
 </ng-container>
 
 <preloader class="preloader" *ngIf="!customer || isLoading" [hasMargins]="false"></preloader>

@@ -36,6 +36,8 @@ import { ResponseDto } from '../../shared/dtos/response.dto';
 import { TaxReceiptRepresentationType } from '../../shared/enums/tax/tax-receipt-representation-type.enum';
 import { TaxService } from '../../shared/services/tax.service';
 import { OrderPricesModalComponent } from '../../order-prices-modal/order-prices-modal.component';
+import { OrderPricesDto } from '../../shared/dtos/order-prices.dto';
+import { OrderItemsModalComponent } from '../../order-items-modal/order-items-modal.component';
 
 @Component({
   selector: 'order-view',
@@ -68,6 +70,7 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
   @ViewChild(ConfirmPackItemModalComponent) confirmPackCmp: ConfirmPackItemModalComponent;
   @ViewChild(ContactInfoModalComponent) contactInfoModalCmp: ContactInfoModalComponent;
   @ViewChild(OrderPricesModalComponent) orderPricesModalCmp: OrderPricesModalComponent;
+  @ViewChild(OrderItemsModalComponent) orderItemsModalCmp: OrderItemsModalComponent;
 
   get nextOrderStatus(): OrderStatusEnum | null {
     switch (this.order.status) {
@@ -509,5 +512,10 @@ export class OrderViewComponent extends NgUnsubscribe implements OnInit {
           window.open(response.data, '_blank');
         }
       );
+  }
+
+  onOrderItemsChanged(evt: { items: OrderItemDto[]; prices: OrderPricesDto }) {
+    this.order.items = evt.items;
+    this.order.prices = evt.prices;
   }
 }
