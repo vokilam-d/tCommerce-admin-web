@@ -1,0 +1,24 @@
+<div class="order-prices">
+  <div class="order-prices__row">
+    <div class="order-prices__block">Стоимость товаров</div>
+    <div class="order-prices__block">{{ prices.itemsCost }} грн</div>
+  </div>
+  <div class="order-prices__row">
+    <div class="order-prices__block">
+      Скидка
+    </div>
+    <div class="order-prices__block">
+      <input class="order-prices__number-input"
+             [(ngModel)]="prices.discountValue"
+             (input)="onDiscountValueChange($event.target)"
+             numberInput
+             min="0"
+             type="number"
+      > грн
+    </div>
+  </div>
+  <div class="order-prices__row">
+    <div class="order-prices__block">Итого к оплате</div>
+    <div class="order-prices__block">{{ prices.totalCost }} грн</div>
+  </div>
+</div>

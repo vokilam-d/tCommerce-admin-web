@@ -21,6 +21,7 @@ import { ManagerDto } from '../../shared/dtos/manager.dto';
 import { AddOrUpdateOrderDto } from '../../shared/dtos/add-or-update-order.dto';
 import { CustomerContactInfoComponent } from '../../customer-contact-info/customer-contact-info.component';
 import { RecipientContactInfoComponent } from '../../recipient-contact-info/recipient-contact-info.component';
+import { OrderPricesDto } from '../../shared/dtos/order-prices.dto';
 
 @Component({
   selector: 'order',
@@ -223,14 +224,13 @@ export class OrderComponent extends NgUnsubscribe implements OnInit {
     this.order.paymentMethodId = paymentMethod.id;
   }
 
-  onDiscountValueChange(target: any) {
-    const discountValue = parseInt(target.value);
-    this.order.prices.totalCost = this.order.prices.itemsCost - discountValue;
-  }
-
   onOrderItemsChanged(items: OrderItemDto[]) {
     this.order.items = items;
     this.calculateOrderPrices();
+  }
+
+  onPricesChange(orderPrices: OrderPricesDto) {
+    this.order.prices = orderPrices;
   }
 
   calculateOrderPrices() {

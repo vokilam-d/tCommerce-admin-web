@@ -128,7 +128,6 @@
 
         <div class="order__block-container">
           <order-items [items]="order.items"
-                       [omitReservedOnCreate]="isEditOrder"
                        (itemsChanged)="onOrderItemsChanged($event)"
           ></order-items>
         </div>
@@ -145,30 +144,9 @@
           </div>
 
           <div class="order__block order__summary-block">
-            <div class="order__summary summary">
-              <div class="summary__row">
-                <div class="summary__block">Стоимость товаров</div>
-                <div class="summary__block">{{ order.prices.itemsCost }} грн</div>
-              </div>
-              <div class="summary__row">
-                <div class="summary__block">
-                  Скидка
-                </div>
-                <div class="summary__block">
-                  <input class="summary__number-input"
-                         [(ngModel)]="order.prices.discountValue"
-                         (input)="onDiscountValueChange($event.target)"
-                         numberInput
-                         min="0"
-                         type="number"
-                  > грн
-                </div>
-              </div>
-              <div class="summary__row">
-                <div class="summary__block">Итого к оплате</div>
-                <div class="summary__block">{{ order.prices.totalCost }} грн</div>
-              </div>
-            </div>
+            <order-prices [prices]="order.prices"
+                          (pricesChanged)="onPricesChange($event)"
+            ></order-prices>
           </div>
         </div>
 

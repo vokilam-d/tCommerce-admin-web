@@ -16,6 +16,7 @@ import { ContactInfoModule } from '../../contact-info/contact-info.module';
 import { CustomerContactInfoModule } from '../../customer-contact-info/customer-contact-info.module';
 import { RecipientContactInfoModule } from '../../recipient-contact-info/recipient-contact-info.module';
 import { OrderItemsModule } from '../../order-items/order-items.module';
+import { OrderPricesModule } from '../../order-prices/order-prices.module';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { OrderItemsModule } from '../../order-items/order-items.module';
     ContactInfoModule,
     CustomerContactInfoModule,
     RecipientContactInfoModule,
-    OrderItemsModule
+    OrderItemsModule,
+    OrderPricesModule
   ]
 })
 export class OrderModule { }

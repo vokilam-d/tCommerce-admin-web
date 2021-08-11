@@ -1,0 +1,36 @@
+@import "variables";
+
+.order-prices {
+  width: 430px;
+  text-align: right;
+
+  &__row {
+    display: flex;
+    align-items: center;
+
+    &:nth-child(odd) {
+      background: $controlBg;
+    }
+  }
+
+  &__block {
+    padding: 5px 10px;
+    font-size: 16px;
+
+    &:first-child {
+      width: 70%;
+      text-align: left;
+    }
+
+    &:last-child {
+      width: 30%;
+    }
+  }
+
+  &__number-input {
+    width: 70px;
+    margin-right: 3px;
+    padding: 6px 0 5px 8px;
+    border: 1px solid $borderColor;
+  }
+}
