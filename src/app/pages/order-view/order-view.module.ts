@@ -14,12 +14,14 @@ import { MediaAssetModule } from '../../media-asset/media-asset.module';
 import { ContactInfoModalComponent } from './contact-info-modal/contact-info-modal.component';
 import { ContactInfoModule } from '../../contact-info/contact-info.module';
 import { MediaUploaderModule } from '../../media-uploader/media-uploader.module';
-import { OrderPricesModalModule } from '../../order-prices-modal/order-prices-modal.module';
-import { OrderItemsModalModule } from '../../order-items-modal/order-items-modal.module';
+import { OrderItemsModule } from '../../order-items/order-items.module';
+import { OrderPricesModule } from '../../order-prices/order-prices.module';
+import { OrderPricesModalComponent } from './order-prices-modal/order-prices-modal.component';
+import { OrderItemsModalComponent } from './order-items-modal/order-items-modal.component';
 
 
 @NgModule({
-  declarations: [OrderViewComponent, ShipmentInfoModalComponent, InvoiceModalComponent, ConfirmPackItemModalComponent, ContactInfoModalComponent],
+  declarations: [OrderViewComponent, ShipmentInfoModalComponent, InvoiceModalComponent, ConfirmPackItemModalComponent, ContactInfoModalComponent, OrderPricesModalComponent, OrderItemsModalComponent],
   imports: [
     CommonModule,
     OrderViewRoutingModule,
@@ -30,8 +32,8 @@ import { OrderItemsModalModule } from '../../order-items-modal/order-items-modal
     MediaAssetModule,
     ContactInfoModule,
     MediaUploaderModule,
-    OrderPricesModalModule,
-    OrderItemsModalModule
+    OrderPricesModule,
+    OrderItemsModule
   ]
 })
 export class OrderViewModule { }

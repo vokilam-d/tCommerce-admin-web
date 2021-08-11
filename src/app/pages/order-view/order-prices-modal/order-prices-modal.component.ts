@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { OrderPricesDto } from '../shared/dtos/order-prices.dto';
-import { OrderService } from '../shared/services/order.service';
-import { NotyService } from '../noty/noty.service';
+import { OrderPricesDto } from '../../../shared/dtos/order-prices.dto';
+import { OrderService } from '../../../shared/services/order.service';
+import { NotyService } from '../../../noty/noty.service';
 import { finalize } from 'rxjs/operators';
 
 @Component({

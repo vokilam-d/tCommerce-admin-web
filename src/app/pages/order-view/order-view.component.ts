@@ -35,9 +35,9 @@ import { ContactInfoModalComponent } from './contact-info-modal/contact-info-mod
 import { ResponseDto } from '../../shared/dtos/response.dto';
 import { TaxReceiptRepresentationType } from '../../shared/enums/tax/tax-receipt-representation-type.enum';
 import { TaxService } from '../../shared/services/tax.service';
-import { OrderPricesModalComponent } from '../../order-prices-modal/order-prices-modal.component';
+import { OrderPricesModalComponent } from './order-prices-modal/order-prices-modal.component';
 import { OrderPricesDto } from '../../shared/dtos/order-prices.dto';
-import { OrderItemsModalComponent } from '../../order-items-modal/order-items-modal.component';
+import { OrderItemsModalComponent } from './order-items-modal/order-items-modal.component';
 
 @Component({
   selector: 'order-view',
