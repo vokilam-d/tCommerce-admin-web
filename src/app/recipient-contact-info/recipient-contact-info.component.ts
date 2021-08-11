@@ -5,6 +5,7 @@ import { AbstractControl, FormControl } from '@angular/forms';
 import { ContactInfoComponent } from '../contact-info/contact-info.component';
 import { takeUntil } from 'rxjs/operators';
 import { NgUnsubscribe } from '../shared/directives/ng-unsubscribe/ng-unsubscribe.directive';
+import { CustomerContactInfoDto } from '../shared/dtos/customer-contact-info.dto';
 
 @Component({
   selector: 'recipient-contact-info',
@@ -18,6 +19,7 @@ export class RecipientContactInfoComponent extends NgUnsubscribe implements OnIn
   recipientControl: FormControl = new FormControl();
 
   contactInfoForCmp: ContactInfoDto;
+  @Input('customerContactInfo') customerContactInfoInput: CustomerContactInfoDto;
   @Input('contactInfo') contactInfoInput: ContactInfoDto;
 
   @ViewChild(ContactInfoComponent) contactInfoCmp: ContactInfoComponent;
@@ -27,19 +29,24 @@ export class RecipientContactInfoComponent extends NgUnsubscribe implements OnIn
   }
 
   ngOnInit(): void {
+    this.contactInfoForCmp = this.contactInfoInput;
     this.setDefaultRecipientOption();
+
+    this.handleRecipientControlValueChange();
   }
 
   private setDefaultRecipientOption() {
-    this.contactInfoForCmp = this.contactInfoInput;
+    const isSameFirstName = this.customerContactInfoInput.firstName === this.contactInfoInput.firstName;
+    const isSameLastName = this.customerContactInfoInput.lastName === this.contactInfoInput.lastName;
+    const isSameMiddleName = this.customerContactInfoInput.middleName === this.contactInfoInput.middleName;
+    const isSamePhone = this.customerContactInfoInput.phoneNumber === this.contactInfoInput.phoneNumber;
+    const isSameContactInfo = isSameFirstName && isSameLastName && isSameMiddleName && isSamePhone;
 
-    const controlValue = this.contactInfoInput.lastName ? RecipientTypeEnum.ANOTHER_PERSON : RecipientTypeEnum.CUSTOMER;
+    const controlValue = isSameContactInfo ? RecipientTypeEnum.CUSTOMER : RecipientTypeEnum.ANOTHER_PERSON;
     this.recipientControl.setValue(controlValue);
-
-    this.handleRecipientControl();
   }
 
-  private handleRecipientControl() {
+  private handleRecipientControlValueChange() {
     this.recipientControl.valueChanges
       .pipe( takeUntil(this.ngUnsubscribe) )
       .subscribe(value => {
