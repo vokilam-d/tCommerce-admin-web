@@ -30,6 +30,7 @@
     <span grid-no-items>Заказы не найдены</span>
 
     <ng-template #cellContent let-order="item">{{ order.id }}</ng-template>
+    <ng-template #cellContent let-order="item">{{ order.idForCustomer }}</ng-template>
     <ng-template #cellContent let-order="item">
       {{ order.createdAt | date:'dd.MM.y' }}
       <span class="order__time">{{ order.createdAt | date:'HH:mm:ss' }}</span>

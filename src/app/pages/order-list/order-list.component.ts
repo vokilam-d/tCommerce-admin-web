@@ -133,6 +133,7 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
       .map(order => {
         const fields: (string | number)[] = [
           order.id,
+          order.idForCustomer,
           `${this.datePipe.transform(order.createdAt, 'dd.MM.y')} ${this.datePipe.transform(order.createdAt, 'HH:mm:ss')}`,
           `${order.shipment.recipient.contactInfo.firstName} ${order.shipment.recipient.contactInfo.lastName} ${order.shipment.recipient.contactInfo.phoneNumber}`,
           order.notes.aboutCustomer,
@@ -237,6 +238,15 @@ const orderGridCells: IGridCell[] = [
     isImage: true,
     isSortable: true,
     fieldName: getPropertyOf<OrderDto>('id')
+  },
+  {
+    isSearchable: true,
+    label: 'ID для клиента',
+    initialWidth: 55,
+    align: 'center',
+    isImage: true,
+    isSortable: true,
+    fieldName: getPropertyOf<OrderDto>('idForCustomer')
   },
   {
     isSearchable: false,

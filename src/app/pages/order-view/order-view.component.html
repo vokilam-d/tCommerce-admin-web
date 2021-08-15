@@ -1,6 +1,9 @@
 <div class="page">
   <div class="header">
-    <h1 class="header__title" (click)="copyOrderIdToClipboard(order.id)">Заказ №{{ order?.id }}</h1>
+    <h1 class="header__title" (click)="copyOrderIdToClipboard(order.id)">
+      Заказ №{{ order?.id }}
+      <span class="order-view__id-for-customer">{{ order?.idForCustomer }}</span>
+    </h1>
 
     <div class="order-view__status" *ngIf="order?.statusDescription[lang] as statusDesc">{{ statusDesc }}</div>
 
