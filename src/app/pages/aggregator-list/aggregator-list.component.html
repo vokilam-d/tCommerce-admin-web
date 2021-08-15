@@ -13,10 +13,9 @@
         [itemsFiltered]="itemsFiltered"
         [pagesTotal]="pagesTotal"
         [isLoading]="isGridLoading"
-        [linkFieldName]="gridLinkFieldName"
+        [linkBuilder]="gridLinkBuilder"
         (gridChange)="fetchAggregators($event)"
         trackByFieldName="id"
-        linkUrlSuffix="edit"
         gridName="aggregator-list"
   >
     <span grid-total-items>Всего агрегаторов: {{ itemsTotal }}</span>

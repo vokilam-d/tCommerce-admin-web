@@ -13,10 +13,9 @@
         [itemsFiltered]="itemsFiltered"
         [pagesTotal]="pagesTotal"
         [isLoading]="isGridLoading"
-        [linkFieldName]="gridLinkFieldName"
+        [linkBuilder]="gridLinkBuilder"
         (gridChange)="fetchPosts($event)"
         trackByFieldName="id"
-        linkUrlSuffix="edit"
         gridName="post-list"
   >
     <span grid-total-items>Всего постов: {{ postsTotal }}</span>

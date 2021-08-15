@@ -25,7 +25,6 @@ export class BlogPostListComponent extends NgUnsubscribe implements OnInit, Afte
   pagesTotal: number = 1;
   itemsFiltered: number;
   isGridLoading: boolean = false;
-  gridLinkFieldName: string = getPropertyOf<BlogPostDto>('id');
   gridCells: IGridCell[] = postGridCells;
   lang = DEFAULT_LANG;
 
@@ -72,6 +71,10 @@ export class BlogPostListComponent extends NgUnsubscribe implements OnInit, Afte
 
   add() {
     this.router.navigate(['add'], { relativeTo: this.route });
+  }
+
+  gridLinkBuilder(listItem: BlogPostDto): string[] {
+    return ['edit', listItem.id.toString()];
   }
 }
 

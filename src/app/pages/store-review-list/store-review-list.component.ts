@@ -23,7 +23,6 @@ export class StoreReviewListComponent implements OnInit, AfterViewInit {
   itemsFiltered: number;
   pagesTotal: number = 1;
   isGridLoading: boolean = false;
-  idFieldName = getPropertyOf<StoreReviewDto>('id');
   gridCells: IGridCell[] = storeReviewsGridCells;
 
   reviewSourceEnum = ReviewSource;
@@ -69,6 +68,10 @@ export class StoreReviewListComponent implements OnInit, AfterViewInit {
 
   add() {
     this.router.navigate(['add'], { relativeTo: this.route });
+  }
+
+  gridLinkBuilder(listItem: StoreReviewDto): string[] {
+    return ['edit', listItem.id.toString()];
   }
 }
 

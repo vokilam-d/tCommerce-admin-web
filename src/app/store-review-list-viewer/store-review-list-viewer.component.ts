@@ -69,6 +69,10 @@ export class StoreReviewListViewerComponent implements OnInit, AfterViewInit {
         error => console.warn(error)
       );
   }
+
+  gridLinkBuilder(listItem: StoreReviewDto): string[] {
+    return ['/', 'admin', 'store-review', 'edit', listItem.id.toString()];
+  }
 }
 
 const storeReviewsGridCells: IGridCell[] = [

@@ -27,7 +27,6 @@ export class AggregatorListComponent extends NgUnsubscribe implements OnInit, Af
   itemsFiltered: number;
   pagesTotal: number = 1;
   isGridLoading: boolean = false;
-  gridLinkFieldName: string = getPropertyOf<AggregatorDto>('id');
   gridCells: IGridCell[] = aggregatorGridCells;
   lang = DEFAULT_LANG;
 
@@ -72,6 +71,10 @@ export class AggregatorListComponent extends NgUnsubscribe implements OnInit, Af
 
   add() {
     this.router.navigate(['add'], { relativeTo: this.route });
+  }
+
+  gridLinkBuilder(listItem: AggregatorDto): string[] {
+    return ['edit', listItem.id.toString()];
   }
 }
 

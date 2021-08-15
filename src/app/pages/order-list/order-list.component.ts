@@ -49,7 +49,6 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
   itemsFiltered: number;
   pagesTotal: number = 1;
   isGridLoading: boolean = false;
-  gridLinkUrl: string = 'view';
   gridCells: IGridCell[] = [];
   lang = DEFAULT_LANG;
   statusControl = new FormControl();
@@ -168,6 +167,10 @@ export class OrderListComponent extends NgUnsubscribe implements OnInit, AfterVi
 
   getOrderMediaUrl(media: MediaDto): string {
     return UPLOADED_HOST + media.variantsUrls.small;
+  }
+
+  gridLinkBuilder(listItem: OrderDto): string[] {
+    return ['view', listItem.id.toString()];
   }
 
   private handleStatusControl() {

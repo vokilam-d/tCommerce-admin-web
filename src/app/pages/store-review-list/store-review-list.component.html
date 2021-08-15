@@ -15,9 +15,8 @@
         [itemsFiltered]="itemsFiltered"
         [pagesTotal]="pagesTotal"
         [isLoading]="isGridLoading"
+        [linkBuilder]="gridLinkBuilder"
         (gridChange)="fetchStoreReviews($event)"
-        [linkFieldName]="idFieldName"
-        linkUrlSuffix="edit"
         trackByFieldName="id"
         gridName="store-review-list"
   >

@@ -13,10 +13,9 @@
         [itemsFiltered]="itemsFiltered"
         [pagesTotal]="pagesTotal"
         [isLoading]="isGridLoading"
-        [linkFieldName]="gridLinkFieldName"
+        [linkBuilder]="gridLinkBuilder"
         (gridChange)="fetchAttributes($event)"
         trackByFieldName="id"
-        linkUrlSuffix="edit"
         gridName="attribute-list"
   >
     <span grid-total-items>Всего атрибутов: {{ itemsTotal }}</span>

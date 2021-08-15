@@ -18,13 +18,12 @@
         [cells]="gridCells"
         [itemsArray]="orders"
         [itemsFiltered]="itemsFiltered"
-        [linkUrlSuffix]="gridLinkUrl"
         [pagesTotal]="pagesTotal"
         [isLoading]="isGridLoading"
         [isItemRemoved]="isOrderRemoved"
+        [linkBuilder]="gridLinkBuilder"
         (gridChange)="fetchOrders($event)"
         trackByFieldName="id"
-        linkFieldName="id"
         gridName="order-list"
   >
     <span grid-total-items>Всего заказов: {{ itemsTotal }}</span>

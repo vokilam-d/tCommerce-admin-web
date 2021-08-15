@@ -38,12 +38,11 @@
         [cells]="gridCells"
         [itemsArray]="products"
         [itemsFiltered]="itemsFiltered"
-        [linkUrlSuffix]="gridLinkUrl"
         [pagesTotal]="pagesTotal"
         [isLoading]="isGridLoading"
+        [linkBuilder]="gridLinkBuilder"
         (gridChange)="onGridChange($event)"
         trackByFieldName="id"
-        linkFieldName="id"
         gridName="product-list"
   >
     <span grid-total-items>Всего товаров: {{ itemsTotal }}</span>

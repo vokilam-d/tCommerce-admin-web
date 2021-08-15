@@ -9,7 +9,6 @@ import { ShipmentAddressDto } from '../../shared/dtos/shipment-address.dto';
 import { finalize } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { GridComponent } from '../../grid/grid.component';
-import { AttributeDto } from '../../shared/dtos/attribute.dto';
 import { HeadService } from '../../shared/services/head.service';
 import { CustomerContactInfoDto } from '../../shared/dtos/customer-contact-info.dto';
 
@@ -26,7 +25,6 @@ export class CustomerListComponent implements OnInit, AfterViewInit {
   itemsFiltered: number;
   pagesTotal: number = 1;
   isGridLoading: boolean = false;
-  idFieldName = getPropertyOf<AttributeDto>('id');
   gridCells: IGridCell[] = customerGridCells;
 
   private fetchAllSub: Subscription;
@@ -70,6 +68,10 @@ export class CustomerListComponent implements OnInit, AfterViewInit {
 
   add() {
     this.router.navigate(['add'], { relativeTo: this.route });
+  }
+
+  gridLinkBuilder(listItem: CustomerDto): string[] {
+    return ['edit', listItem.id.toString()];
   }
 }
 

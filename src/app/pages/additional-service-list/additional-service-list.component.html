@@ -13,10 +13,9 @@
         [itemsFiltered]="itemsFiltered"
         [pagesTotal]="pagesTotal"
         [isLoading]="isGridLoading"
-        [linkFieldName]="gridLinkFieldName"
+        [linkBuilder]="gridLinkBuilder"
         (gridChange)="fetchAdditionalServices($event)"
         trackByFieldName="id"
-        linkUrlSuffix="edit"
         gridName="additional-service-list"
   >
     <span grid-total-items>Всего доп. услуг: {{ itemsTotal }}</span>

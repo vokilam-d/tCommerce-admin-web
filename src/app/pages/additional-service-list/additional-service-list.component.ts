@@ -27,7 +27,6 @@ export class AdditionalServiceListComponent extends NgUnsubscribe implements OnI
   itemsFiltered: number;
   pagesTotal: number = 1;
   isGridLoading: boolean = false;
-  gridLinkFieldName: string = getPropertyOf<AdditionalServiceDto>('id');
   gridCells: IGridCell[] = additionalServiceGridCells;
   lang = DEFAULT_LANG;
 
@@ -72,6 +71,10 @@ export class AdditionalServiceListComponent extends NgUnsubscribe implements OnI
 
   add() {
     this.router.navigate(['add'], { relativeTo: this.route });
+  }
+
+  gridLinkBuilder(listItem: AdditionalServiceDto): string[] {
+    return ['edit', listItem.id.toString()];
   }
 }
 

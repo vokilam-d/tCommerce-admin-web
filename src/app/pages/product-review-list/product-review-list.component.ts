@@ -25,7 +25,6 @@ export class ProductReviewListComponent implements OnInit, AfterViewInit {
   itemsFiltered: number;
   pagesTotal: number = 1;
   isGridLoading: boolean = false;
-  idFieldName = getPropertyOf<ProductReviewDto>('id');
   gridCells: IGridCell[] = productReviewsGridCells;
 
   reviewSourceEnum = ReviewSource;
@@ -69,6 +68,10 @@ export class ProductReviewListComponent implements OnInit, AfterViewInit {
         },
         error => console.warn(error)
       );
+  }
+
+  gridLinkBuilder(listItem: ProductReviewDto): string[] {
+    return ['edit', listItem.id.toString()];
   }
 }
 

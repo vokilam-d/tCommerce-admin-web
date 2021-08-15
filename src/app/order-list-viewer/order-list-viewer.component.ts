@@ -31,7 +31,6 @@ export class OrderListViewerComponent implements OnInit, AfterViewInit {
   itemsFiltered: number;
   pagesTotal: number = 1;
   isGridLoading: boolean = false;
-  gridLinkUrl: string = '/admin/order/view';
   gridCells: IGridCell[] = orderGridCells;
   defaultCurrency = DEFAULT_CURRENCY_CODE;
   lang = DEFAULT_LANG;
@@ -80,6 +79,10 @@ export class OrderListViewerComponent implements OnInit, AfterViewInit {
         },
         error => console.warn(error)
       );
+  }
+
+  gridLinkBuilder(listItem: OrderDto): string[] {
+    return ['/', 'admin', 'order', 'view', listItem.id.toString()];
   }
 }
 

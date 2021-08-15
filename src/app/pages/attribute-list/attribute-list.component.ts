@@ -28,7 +28,6 @@ export class AttributeListComponent extends NgUnsubscribe implements OnInit, Aft
   itemsFiltered: number;
   pagesTotal: number = 1;
   isGridLoading: boolean = false;
-  gridLinkFieldName: string = getPropertyOf<AttributeDto>('id');
   gridCells: IGridCell[] = attributeGridCells;
   lang = DEFAULT_LANG;
 
@@ -73,6 +72,10 @@ export class AttributeListComponent extends NgUnsubscribe implements OnInit, Aft
 
   add() {
     this.router.navigate(['add'], { relativeTo: this.route });
+  }
+
+  gridLinkBuilder(listItem: AttributeDto): string[] {
+    return ['edit', listItem.id.toString()];
   }
 }
 

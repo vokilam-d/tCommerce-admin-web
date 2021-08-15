@@ -60,14 +60,13 @@ export class GridComponent<T extends { isOpened?: boolean } = any> extends NgUns
   @Input() itemsArray: T[] = [];
   @Input() isLoading: boolean = false;
   @Input() size: 'default' | 'small' = 'default';
-  @Input() linkUrlSuffix: string;
-  @Input() linkFieldName: string;
   @Input() linkTarget: '_self' | '_blank' = '_self';
   @Input() subItemsFieldName: string;
   @Input() trackByFieldName: string;
   @Input() pagesTotal: number;
   @Input() itemsFiltered: number;
   @Input() isItemRemoved: (item: T) => boolean = () => false;
+  @Input('linkBuilder') getRouterLinkUrl: (item: T) => string[] = () => null;
   @Output('gridChange') changeEmitter = new EventEmitter<IGridValue>();
   @Output('itemSelect') itemSelectEmitter = new EventEmitter<T>();
 
@@ -143,14 +142,6 @@ export class GridComponent<T extends { isOpened?: boolean } = any> extends NgUns
     selectedDateRange[rangeIdx] = date;
 
     this.search$.next({ fieldName: cell.fieldName, value: selectedDateRange });
-  }
-
-  getRouterLinkUrl(item: T): string[] | null {
-    if (!this.linkUrlSuffix || !this.linkFieldName) {
-      return null;
-    }
-
-    return [this.linkUrlSuffix, item[this.linkFieldName]];
   }
 
   onItemSelect(item: T) {

@@ -44,7 +44,6 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
   itemsTotal: number = 0;
   itemsFiltered: number;
   pagesTotal: number = 1;
-  gridLinkUrl: string = 'edit';
   isGridLoading: boolean = false;
   gridCells: IGridCell[] = [];
 
@@ -152,6 +151,10 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
     this.orderedDates[rangeIdx] = date;
 
     this.fetchProducts();
+  }
+
+  gridLinkBuilder(listItem: ProductListItemDto): string[] {
+    return ['edit', listItem.id.toString()];
   }
 
   copyProductsToClipboard() {

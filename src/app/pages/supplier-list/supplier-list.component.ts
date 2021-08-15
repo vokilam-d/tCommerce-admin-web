@@ -22,7 +22,6 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
   itemsFiltered: number;
   pagesTotal: number = 1;
   isGridLoading: boolean = false;
-  idFieldName = getPropertyOf<SupplierDto>('id');
   gridCells: IGridCell[] = suppliersGridCells;
 
   private fetchAllSub: Subscription;
@@ -66,6 +65,10 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
 
   add() {
     this.router.navigate(['add'], { relativeTo: this.route });
+  }
+
+  gridLinkBuilder(listItem: SupplierDto): string[] {
+    return ['edit', listItem.id.toString()];
   }
 }
 
