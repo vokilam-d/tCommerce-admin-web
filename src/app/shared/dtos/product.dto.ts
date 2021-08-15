@@ -82,4 +82,6 @@ export class ProductListItemDto {
   note: string;
   isIncludedInShoppingFeed: boolean;
   supplierId: number;
+  isInStock: boolean;
+  isSellable: boolean;
 }

@@ -21,6 +21,7 @@ export interface IGridCell {
   initialWidth: number;
   isImage?: boolean;
   filterFields?: ISelectOption[];
+  filterFieldName?: string;
   hasDateFromFilter?: boolean;
   hasDateToFilter?: boolean;
 }

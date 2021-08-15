@@ -10,7 +10,7 @@ import { NotyService } from '../../noty/noty.service';
 import { saveFileFromUrl } from '../../shared/helpers/save-file.function';
 import { IGridCell, IGridValue } from '../../grid/grid.interface';
 import { GridComponent } from '../../grid/grid.component';
-import { combineLatest, forkJoin, Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { finalize, takeUntil, tap } from 'rxjs/operators';
 import { getPropertyOf } from '../../shared/helpers/get-property-of.function';
 import { DEFAULT_LANG, UPLOADED_HOST } from '../../shared/constants/constants';
@@ -289,7 +289,9 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             align: 'left',
             isImage: false,
             isSortable: true,
-            fieldName: `${getPropertyOf<ProductListItemDto>('variants')}.${getPropertyOf<ProductVariantListItemDto>('qtyInStock')}`
+            fieldName: `${getPropertyOf<ProductListItemDto>('variants')}.${getPropertyOf<ProductVariantListItemDto>('qtyInStock')}`,
+            filterFieldName: getPropertyOf<ProductListItemDto>('isInStock'),
+            filterFields: [{ value: true, view: 'Есть' }, { value: false, view: 'Нет' }]
           },
           {
             isSearchable: false,
@@ -298,7 +300,9 @@ export class ProductListComponent extends NgUnsubscribe implements OnInit, After
             align: 'left',
             isImage: false,
             isSortable: true,
-            fieldName: `${getPropertyOf<ProductListItemDto>('variants')}.${getPropertyOf<ProductVariantListItemDto>('sellableQty')}`
+            fieldName: `${getPropertyOf<ProductListItemDto>('variants')}.${getPropertyOf<ProductVariantListItemDto>('sellableQty')}`,
+            filterFieldName: getPropertyOf<ProductListItemDto>('isSellable'),
+            filterFields: [{ value: true, view: 'Есть' }, { value: false, view: 'Нет' }]
           },
           {
             isSearchable: true,

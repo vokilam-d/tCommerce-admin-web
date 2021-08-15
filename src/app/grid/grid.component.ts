@@ -131,7 +131,7 @@ export class GridComponent<T extends { isOpened?: boolean } = any> extends NgUns
   }
 
   onFilterSelect(cell: IGridCell, data: any) {
-    this.search$.next({ fieldName: cell.fieldName, value: data })
+    this.search$.next({ fieldName: cell.filterFieldName || cell.fieldName, value: data })
   }
 
   onDateSelect(cell: IGridCell, event: Event, range: 'from' | 'to') {
